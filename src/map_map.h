@@ -1,11 +1,11 @@
-#ifndef MAP_H
-# define MAP_H
-
-# include "../libs/libft/includes/libft.h"
+#ifndef MAP_MAP_H
+# define MAP_MAP_H
 # include <stdlib.h>
 # include <fcntl.h>
 # include <unistd.h>
 # include <stdio.h>
+
+# include "../libs/libft/includes/libft.h"
 
 typedef struct s_map {
 	char	*n; //pic path north
@@ -29,6 +29,12 @@ t_map	*read_map(char *src);
 /* free_map.c */
 
 void	free_map(t_map *map);
+
+/* helper.c */
+
+int		valid_line(char *string, int potenz);
+int		find_code(char *origin, char *needle);
+int		find_map(char *string);
 
 
 

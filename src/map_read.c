@@ -3,7 +3,7 @@
 t_map	*make_struct(char *lines, int x, int y);
 void	fill_struct(char *lines, t_map *map);
 t_map	*read_map(char *src);
-char	*fill_var(char *lines, char var, int ct);
+char	*fill_var(char *lines, char *name);
 
 
 /* 
@@ -14,7 +14,6 @@ char	*fill_var(char *lines, char var, int ct);
 */
 t_map	*read_map(char *src)
 {
-	printf("read_map \n");
 	int		fd;
 	int		x;
 	int		y;
@@ -49,7 +48,6 @@ t_map	*read_map(char *src)
 */
 t_map	*make_struct(char *lines, int x, int y)
 {
-	printf("make struct\n");
 	t_map	*new;
 
 	new = malloc(sizeof(t_map *));
@@ -61,6 +59,7 @@ t_map	*make_struct(char *lines, int x, int y)
 	new->w = NULL;
 	new->f = NULL;
 	new->c = NULL;
+	new->map = NULL;
 	new->player = 0;
 	new->x_max = x;
 	new->y_max = y;
@@ -71,30 +70,26 @@ t_map	*make_struct(char *lines, int x, int y)
 
 void	fill_struct(char *lines, t_map *map)
 {
-	printf("fill_struct\n");
 	int		ct;
 	char	*temp;
 
-	map->n = fill_var(lines, 'O', ft_strchr_int(lines, 'N'));
-	map->s = fill_var(lines, 'O', ft_strchr_int(lines, 'S'));
-	map->e = fill_var(lines, 'A', ft_strchr_int(lines, 'E'));
-	map->w = fill_var(lines, 'E', ft_strchr_int(lines, 'W'));
-	map->c = fill_var(lines, ' ', ft_strchr_int(lines, 'C'));
-	ct = ft_strchr_int(lines, 'F');
-	map->f = fill_var(lines, ' ', ct);
+	map->n = fill_var(lines, "NO ");
+	map->s = fill_var(lines, "SO ");
+	map->e = fill_var(lines, "EA ");
+	map->w = fill_var(lines, "WE ");
+	map->c = fill_var(lines, "C ");
+	map->f = fill_var(lines, "F ");
+	temp = lines;
+	ct = find_map(temp);
+	printf("ct = %d\n", ct);
+	if (ct > -1)
+		map->map = ft_split(temp + ct, '\n'); // ich beginne zu frueh
 	/*
 	irgendwie scheint mir dieses konstrukt noch reichlich fehleranfaellig (JAAAA!)
-	ich muss strnstr verwenden oder so
-	schliesslich koennte ein E schon in der ersten zeile als datei name stehen
 	ct auf beginn der map setzen - iwie
-	fuellen der anderen variablen
+	ich brauche eine funktion, mit der ich ermittle, ab wann  die eigentliche map beginnt
+	darf nur whitespace oder digit sein in der zeile
 	*/
-	temp = lines;
-	temp = temp + ct;
-	temp = temp + ft_strchr_int(temp, '\n');
-	map->map = ft_split(lines + ct, '\n'); // ich beginne zu frueh
-	// ich brauche eine funktion, mit der ich ermittle, ab wann  die eigentliche map beginnt
-	// darf nur whitespace oder digit sein in der zeile
 	return ;
 }
 
@@ -102,24 +97,20 @@ void	fill_struct(char *lines, t_map *map)
 	der versuch, eine funktion zu schreiben, 
 	die mir alle variablen befuellen kann
 */
-char	*fill_var(char *lines, char var, int ct)
+char	*fill_var(char *lines, char *name)
 {
-	printf("fill_var\n");
 	int		end;
+	int		begin;
 	char	*temp;
 
-	printf("lines[ct] = %c\n", lines[ct]);
-	if (lines[ct + 1] != var)
+	begin = find_code(lines, name);
+	if (begin == -1)
 		return (NULL);
-	if (var != ' ')
-		ct = ct + 2;
-	else
-		ct++;
-	while (ft_iswhitespace(lines[ct]))
-		ct++;
-	end = ct;
+	while (ft_iswhitespace(lines[begin]))
+		begin++;
+	end = begin;
 	while (lines[end] != '\0' && lines[end] != '\n')
 		end++;
-	temp = ft_substr(lines, ct, (end - ct));
+	temp = ft_substr(lines, begin, (end - begin));
 	return (temp);
 }

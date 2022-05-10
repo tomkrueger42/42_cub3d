@@ -9,7 +9,7 @@ int	main(void)
 	test = read_map("x.cub");
 	print_map(test);
 	free_map(test);
-//	system("leaks cub3d"); // wenn ich den nicht auskommentiere kriege ich probleme
+	//system("leaks cub3d"); // wenn ich den nicht auskommentiere kriege ich probleme
 }
 
 void	print_map(t_map *map)
@@ -22,14 +22,19 @@ void	print_map(t_map *map)
 		printf("map is null!!!\n");
 		return ;
 	}
-	printf("EAST = \t%s\n", map->e);
-	printf("NORTH = \t%s\n", map->n);
-	printf("WEST = \t%s\n", map->w);
-	printf("SOUTH = \t%s\n", map->e);
-	printf("PLAYER = \t%c\n", map->player);
-	printf("FLOOR COLOUR = \t%s\n", map->f);
+	printf("EAST = \t\t\t%s\n", map->e);
+	printf("NORTH = \t\t%s\n", map->n);
+	printf("WEST = \t\t\t%s\n", map->w);
+	printf("SOUTH = \t\t%s\n", map->s);
+	printf("PLAYER = \t\t%c\n", map->player);
+	printf("FLOOR COLOUR = \t\t%s\n", map->f);
 	printf("CEILING COLOUR = \t%s\n", map->c);
 	printf("\nMAP:\n");
+	if (map->map == NULL)
+	{
+		printf("map->map is null!!!\n");
+		return ;
+	}
 	while (map->map[ct] != NULL)
 	{
 		printf("|%s|\n", map->map[ct]);
