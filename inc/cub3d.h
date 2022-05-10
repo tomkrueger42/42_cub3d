@@ -5,8 +5,8 @@
 /* INCLUDES																	  */
 /* ************************************************************************** */
 
-# include "../libs/libft/includes/libft.h"
-# include "../libs/minilibx/mlx.h"
+# include "libft.h"
+# include <mlx.h>
 
 /* ************************************************************************** */
 /* DEFINES																	  */

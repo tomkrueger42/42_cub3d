@@ -12,6 +12,7 @@ LIBFT		=	-L./libs/libft -lft
 LIBFT_PATH	=	libs/libft/libft.a
 MINILIBX	=	-framework OpenGL -framework AppKit -L./libs/minilibx -lmlx
 MINILIBX_PATH =	libs/minilibx/libmlx.a
+MINILIBX_INC =	-Imlx
 LIBS		=	$(LIBFT) $(MINILIBX)
 
 # hier kannst du deine files eintragen und dann mit "make davina" builden. dadurch koennen wir beide zum beispiel eine main() funktion haben
@@ -35,7 +36,7 @@ $(NAME): $(PREP) $(OBJS)
 	$(CC) $(CFLAGS) $(OBJS) -o $(NAME) $(LIBS)
 
 $(OBJ_PATH)%.o: $(SRC_PATH)%.c $(DEP)
-	$(CC) $(CFLAGS) -c $< -o $@
+	$(CC) $(CFLAGS) $(MINILIBX_INC) -c $< -o $@
 
 $(PREP):
 	mkdir -p $(OBJ_PATH)
