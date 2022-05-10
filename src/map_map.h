@@ -1,7 +1,11 @@
 #ifndef MAP_H
 # define MAP_H
 
-# include "../../libs/libft/includes/libft.h"
+# include "../libs/libft/includes/libft.h"
+# include <stdlib.h>
+# include <fcntl.h>
+# include <unistd.h>
+# include <stdio.h>
 
 typedef struct s_map {
 	char	*n; //pic path north
@@ -9,13 +13,26 @@ typedef struct s_map {
 	char	*w; //pic path west
 	char	*e; //pic path east
 	char	*f; // floor colour
+	char	*c; // ceiling colour
+	char	player; // direction looking to
 	int		x_max;
 	int		y_max;
 	char	**map;
 }	t_map;
 
-#endif
+/* read.c */
 
+t_map	*make_struct(char *lines, int x, int y);
+void	fill_struct(char *lines, t_map *map);
+t_map	*read_map(char *src);
+
+/* free_map.c */
+
+void	free_map(t_map *map);
+
+
+
+#endif
 /*
 The map must be composed of only 6 possible characters: 0 for an empty space,
 1 for a wall, and N,S,E or W for the player’s start position and spawning
