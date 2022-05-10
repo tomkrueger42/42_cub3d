@@ -1,52 +1,41 @@
-# **************************************************************************** #
-#                                                                              #
-#                                                         :::      ::::::::    #
-#    Makefile                                           :+:      :+:    :+:    #
-#                                                     +:+ +:+         +:+      #
-#    By: tkruger <tkruger@student.42.fr>            +#+  +:+       +#+         #
-#                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2022/02/21 20:28:04 by tkruger           #+#    #+#              #
-#    Updated: 2022/02/21 20:30:01 by tkruger          ###   ########.fr        #
-#                                                                              #
-# **************************************************************************** #
-
-NAME	=	new_project
+NAME	=	cub3d
 CC		=	gcc
-CFLAGS	=	-Wall -Wextra -Werror
-INC		=	./inc/new_project.h
+CFLAGS	+=	-Wall -Wextra -Werror
+DEP		= ./inc/cub3d.h
 SRC_PATH =	./src/
-SRCS	=	new_project.c
-OBJ_PATH =	./objs/
-OBJS	=	$(patsubst %c,$(OBJ_PATH)%o,$(SRCS))
-LIBFT	=	-L./lib/libft -lft lib/libft/libft.a
+PREP	=	objs
+OBJ_PATH =	objs/
+OBJS	=	$(addprefix $(OBJ_PATH), $(SRCS:.c=.o))
+LIBFT	=	-L./libs/libft -lft
+LIBFT_PATH = libs/libft/libft.a
 LIBS	=	$(LIBFT)
 
-.PHONY: all $(NAME) $(OBJ_PATH) libmake clean fclean re
+SRCS 	=	new_project.c
 
-all: $(NAME)
+.PHONY: all clean fclean re
 
-$(NAME): $(OBJ_PATH) $(OBJS) libmake
-	$(CC) $(CFLAGS) $(LIBS) $(OBJS) -o $(NAME)
+all: $(LIBFT_PATH) $(NAME)
 
-$(OBJ_PATH)%.o: $(SRC_PATH)%.c $(INC)
-	$(CC) $(FLAGS) -c $< -o $@
+$(NAME): $(PREP) $(OBJS)
+	$(CC) $(CFLAGS) $(OBJS) -o $(NAME) $(LIBFT)
 
-$(OBJ_PATH):
-	@mkdir -p $(OBJ_PATH)
+$(OBJ_PATH)%.o: $(SRC_PATH)%.c $(DEP)
+	$(CC) $(CFLAGS) -c $< -o $@
 
-libmake:
-	@make -C lib/libft/
+$(PREP):
+	mkdir -p $(OBJ_PATH)
+
+$(LIBFT_PATH):
+	make -C libs/libft/
 
 clean:
-	@rm -rf $(OBJ_PATH)
-	@rm -f *.o *~
-	@rm -rf *.dSYM
-	@make -C lib/libft/ clean
-	@echo "\033[1;32m.o files removed!\033[0m"
+	rm -rf $(OBJ_PATH)
+	rm -f *.o *~
+	rm -rf *.dSYM
+	make clean -C libs/libft/
 
 fclean: clean
-	@rm -f $(NAME)
-	@rm -f lib/libft/libft.a
-	@echo "\033[1;32mbinary files removed!\033[0m" 
+	rm -rf $(NAME)
+	rm -f libs/libft/libft.a
 
 re: fclean all
