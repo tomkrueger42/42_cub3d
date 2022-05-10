@@ -33,6 +33,14 @@ typedef struct	s_data
 	int		endian;
 }	t_data;
 
+typedef struct s_map
+{
+	char	**data;
+	size_t	width;
+	size_t	len;
+	size_t	box_size;
+}	t_map;
+
 /* ************************************************************************** */
 /* FUNCTION PROTOTYPES														  */
 /* ************************************************************************** */
