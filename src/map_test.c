@@ -26,7 +26,7 @@ void	print_map(t_map *map)
 	printf("NORTH = \t\t%s\n", map->n);
 	printf("WEST = \t\t\t%s\n", map->w);
 	printf("SOUTH = \t\t%s\n", map->s);
-	printf("PLAYER = \t\t%c\n", map->player);
+	printf("PLAYER = \t\t%c\n", map->player.direction);
 	printf("FLOOR COLOUR = \t\t%s\n", map->f);
 	printf("CEILING COLOUR = \t%s\n", map->c);
 	printf("\nMAP:\n");

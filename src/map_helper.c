@@ -42,16 +42,12 @@ int	find_map(char *string)
 		return (-1);
 	while (string[ct] != '\0')
 	{
-		if (ft_isdigit(string[ct]) && !ft_iswhitespace(string[ct]))
-		{
-			while (string[ct] != '\0' && string[ct] != '\n')
-				ct++;
-			if (string[ct] != '\0')
-				potenz = ct;
-		}
+		if (string[ct] == '\n' && string[ct + 1] != '\0')
+			potenz = ct + 1;
 		if (valid_line(string, potenz) > -1)
 			return (potenz);
-		ct++;
+		if (string[ct] != '\0')
+			ct++;
 	}
 	return (-1);
 }
@@ -61,12 +57,12 @@ int	valid_line(char *string, int potenz)
 	int	ct;
 
 	ct = potenz;
-	while (string[ct] != '\0' && string[ct] != '\n'
-		&& (ft_isdigit(string[ct]) || ft_iswhitespace(string[ct])))
+	while (string[ct] != '\0' && string[ct] != '\n')
 	{
+		if (!ft_isdigit(string[ct]) && !ft_iswhitespace(string[ct]))
+			return (-1);
 		ct++;
 	}
-	printf("string an stelle %d = %c\n", ct, string[ct]);
 	if ((string[ct] == '\0' || string[ct] == '\n') && ct != potenz)
 		return (1);
 	else

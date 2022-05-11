@@ -1,6 +1,6 @@
 NAME		=	cub3d
 CC			=	gcc
-CFLAGS		+=	-Wall -Wextra -Werror
+CFLAGS		+=	-Wall -Wextra -Werror -fsanitize=address
 DEP			=	./inc/cub3d.h
 SRC_PATH	=	./src/
 PREP		=	objs

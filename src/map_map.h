@@ -7,22 +7,37 @@
 
 # include "../libs/libft/includes/libft.h"
 
+/*
+N = 0.5
+S = 1.5
+W = 1;
+E = 0
+*/
+
+typedef struct s_player {
+	char	direction;	 // direction looking to
+//	double	direction;
+	int		start_x;
+	int		start_y;
+}	t_player;
+
 typedef struct s_map {
-	char	*n; //pic path north
-	char	*s; //pic path south
-	char	*w; //pic path west
-	char	*e; //pic path east
-	char	*f; // floor colour
-	char	*c; // ceiling colour
-	char	player; // direction looking to
-	int		x_max;
-	int		y_max;
-	char	**map;
+	char		*n; //pic path north
+	char		*s; //pic path south
+	char		*w; //pic path west
+	char		*e; //pic path east
+	char		*f; // floor colour
+	char		*c; // ceiling colour
+	t_player	player;
+	int			x_max; // while strlen < x_max char append mit ' '
+	int			y_max;
+	char		**map;
 }	t_map;
+
 
 /* read.c */
 
-t_map	*make_struct(char *lines, int x, int y);
+t_map	*make_struct(char *lines, int x);
 void	fill_struct(char *lines, t_map *map);
 t_map	*read_map(char *src);
 

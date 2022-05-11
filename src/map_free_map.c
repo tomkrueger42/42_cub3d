@@ -11,7 +11,7 @@ void	free_map(t_map *map)
 	ct = 0;
 	if (map == NULL)
 		return ;
-	while (map->map[ct] != NULL)
+	while (map->map != NULL && map->map[ct] != NULL)
 	{
 		ft_free((void **)(&map->map[ct]));
 		ct++;

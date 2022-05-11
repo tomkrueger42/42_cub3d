@@ -1,10 +1,9 @@
 #include "map_map.h"
 
-t_map	*make_struct(char *lines, int x, int y);
+t_map	*make_struct(char *lines, int x);
 void	fill_struct(char *lines, t_map *map);
 t_map	*read_map(char *src);
 char	*fill_var(char *lines, char *name);
-
 
 /* 
 	liest alles in einen langen string, der spaeter ausgewertet wird
@@ -16,7 +15,6 @@ t_map	*read_map(char *src)
 {
 	int		fd;
 	int		x;
-	int		y;
 	char	*lines;
 	char	*temp;
 
@@ -28,7 +26,6 @@ t_map	*read_map(char *src)
 		close (fd);
 		return (NULL);
 	}
-	y = 1;
 	x = ft_strlen(temp);
 	while (temp != NULL)
 	{
@@ -36,21 +33,20 @@ t_map	*read_map(char *src)
 		temp = get_next_line(fd);
 		if (ft_strlen(temp) > x)
 			x = ft_strlen(temp);
-		y++;
 	}
 	close (fd);
-	return (make_struct(lines, x, y));
+	return (make_struct(lines, x));
 }
 
 /*
 	macht einen grundmalloc und setzt die werte per default auf NULL
 	das macht die errorpruefung leichter
 */
-t_map	*make_struct(char *lines, int x, int y)
+t_map	*make_struct(char *lines, int x)
 {
 	t_map	*new;
 
-	new = malloc(sizeof(t_map *));
+	new = malloc(sizeof(t_map));
 	if (new == NULL)
 		return (NULL);
 	new->n = NULL;
@@ -60,10 +56,10 @@ t_map	*make_struct(char *lines, int x, int y)
 	new->f = NULL;
 	new->c = NULL;
 	new->map = NULL;
-	new->player = 0;
-	new->x_max = x;
-	new->y_max = y;
 	fill_struct(lines, new);
+	new->x_max = x;
+	new->y_max = ft_arrlen(new->map);
+	fill_player(new);
 	ft_free((void **)(&lines));
 	return (new);
 }
@@ -81,15 +77,8 @@ void	fill_struct(char *lines, t_map *map)
 	map->f = fill_var(lines, "F ");
 	temp = lines;
 	ct = find_map(temp);
-	printf("ct = %d\n", ct);
 	if (ct > -1)
-		map->map = ft_split(temp + ct, '\n'); // ich beginne zu frueh
-	/*
-	irgendwie scheint mir dieses konstrukt noch reichlich fehleranfaellig (JAAAA!)
-	ct auf beginn der map setzen - iwie
-	ich brauche eine funktion, mit der ich ermittle, ab wann  die eigentliche map beginnt
-	darf nur whitespace oder digit sein in der zeile
-	*/
+		map->map = ft_split(temp + ct, '\n');
 	return ;
 }
 
@@ -114,3 +103,21 @@ char	*fill_var(char *lines, char *name)
 	temp = ft_substr(lines, begin, (end - begin));
 	return (temp);
 }
+
+/*
+1. map auffuellen, damit nicht versehentlich auf speicher zugegriffen werden kann 
+-> da wo strlen der map kleiner ist als x_max muss mit leerzeichen aufgefuellt werden
+2. player direction und start position  x/y ermitteln
+3. error handling, pruefen auf valide map 
+-> string darf nicht mit 0 oder buchstaben beginnen oder enden
+-> neben diesen darf auch kein leerzeichen sein
+-> auch nicht nach oben hin!!!!
+
+*/
+
+/*
+	N = 0.5
+	S = 1.5
+	W = 1;
+	E = 0
+*/
