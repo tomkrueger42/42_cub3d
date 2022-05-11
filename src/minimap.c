@@ -41,70 +41,101 @@ int	key_hook(int keycode, t_vars *vars)
 	return (0);
 }
 
-void	my_mlx_pixel_put(t_data *data, int x, int y, int color)
+void	draw_box(t_data *minimap, int x_pos, int y_pos, t_map *map)
 {
-	char	*dst;
-
-	dst = data->addr + (y * data->line_length + x * (data->bits_per_pixel / 8));
-	*(unsigned int*)dst = color;
-}
-
-void	draw_box(t_data *img, int pos_x, int pos_y, t_map *map)
-{
-	size_t	x;
-	size_t	y;
+	size_t	x_px;
+	size_t	y_px;
 	int		color;
 
-	y = 1;
-	while (y < map->box_size - 1)
+	y_px = 1;
+	while (y_px < map->box_size - 1)
 	{
-		x = 1;
-		while (x < map->box_size - 1)
+		x_px = 1;
+		while (x_px < map->box_size - 1)
 		{
-			if (map->data[pos_y][pos_x] == '0')
-				color = 0x00bbbbbb;
-			else if (map->data[pos_y][pos_x] == '1')
+			if (map->data[y_pos][x_pos] == '1')							// wall
 				color = 0x00444444;
-			else if (map->data[pos_y][pos_x] == ' ')
+			else if (map->data[y_pos][x_pos] == ' ')					// transparent
 				color = 0xFF000000;
-			my_mlx_pixel_put(img, (pos_x * map->box_size) + x, (pos_y * map->box_size) + y, color);
-			x++;
+			else
+				color = 0x00bbbbbb;										// ground below player / sprite
+			my_mlx_pixel_put(minimap, (x_pos * map->box_size) + x_px,
+				(y_pos * map->box_size) + y_px, color);
+			x_px++;
 		}
-		y++;
+		y_px++;
 	}
 }
 
-t_data	render_map(t_vars vars, t_map *map)
+void	render_minimap(t_map *map, t_data *minimap)
 {
-	t_data	img;
-	size_t	x;
-	size_t	y;
+	size_t	x_pos;
+	size_t	y_pos;
 
-	img.img = mlx_new_image(vars.mlx, MAPWIN, MAPWIN);
-	img.addr = mlx_get_data_addr(img.img, &img.bits_per_pixel, &img.line_length, &img.endian);
-	y = 0;
-	while (y < map->len)
+	y_pos = 0;
+	while (y_pos < map->len)
 	{
-		x = 0;
-		while (x < map->width)
+		x_pos = 0;
+		while (x_pos < map->width)
 		{
-			draw_box(&img, x, y, map);
-			x++;
+			draw_box(minimap, x_pos, y_pos, map);
+			x_pos++;
 		}
-		y++;
+		y_pos++;
 	}
-	return (img);
+}
+
+t_player *player_init(t_map *map)
+{
+	t_player	*player;
+
+	player = ft_calloc(1, sizeof(t_player));
+	if (player == NULL)
+		exit(123);
+	player->x_pos = 300;
+	player->y_pos = 300;
+	player->direction = 0.5;
+	player->size = map->box_size / 2;
+	return (player);
+}
+
+void	render_player(t_player *player, t_data *minimap)
+{
+	int	x_px;
+	int	y_px;
+
+	y_px = - (player->size / 2);
+	while (y_px < (int)(player->size / 2))
+	{
+		x_px = - (player->size / 2);
+		while (x_px < (int)(player->size / 2))
+		{
+			my_mlx_pixel_put(minimap, player->x_pos + x_px, player->y_pos + y_px, 0xffff00);
+			x_px++;
+		}
+		y_px++;
+	}
 }
 
 int	main(void)
 {
-	t_map	*map;
-	t_vars	vars;
+	t_map		*map;
+	t_vars		vars;
+	t_data		*minimap;
+	t_player	*player;
 
 	map = make_map();
 	vars.mlx = mlx_init();
 	vars.win = mlx_new_window(vars.mlx, map->width * map->box_size, map->len * map->box_size, "cub3d minimap");
-	mlx_put_image_to_window(vars.mlx, vars.win, render_map(vars, map).img, 0, 0);
+	minimap = ft_calloc(1, sizeof(t_data));
+	if (minimap == NULL)
+		return (12);
+	minimap->img = mlx_new_image(vars.mlx, MAPWIN, MAPWIN);
+	minimap->addr = mlx_get_data_addr(minimap->img, &minimap->bits_per_pixel, &minimap->line_length, &minimap->endian);
+	render_minimap(map, minimap);
+	player = player_init(map);	// this is done by davina
+	render_player(player, minimap);
+	mlx_put_image_to_window(vars.mlx, vars.win, minimap->img, 0, 0);
 	mlx_key_hook(vars.win, key_hook, &vars);
 	mlx_loop(vars.mlx);
 }

@@ -18,7 +18,7 @@ LIBS		=	$(LIBFT) $(MINILIBX)
 # hier kannst du deine files eintragen und dann mit "make davina" builden. dadurch koennen wir beide zum beispiel eine main() funktion haben
 SRCS_DAVINA		=	
 
-SRCS_TOM		=	minimap.c
+SRCS_TOM		=	minimap.c draw.c
 
 SRCS			= $(SRCS_DAVINA) $(SRCS_TOM)
 

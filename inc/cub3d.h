@@ -41,8 +41,22 @@ typedef struct s_map
 	size_t	box_size;
 }	t_map;
 
+typedef struct s_player
+{
+	size_t	x_pos;
+	size_t	y_pos;
+	double	direction;
+	size_t	size;
+}	t_player;
+
 /* ************************************************************************** */
 /* FUNCTION PROTOTYPES														  */
 /* ************************************************************************** */
+
+
+// draw.c
+void	my_mlx_pixel_put(t_data *data, int x, int y, int color);
+
+// minimap.c
 
 #endif
