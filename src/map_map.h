@@ -15,8 +15,7 @@ E = 0
 */
 
 typedef struct s_player {
-	char	direction;	 // direction looking to
-//	double	direction;
+	double	direction;
 	int		start_x;
 	int		start_y;
 }	t_player;
@@ -36,21 +35,21 @@ typedef struct s_map {
 
 
 /* read.c */
-
 t_map	*make_struct(char *lines, int x);
 void	fill_struct(char *lines, t_map *map);
 t_map	*read_map(char *src);
+char	*fill_var(char *lines, char *name);
 
 /* free_map.c */
-
 void	free_map(t_map *map);
 
 /* helper.c */
-
 int		valid_line(char *string, int potenz);
 int		find_code(char *origin, char *needle);
 int		find_map(char *string);
 
+/* player.c */
+void	fill_player(t_map *map);
 
 
 #endif

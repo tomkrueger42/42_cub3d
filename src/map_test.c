@@ -26,10 +26,14 @@ void	print_map(t_map *map)
 	printf("NORTH = \t\t%s\n", map->n);
 	printf("WEST = \t\t\t%s\n", map->w);
 	printf("SOUTH = \t\t%s\n", map->s);
-	printf("PLAYER = \t\t%c\n", map->player.direction);
 	printf("FLOOR COLOUR = \t\t%s\n", map->f);
 	printf("CEILING COLOUR = \t%s\n", map->c);
-	printf("\nMAP:\n");
+	printf("x_max = \t\t%d\n", map->x_max);
+	printf("y_max = \t\t%d\n", map->y_max);
+	printf("\n____________________\nPLAYER INFOS\n");
+	printf("Player direction = %f\n", map->player.direction);
+	printf("Player starts at = (%d|%d)\n", map->player.start_x, map->player.start_y);
+	printf("\n___________________\nMAP:\n");
 	if (map->map == NULL)
 	{
 		printf("map->map is null!!!\n");

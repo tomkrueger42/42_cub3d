@@ -9,7 +9,6 @@ char	*fill_var(char *lines, char *name);
 	liest alles in einen langen string, der spaeter ausgewertet wird
 	kennt ausserdem die groesse der map
 	sollte im return t_map aufrufen
-	das x und y kann ich vllt auch der ft_split entnehmen
 */
 t_map	*read_map(char *src)
 {
@@ -57,8 +56,8 @@ t_map	*make_struct(char *lines, int x)
 	new->c = NULL;
 	new->map = NULL;
 	fill_struct(lines, new);
-	new->x_max = x;
-	new->y_max = ft_arrlen(new->map);
+	new->x_max = x; // ich bin mir noch nicht sicher, ob ich nicht -1 brauche
+	new->y_max = ft_arrlen(new->map); // hier vllt auch -1
 	fill_player(new);
 	ft_free((void **)(&lines));
 	return (new);
@@ -108,6 +107,7 @@ char	*fill_var(char *lines, char *name)
 1. map auffuellen, damit nicht versehentlich auf speicher zugegriffen werden kann 
 -> da wo strlen der map kleiner ist als x_max muss mit leerzeichen aufgefuellt werden
 2. player direction und start position  x/y ermitteln
+-> beginnt bei 0, tom fragen, ob das so recht ist
 3. error handling, pruefen auf valide map 
 -> string darf nicht mit 0 oder buchstaben beginnen oder enden
 -> neben diesen darf auch kein leerzeichen sein
