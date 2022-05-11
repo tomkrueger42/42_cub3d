@@ -8,6 +8,7 @@ int	main(void)
 
 	test = read_map("x.cub");
 	print_map(test);
+	valid_check(test);
 	free_map(test);
 	//system("leaks cub3d"); // wenn ich den nicht auskommentiere kriege ich probleme
 }

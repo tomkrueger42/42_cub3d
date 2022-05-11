@@ -28,29 +28,45 @@ typedef struct s_map {
 	char		*f; // floor colour
 	char		*c; // ceiling colour
 	t_player	player;
-	int			x_max; // while strlen < x_max char append mit ' '
+	int			x_max;
 	int			y_max;
 	char		**map;
 }	t_map;
-
 
 /* read.c */
 t_map	*make_struct(char *lines, int x);
 void	fill_struct(char *lines, t_map *map);
 t_map	*read_map(char *src);
 char	*fill_var(char *lines, char *name);
+void	fill_lines(t_map *map);
 
 /* free_map.c */
 void	free_map(t_map *map);
+void	free_map_vars(t_map *map);
 
 /* helper.c */
 int		valid_line(char *string, int potenz);
 int		find_code(char *origin, char *needle);
 int		find_map(char *string);
+char	*append_space(char *line, int len);
 
 /* player.c */
 void	fill_player(t_map *map);
+double	find_direction(t_map *map, int *ct, int *ct2);
 
+/* check_player */
+int		player_check(char **map);
+int		player_check_line(char *line);
+
+/* check_walls */
+int		closed_walls(char **map);
+int		check_wall(char **map, int ct, int ct2);
+
+/* check.c */
+int		valid_check(t_map *map);
+int		invalid_char(char **map);
+int		invalid_char_line(char *line);
+int		no_value(t_map *map);
 
 #endif
 /*

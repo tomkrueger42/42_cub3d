@@ -3,6 +3,9 @@
 void	fill_player(t_map *map);
 double	find_direction(t_map *map, int *ct, int *ct2);
 
+/*
+	befuellt die variablen des players
+*/
 void	fill_player(t_map *map)
 {
 	int	ct;
@@ -16,6 +19,12 @@ void	fill_player(t_map *map)
 	return ;
 }
 
+/*
+	sucht nach N W E S und legt die blickrichtung 
+	im bogenmass als double fest
+	ausserdem werden ct & ct2 veraendert, die dann 
+	die x/y start-koordinate ergeben
+*/
 double	find_direction(t_map *map, int *ct, int *ct2)
 {
 	double	val;

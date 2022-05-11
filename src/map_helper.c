@@ -3,7 +3,12 @@
 int		valid_line(char *string, int potenz);
 int		find_code(char *origin, char *needle);
 int		find_map(char *string);
+char	*append_space(char *line, int len);
 
+/* 
+	sucht nach den codewoertern wie zb NO 
+	und gibt die stelle im string zurueck, an der sie sich befinden
+*/
 int	find_code(char *origin, char *needle)
 {
 	int	ct;
@@ -29,6 +34,10 @@ int	find_code(char *origin, char *needle)
 	return (-1);
 }
 
+/*
+	sucht den anfang der map
+	anfang == erste valide line
+*/
 int	find_map(char *string)
 {
 	int	potenz;
@@ -52,6 +61,9 @@ int	find_map(char *string)
 	return (-1);
 }
 
+/*
+	sucht die erste valide line
+*/
 int	valid_line(char *string, int potenz)
 {
 	int	ct;
@@ -67,4 +79,33 @@ int	valid_line(char *string, int potenz)
 		return (1);
 	else
 		return (-1);
+}
+
+/*
+	erweitert den string line
+	auf die laenge len und befuellt ihn
+	nach dem ende mit spaces
+*/
+char	*append_space(char *line, int len)
+{
+	char	*new;
+	int		ct;
+
+	ct = 0;
+	new = malloc(sizeof(char) * (len + 1));
+	if (new == NULL)
+		return (NULL);
+	new[len] = '\0';
+	while (line[ct] != '\0')
+	{
+		new[ct] = line[ct];
+		ct++;
+	}
+	while (ct < len)
+	{
+		new[ct] = ' ';
+		ct++;
+	}
+	ft_free((void **)(&line));
+	return (new);
 }

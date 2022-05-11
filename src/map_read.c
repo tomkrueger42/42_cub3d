@@ -4,6 +4,7 @@ t_map	*make_struct(char *lines, int x);
 void	fill_struct(char *lines, t_map *map);
 t_map	*read_map(char *src);
 char	*fill_var(char *lines, char *name);
+void	fill_lines(t_map *map);
 
 /* 
 	liest alles in einen langen string, der spaeter ausgewertet wird
@@ -56,13 +57,19 @@ t_map	*make_struct(char *lines, int x)
 	new->c = NULL;
 	new->map = NULL;
 	fill_struct(lines, new);
-	new->x_max = x; // ich bin mir noch nicht sicher, ob ich nicht -1 brauche
-	new->y_max = ft_arrlen(new->map); // hier vllt auch -1
+	if (new->map == NULL)
+		return (NULL);
+	new->x_max = x - 1;
+	new->y_max = ft_arrlen(new->map) - 1;
 	fill_player(new);
+	fill_lines(new);
 	ft_free((void **)(&lines));
 	return (new);
 }
 
+/*
+	hm, ja, das erklaert sich von selbst, oder?
+*/
 void	fill_struct(char *lines, t_map *map)
 {
 	int		ct;
@@ -104,20 +111,38 @@ char	*fill_var(char *lines, char *name)
 }
 
 /*
+	auffuellen der lines mit space, sodass am ende alle gleich lang sind und nicht
+	versehentlich auf speicher zugegriffen wird, der nicht existiert
+*/
+void	fill_lines(t_map *map)
+{
+	int	ct;
+
+	ct = 0;
+	while (map != NULL && map->map != NULL && map->map[ct] != NULL)
+	{
+		if (ft_strlen(map->map[ct]) < map->x_max)
+		{
+			map->map[ct] = append_space(map->map[ct], map->x_max);
+		}
+		ct++;
+	}
+	return ;
+}
+
+/*
+					CHECK
 1. map auffuellen, damit nicht versehentlich auf speicher zugegriffen werden kann 
 -> da wo strlen der map kleiner ist als x_max muss mit leerzeichen aufgefuellt werden
+
+
 2. player direction und start position  x/y ermitteln
 -> beginnt bei 0, tom fragen, ob das so recht ist
+-> in pixel umrechnen
+
 3. error handling, pruefen auf valide map 
 -> string darf nicht mit 0 oder buchstaben beginnen oder enden
 -> neben diesen darf auch kein leerzeichen sein
 -> auch nicht nach oben hin!!!!
 
-*/
-
-/*
-	N = 0.5
-	S = 1.5
-	W = 1;
-	E = 0
 */

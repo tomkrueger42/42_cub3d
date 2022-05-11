@@ -3,6 +3,9 @@
 void	free_map(t_map *map);
 void	free_map_vars(t_map *map);
 
+/*
+	zusammenfassende free funktion der map
+*/
 void	free_map(t_map *map)
 {
 	printf("free function\n");
@@ -22,6 +25,10 @@ void	free_map(t_map *map)
 	return ;
 }
 
+/*
+	freet die char * variablen in der map
+	(platzgruende)
+*/
 void	free_map_vars(t_map *map)
 {
 	ft_free((void **)(&map->n));
