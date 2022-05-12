@@ -12,7 +12,10 @@
 /* DEFINES																	  */
 /* ************************************************************************** */
 
-
+# define MOVEMENT_SPEED	10
+# define RAD			0.0174533
+# define PI				3.1415926535
+#define	MAPWIN			500
 
 /* ************************************************************************** */
 /* STRUCTS																	  */
@@ -24,29 +27,32 @@ typedef struct	s_vars
 	void	*win;
 }	t_vars;
 
-typedef struct	s_data
+typedef struct	s_img
 {
 	void	*img;
 	char	*addr;
 	int		bits_per_pixel;
 	int		line_length;
 	int		endian;
-}	t_data;
+}	t_img;
 
 typedef struct s_map
 {
 	char	**data;
-	size_t	width;
-	size_t	len;
-	size_t	box_size;
+	int		width;
+	int		len;
+	int		box_size;
+	t_img	*minimap;
 }	t_map;
 
 typedef struct s_player
 {
-	size_t	x_pos;
-	size_t	y_pos;
+	int		x_pos;
+	int		y_pos;
+	double	x_del;
+	double	y_del;
 	double	direction;
-	size_t	size;
+	int		size;
 }	t_player;
 
 /* ************************************************************************** */
@@ -55,8 +61,18 @@ typedef struct s_player
 
 
 // draw.c
-void	my_mlx_pixel_put(t_data *data, int x, int y, int color);
+void	my_mlx_pixel_put(t_img *data, int x, int y, int color);
 
 // minimap.c
+t_map	*map(void);
+
+// player.c
+t_player	*player(void);
+void		render_player(t_vars *vars);
+void		move_player(int keycode);
+
+// utils.c
+void	put_error_and_exit(char *msg, int exitcode);
+
 
 #endif
