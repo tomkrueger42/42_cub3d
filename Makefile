@@ -16,7 +16,7 @@ MINILIBX_INC =	-Imlx
 LIBS		=	$(LIBFT) $(MINILIBX)
 
 # hier kannst du deine files eintragen und dann mit "make davina" builden. dadurch koennen wir beide zum beispiel eine main() funktion haben
-SRCS_DAVINA		=	
+SRCS_DAVINA		=	map_free_map.c map_read.c map_test.c map_helper.c
 
 SRCS_TOM		=	minimap.c draw.c player.c utils.c
 
