@@ -60,16 +60,21 @@ void	draw_box(int x_pos, int y_pos)
 
 void	render_minimap(t_vars *vars)
 {
+	static int	asdf = 0;
 	int	x_pos;
 	int	y_pos;
 
-	y_pos = 0;
-	while (y_pos < map()->len)
+	if (asdf == 0)
 	{
-		x_pos = 0;
-		while (x_pos < map()->width)
-			draw_box(x_pos++, y_pos);
-		y_pos++;
+		y_pos = 0;
+		while (y_pos < map()->len)
+		{
+			x_pos = 0;
+			while (x_pos < map()->width)
+				draw_box(x_pos++, y_pos);
+			y_pos++;
+		}
+		asdf = 1;
 	}
 	render_player(vars);
 }
@@ -111,7 +116,7 @@ int	main(void)
 	make_map(vars);
 	vars.win = mlx_new_window(vars.mlx, map()->width * map()->box_size, map()->len * map()->box_size, "cub3d minimap");
 	render_minimap(&vars);
-	mlx_key_hook(vars.win, key_hook, &vars);
+	mlx_hook(vars.win, 02, 1L<<0, key_hook, &vars);
 	mlx_loop(vars.mlx);
 	return (0);
 }
