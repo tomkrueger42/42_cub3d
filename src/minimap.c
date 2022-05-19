@@ -60,11 +60,11 @@ void	draw_box(int x_pos, int y_pos)
 
 void	render_minimap(t_vars *vars)
 {
-	static int	asdf = 0;
+	static int	re_render = 0;
 	int	x_pos;
 	int	y_pos;
 
-	if (asdf == 0)
+	if (re_render == 0)
 	{
 		y_pos = 0;
 		while (y_pos < map()->len)
@@ -74,7 +74,7 @@ void	render_minimap(t_vars *vars)
 				draw_box(x_pos++, y_pos);
 			y_pos++;
 		}
-		asdf = 1;
+		re_render = 0;	// 0 = will re-render minimap, 1 = will not re-render minimap
 	}
 	render_player(vars);
 }

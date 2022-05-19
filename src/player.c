@@ -51,29 +51,21 @@ void	draw_ray(__unused t_vars *vars)
 
 	x = round(player()->x_del * 100);
 	y = round(player()->y_del * 100);
-	if (player()->x_del == 0)
+	if (player()->y_del == 0)
 		xy = __INT_FAST64_MAX__;
 	else
-		xy = player()->y_del / player()->x_del;
-	while (ft_abs(x) != 0 || ft_abs(y) != 0)
+		xy = player()->x_del / player()->y_del;
+	while (x != 0 || y != 0)
 	{
 		my_mlx_pixel_put(map()->minimap, player()->x_pos + x, player()->y_pos + y, 0xFF00);
-		if (x > 0 && (y == 0 || (x / y >= xy && xy > 0)
-					|| (x / y < xy && xy < 0)))
+		if (x > 0 && (y == 0 || (x / y >= xy && xy > 0) || (x / y < xy && xy < 0)))
 			x--;
-		else if (x < 0 && (y == 0 || (x / y <= xy && xy < 0)
-					|| (x / y > xy && xy > 0)))
+		else if (x < 0 && (y == 0 || (x / y <= xy && xy < 0) || (x / y > xy && xy > 0)))
 			x++;
 		else if (y > 0)
 			y--;
 		else if (y < 0)
 			y++;
-		else
-		{
-			printf("xy: %f, x/y: %f, x: %f, y: %f\n", xy, x / y, x, y);
-			return ;
-		}
-		printf("loop: x: %f, y: %f\n", x, y);
 	}
 }
 
@@ -121,5 +113,5 @@ void	move_player(int keycode)
 		player()->x_del = cos(player()->direction);
 		player()->y_del = sin(player()->direction);
 	}
-	printf("x: %d, y: %d, x_d: %f, y_d: %f, dir: %f\n", player()->x_pos, player()->y_pos, player()->x_del, player()->y_del, player()->direction);
+	// printf("x: %d, y: %d, x_d: %f, y_d: %f, dir: %f\n", player()->x_pos, player()->y_pos, player()->x_del, player()->y_del, player()->direction);
 }
