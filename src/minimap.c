@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include "../inc/cub3d.h"
+#include "cub3d.h"
 #include <stdlib.h>
 
 void make_map(t_vars vars)
@@ -18,13 +18,13 @@ void make_map(t_vars vars)
 	map()->width = 7;
 	map()->len = 9;
 	if (map()->width > map()->len)
-		map()->box_size = MAPWIN / map()->width;
+		map()->box_size = MINIMAP_SIZE / map()->width;
 	else
-		map()->box_size = MAPWIN / map()->len;
+		map()->box_size = MINIMAP_SIZE / map()->len;
 	map()->minimap = ft_calloc(1, sizeof(t_img));
 	if (map()->minimap == NULL)
 		put_error_and_exit("malloc failure in make_map()", 1);
-	map()->minimap->img = mlx_new_image(vars.mlx, MAPWIN, MAPWIN);
+	map()->minimap->img = mlx_new_image(vars.mlx, MINIMAP_SIZE, MINIMAP_SIZE);
 	map()->minimap->addr = mlx_get_data_addr(map()->minimap->img,
 		&map()->minimap->bits_per_pixel, &map()->minimap->line_length,
 		&map()->minimap->endian);
@@ -106,17 +106,4 @@ t_map	*map(void)
 			put_error_and_exit("malloc failure in map()", 1);
 	}
 	return (map);
-}
-
-int	main(void)
-{
-	t_vars	vars;
-
-	vars.mlx = mlx_init();
-	make_map(vars);
-	vars.win = mlx_new_window(vars.mlx, map()->width * map()->box_size, map()->len * map()->box_size, "cub3d minimap");
-	render_minimap(&vars);
-	mlx_hook(vars.win, 02, 1L<<0, key_hook, &vars);
-	mlx_loop(vars.mlx);
-	return (0);
 }

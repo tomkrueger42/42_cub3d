@@ -71,7 +71,7 @@ void	draw_ray(__unused t_vars *vars)
 
 void	move_player(int keycode)
 {
-	// they do some weird stuff still
+	// they do some weird stuff still -> not going straight to the direction the player is pointing to (but probably not really noticeable)
 
 	if (keycode == 13)	// W key // this movement tends to go slightly to the left
 	{
@@ -99,7 +99,7 @@ void	move_player(int keycode)
 	}
 	else if (keycode == 123) // Arrow left key
 	{
-		player()->direction -= 0.1;
+		player()->direction -= ROTATION_SPEED;
 		if (player()->direction < 0 * PI)
 			player()->direction += 2 * PI;
 		player()->x_del = cos(player()->direction);
@@ -107,7 +107,7 @@ void	move_player(int keycode)
 	}
 	else if (keycode == 124) // Arrow right key
 	{
-		player()->direction += 0.1;
+		player()->direction += ROTATION_SPEED;
 		if (player()->direction >= 2 * PI)
 			player()->direction -= 2 * PI;
 		player()->x_del = cos(player()->direction);

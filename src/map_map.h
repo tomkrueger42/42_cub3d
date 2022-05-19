@@ -14,30 +14,30 @@ W = 1;
 E = 0
 */
 
-typedef struct s_player {
-	double	direction;
-	int		start_x;
-	int		start_y;
-}	t_player;
+// typedef struct s_player {
+// 	double	direction;
+// 	int		start_x;
+// 	int		start_y;
+// }	t_player;
 
-typedef struct s_map {
-	char		*n; //pic path north
-	char		*s; //pic path south
-	char		*w; //pic path west
-	char		*e; //pic path east
-	char		*f; // floor colour
-	char		*c; // ceiling colour
-	t_player	player;
-	int			x_max;
-	int			y_max;
-	char		**map;
-}	t_map;
+// typedef struct s_map {
+// 	char		*n; //pic path north
+// 	char		*s; //pic path south
+// 	char		*w; //pic path west
+// 	char		*e; //pic path east
+// 	char		*f; // floor colour
+// 	char		*c; // ceiling colour
+// 	t_player	player;
+// 	int			x_max;
+// 	int			y_max;
+// 	char		**map;
+// }	t_map;
 
 /* read.c */
-t_map	*make_struct(char *lines, int x);
-void	fill_struct(char *lines, t_map *map);
-t_map	*read_map(char *src);
-char	*fill_var(char *lines, char *name);
+// t_map	*extract_style(char *lines, int x);
+// void	fill_struct(char *lines, t_map *map);
+void	read_map(char *src);
+// char	*extract_value(char *lines, char *name);
 void	fill_lines(t_map *map);
 
 /* free_map.c */
