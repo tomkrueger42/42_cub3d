@@ -9,7 +9,7 @@ bool	parse_map(void)
 {
 	count_dimensions(map()->data);
 	fill_rows_with_spaces(map()->data);
-	printf("\nprint_map........\n");
+	printf("\nprint_map()........\n");
 	
 	print_map();
 	return (1);
@@ -41,7 +41,7 @@ void	fill_rows_with_spaces(char **data)
 		if (ft_strlen(data[y]) < map()->width)
 		{
 			x = 0;
-			new = ft_calloc(map()->len + 1, sizeof(*new));
+			new = ft_calloc(map()->width + 1, sizeof(*new));
 			if (new == NULL)
 				put_error_and_exit("malloc error in fill_rows_with_spaces()", 1);
 			while (data[y][x] != '\0')
@@ -75,16 +75,16 @@ void	print_map(void)
 	// printf("\n____________________\nPLAYER INFOS\n");
 	// printf("Player direction = %f\n", map->player.direction);
 	// printf("Player starts at = (%d|%d)\n", map->player.start_x, map->player.start_y);
-	// printf("\n___________________\nMAP:\n");
-	// if (map()->data == NULL)
-	// {
-	// 	printf("map()->data is null!!!\n");
-	// 	return ;
-	// }
-	// while (map()->data[index] != NULL)
-	// {
-	// 	printf("|%s|\n", map()->data[index]);
-	// 	index++;
-	// }
+	printf("\n___________________\nMAP:\n");
+	if (map()->data == NULL)
+	{
+		printf("map()->data is null!!!\n");
+		return ;
+	}
+	while (map()->data[index] != NULL)
+	{
+		printf("|%s|\n", map()->data[index]);
+		index++;
+	}
 	return ;
 }

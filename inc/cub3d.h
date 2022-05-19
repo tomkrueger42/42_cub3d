@@ -12,6 +12,7 @@
 /* DEFINES																	  */
 /* ************************************************************************** */
 
+# define MAP_CHARS		" 01NESW"
 # define MOVEMENT_SPEED	10
 # define ROTATION_SPEED	0.1
 # define RAD			0.0174533

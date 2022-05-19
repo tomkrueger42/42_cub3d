@@ -5,8 +5,7 @@
 
 unsigned int	convert_color(char *value);
 char			*extract_value(char *lines, char *name);
-int				find_map(char *string);
-int				valid_line(char *string, int potenz);
+char			*find_map(char *string);
 
 void	read_file(char *filename)
 {
@@ -28,9 +27,9 @@ void	read_file(char *filename)
 	style()->west_walls = extract_value(lines, "WE ");
 	style()->floor_color = convert_color(extract_value(lines, "F "));
 	style()->ceiling_color = convert_color(extract_value(lines, "C "));
-	if (find_map(lines) == -1)
-		put_error_and_exit("couldn't find map", 2);
-	map()->data = ft_split(lines + find_map(lines), '\n');
+	// if (find_map(lines) == -1)
+	// 	put_error_and_exit("couldn't find map", 2);
+	map()->data = ft_split(find_map(lines), '\n');
 	ft_free((void **)(&lines));
 }
 
@@ -67,49 +66,46 @@ char	*extract_value(char *lines, char *name)
 		origin++;
 	while (ft_iswhitespace(*origin))
 		origin++;
-	end = origin - lines;
-	printf("name: %s, origin: %s\n\n", name, ft_substr(origin, 0, 20));
-	while (lines[end] != '\0' && !ft_iswhitespace(lines[end]))
+	end = 0;
+	while (origin[end] != '\0' && !ft_iswhitespace(origin[end]))
 		end++;
 	return (ft_substr(origin, 0, end));
 }
 
-int	find_map(char *string)
+bool	valid_line(char *line)
 {
-	int	potenz;
-	int	ct;
-	int	out;
+	size_t	index;
 
-	potenz = 0;
-	ct = 0;
-	out = 0;
-	if (!string)
-		return (-1);
-	while (string[ct] != '\0')
+	index = 0;
+	while (line[index] != '\0' && line[index] != '\n')
 	{
-		if (string[ct] == '\n' && string[ct + 1] != '\0')
-			potenz = ct + 1;
-		if (valid_line(string, potenz) > -1)
-			return (potenz);
-		if (string[ct] != '\0')
-			ct++;
+		if (ft_strchr(MAP_CHARS, line[index]))
+			index++;
+		else
+			return (false);
 	}
-	return (-1);
+	return (true);
 }
 
-int	valid_line(char *string, int potenz)
+char	*find_map(char *lines)
 {
-	int	ct;
+	char	*line;
+	char	*map_start;
 
-	ct = potenz;
-	while (string[ct] != '\0' && string[ct] != '\n')
+	line = lines;
+	while (*line != '\0' && valid_line(line) == false)
 	{
-		if (!ft_isdigit(string[ct]) && !ft_iswhitespace(string[ct]))
-			return (-1);
-		ct++;
+		line = ft_strchr(line, '\n') + 1;
 	}
-	if ((string[ct] == '\0' || string[ct] == '\n') && ct != potenz)
-		return (1);
-	else
-		return (-1);
+	map_start = line;
+	while (*line != '\0')
+	{
+		if (valid_line(line) == false)
+			put_error_and_exit("invalid map", 2);
+		if (ft_strchr(line, '\n'))
+			line = ft_strchr(line, '\n') + 1;
+		else
+			break ;
+	}
+	return (map_start);
 }
