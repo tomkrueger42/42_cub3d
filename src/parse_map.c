@@ -1,18 +1,17 @@
 #include "cub3d.h"
+#include <stdlib.h>
 #include <stdio.h>
 
 void	count_dimensions(char **data);
 void	fill_rows_with_spaces(char **data);
 void	print_map(void);
 
-bool	parse_map(void)
+int	parse_map(void)
 {
 	count_dimensions(map()->data);
 	fill_rows_with_spaces(map()->data);
-	if (closed_walls(map()->data))
-		printf("closed_walls: true\n");
-	else
-		printf("closed_walls: false\n");
+	if (map_check(map()->data) || player_check(map()->data))
+		return (EXIT_FAILURE);
 	printf("\nprint_map()........\n");
 	
 	print_map();
@@ -21,7 +20,7 @@ bool	parse_map(void)
 
 void	count_dimensions(char **data)
 {
-	size_t	y;
+	int	y;
 
 	y = 0;
 	while (data != NULL && data[y] != NULL)
@@ -30,7 +29,10 @@ void	count_dimensions(char **data)
 			map()->width = ft_strlen(data[y]);
 		y++;
 	}
-	map()->len = ft_strlen(*data);
+	map()->len = y;
+	map()->box_size = MINIMAP_SIZE / map()->width;
+	if (map()->len > map()->width)
+		map()->box_size = MINIMAP_SIZE / map()->len;
 }
 
 void	fill_rows_with_spaces(char **data)
@@ -76,9 +78,10 @@ void	print_map(void)
 	printf("CEILING COLOUR = %x\n", style()->ceiling_color);
 	printf("x_max = %d\n", map()->width);
 	printf("y_max = %d\n", map()->len);
-	// printf("\n____________________\nPLAYER INFOS\n");
-	// printf("Player direction = %f\n", map->player.direction);
-	// printf("Player starts at = (%d|%d)\n", map->player.start_x, map->player.start_y);
+	printf("box_size = %d\n", map()->box_size);
+	printf("\n____________________\nPLAYER INFOS\n");
+	printf("Player direction = %f\n", player()->direction);
+	printf("Player starts at = (%d|%d)\n", player()->x_pos, player()->y_pos);
 	printf("\n___________________\nMAP:\n");
 	if (map()->data == NULL)
 	{

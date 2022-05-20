@@ -76,10 +76,11 @@ void	read_file(char *filename);
 t_style	*style(void);
 
 // parse_map.c
-bool	parse_map(void);
+int	parse_map(void);
 
-// map_check_walls.c
-bool	closed_walls(char **map);
+// map_check.c
+int	map_check(char **map);
+int	player_check(char **map);
 
 // draw.c
 void	my_mlx_pixel_put(t_img *data, int x, int y, int color);

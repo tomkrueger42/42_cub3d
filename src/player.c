@@ -1,4 +1,4 @@
-#include "../inc/cub3d.h"
+#include "cub3d.h"
 #include <stdio.h>
 #include <math.h>
 

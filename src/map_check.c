@@ -1,108 +1,94 @@
-#include "map_map.h"
+#include "cub3d.h"
+#include <stdlib.h>
+#include <stdio.h>
 
-int		valid_check(t_map *map);
-int		invalid_char(char **map);
-int		invalid_char_line(char *line);
-int		no_value(t_map *map);
+int		blanks_nearby(char **data, int x, int y);
+int		player_check(char **data);
+void	populate_player(int x, int y, char heading);
 
-/*
-	zusammenfassung aller notwendiger checks
-*/
-int	valid_check(t_map *map)
+int	map_check(char **data)
 {
-	if (no_value(map) == -1 || invalid_char(map->map) == -1)
-		return (-1);
-	if (player_check(map->map) != 1)
-	{
-		ft_putstr_fd("Wrong nbr of players!\n", 2);
-		return (-1);
-	}
-	if (closed_walls(map->map) == -1)
-	{
-		ft_putstr_fd("Unclosed Walls in map!\n", 2);
-		return (-1);		
-	}
-	return (1);
-}
+	int	y;
+	int	x;
 
-/*
-	checkt ob es iwo keinen wert gibt
-	ACHTUNG
-	die datei pfade muessen spaeter gesondert noch mal geprueft werden!
-*/
-int	no_value(t_map *map)
-{
-	if (map->n == NULL || map->s == NULL || map->w == NULL || map->e == NULL)
+	y = 0;
+	x = 0;
+	while (data[y] != NULL)
 	{
-		ft_putstr_fd("No Value for picture path!\n", 2);
-		return (-1);
-	}
-	if (map->f == NULL || map->c == NULL)
-	{
-		ft_putstr_fd("No colour for floor or ceiling!\n", 2);
-		return (-1);
-	}
-	if (map->player.direction < 0
-		|| map->player.start_x < 0 || map->player.start_y < 0)
-	{
-		ft_putstr_fd("Wrong player information!\n", 2);
-		return (-1);
-	}
-	if (map->map == NULL)
-	{
-		ft_putstr_fd("Couldn't read map!\n", 2);
-		return (-1);
-	}
-	return (1);
-}
-
-/*
-	checkt auf invalid chars in der map
-*/
-int	invalid_char(char **map)
-{
-	int	ct;
-	int	ret;
-
-	ct = 0;
-	ret = 1;
-	while (ret == 1 && map[ct] != NULL)
-	{
-		if (invalid_char_line(map[ct]) == -1)
+		while (data[y][x] != '\0')
 		{
-			ret = -1;
-			ft_putstr_fd("Invalid char in map!\n", 2);
+			if (data[y][x] == '0' && blanks_nearby(data, x, y))
+			{
+				printf("unclosed walls near map[%d][%d]\n", y, x);
+				put_error_and_exit("unclosed walls", 3);
+				return (EXIT_FAILURE);
+			}
+			x++;
 		}
-		ct++;
+		x = 0;
+		y++;
 	}
-	return (ret);
+	return (EXIT_SUCCESS);
 }
 
-/*
-	hilfsfunktion wegen laenge
-*/
-int	invalid_char_line(char *line)
+int	blanks_nearby(char **data, int x, int y)
 {
-	char	*valid;
-	int		ct;
-	int		ret;
-
-	valid = ft_strdup("10CNESW ");
-	if (valid == NULL)
-		return (-1);
-	ct = 0;
-	ret = 1;
-	while (ret == 1 && line[ct] != '\0')
+	if (x == 0 || y == 0
+		|| data[y - 1][x - 1] == ' '
+		|| data[y - 1][x] == ' '
+		|| data[y - 1][x + 1] == ' '
+		|| data[y][x - 1] == ' '
+		|| data[y][x] == ' '
+		|| data[y][x + 1] == ' '
+		|| data[y + 1][x - 1] == ' '
+		|| data[y + 1][x] == ' '
+		|| data[y + 1][x + 1] == ' ')
 	{
-		if (ft_strchr_int(valid, line[ct]) == -1)
-			ret = -1;
-		ct++;
+		return (EXIT_FAILURE);
 	}
-	free(valid);
-	return (ret);
+	return (EXIT_SUCCESS);
 }
 
-/*
-ich muss die farbwerte auch noch checken ... 
-ach fuck ey
-*/
+int	player_check(char **data)
+{
+	int	x;
+	int	y;
+	int	sum;
+
+	y = 0;
+	sum = 0;
+	while (data[y] != NULL)
+	{
+		x = 0;
+		while (data[y][x] != '\0')
+		{
+			if (data[y][x] == 'N' || data[y][x] == 'E'
+				|| data[y][x] == 'S' || data[y][x] == 'W')
+			{
+				if (y == map()->len || x == map()->width || blanks_nearby(data, x, y))
+					put_error_and_exit("incorrect player positioning", 3);
+				populate_player(x, y, data[y][x]);
+				sum++;
+			}
+			x++;
+		}
+		y++;
+	}
+	if (sum != 1)
+		put_error_and_exit("wrong amount of players", 3);
+	return (EXIT_SUCCESS);
+}
+
+void	populate_player(int x, int y, char heading)
+{
+	player()->y_pos = (y + 0.5) * map()->box_size;
+	player()->x_pos = (x + 0.5) * map()->box_size;
+	if (heading == 'N')
+		player()->direction = 0.5 * PI;
+	else if (heading == 'E')
+		player()->direction = 0;
+	else if (heading == 'S')
+		player()->direction = 1.5 * PI;
+	else if (heading == 'W')
+		player()->direction = PI;
+}

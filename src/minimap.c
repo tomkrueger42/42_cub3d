@@ -64,6 +64,10 @@ void	render_minimap(t_vars *vars)
 	int	x_pos;
 	int	y_pos;
 
+	// my_mlx_pixel_put(map()->minimap, 10, 10, 0xFFFFFF);
+	// my_mlx_pixel_put(map()->minimap, 10, 11, 0xFFFFFF);
+	// my_mlx_pixel_put(map()->minimap, 11, 10, 0xFFFFFF);
+	// my_mlx_pixel_put(map()->minimap, 11, 11, 0xFFFFFF);
 	if (re_render == 0)
 	{
 		y_pos = 0;
@@ -76,6 +80,7 @@ void	render_minimap(t_vars *vars)
 		}
 		re_render = 0;	// 0 = will re-render minimap, 1 = will not re-render minimap
 	}
+	// mlx_put_image_to_window(vars->mlx, vars->win, map()->minimap, 0, 0);
 	render_player(vars);
 }
 
