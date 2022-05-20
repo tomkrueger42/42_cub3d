@@ -1,60 +1,68 @@
-#include "map_map.h"
+#include "cub3d.h"
 
-int		closed_walls(char **map);
-int		check_wall(char **map, int ct, int ct2);
+#include <stdio.h>
+
+bool		closed_walls(char **map);
+bool		check_wall(char **map, int y, int x);
+
+
+
+// blanks on outer corners!
+// zeros on inner corners
+
 
 /*
 	check auf unclosed walls
 */
-int	closed_walls(char **map)
+bool	closed_walls(char **map)
 {
-	int	ct;
-	int	ct2;
+	int	y;
+	int	x;
 
-	ct = 0;
-	ct2 = 0;
-	while (map[ct] != NULL)
+	y = 0;
+	x = 0;
+	while (map[y] != NULL)
 	{
-		while (map[ct][ct2])
+		while (map[y][x] != '\0')
 		{
-			if (map[ct][ct2] != '1' && !ft_iswhitespace(map[ct][ct2]))
+			if (map[y][x] != '1' && !ft_iswhitespace(map[y][x]))
 			{
-				if (check_wall(map, ct, ct2) == -1)
+				if (check_wall(map, y, x) == false)
 				{
-					printf("Annahme unclosed walls bei:\n[%d][%d] == %c\n", ct, ct2, map[ct][ct2]);
-					return (-1);
+					printf("Annahme unclosed walls bei:\n[%d][%d] == %c\n", y, x, map[y][x]);
+					return (false);
 				}
 			}
-			ct2++;
+			x++;
 		}
-		ct2 = 0;
-		ct++;
+		x = 0;
+		y++;
 	}
-	return (1);
+	return (true);
 }
 
 /*
 	aufgerufen, wenn nicht 1 oder space,
 	dann wird auf unclosed gecheckt
 */
-int	check_wall(char **map, int ct, int ct2)
+bool	check_wall(char **map, int y, int x)
 {
 	int	size;
 	int	len;
 
 	size = ft_arrlen(map) - 1;
 	len = ft_strlen(map[0]);
-	if (ct == 0 || ct == size || ct2 == len || ct2 == 0)
-		return (-1);
-	if (map[ct - 1][ct2] == ' ' || map[ct + 1][ct2] == ' ')
-		return (-1);
-	if (map[ct - 1][ct2] == '\0' || map[ct + 1][ct2] == '\0')
-		return (-1);
-	if (map[ct][ct2 - 1] == ' ' || map[ct][ct2 + 1] == ' ')
-		return (-1);
-	if (map[ct][ct2 - 1] == '\0' || map[ct][ct2 + 1] == '\0')
-		return (-1);
-	return (1);
+	if (y == 0 || y == size || x == len || x == 0)
+		return (false);
+	if (map[y - 1][x] == ' ' || map[y + 1][x] == ' ')
+		return (false);
+	if (map[y - 1][x] == '\0' || map[y + 1][x] == '\0')
+		return (false);
+	if (map[y][x - 1] == ' ' || map[y][x + 1] == ' ')
+		return (false);
+	if (map[y][x - 1] == '\0' || map[y][x + 1] == '\0')
+		return (false);
+	return (true);
 }
 
 /*

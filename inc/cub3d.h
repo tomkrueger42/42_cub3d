@@ -78,6 +78,9 @@ t_style	*style(void);
 // parse_map.c
 bool	parse_map(void);
 
+// map_check_walls.c
+bool	closed_walls(char **map);
+
 // draw.c
 void	my_mlx_pixel_put(t_img *data, int x, int y, int color);
 int		create_trgb(unsigned char t, unsigned char r, unsigned char g,

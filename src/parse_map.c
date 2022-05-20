@@ -9,6 +9,10 @@ bool	parse_map(void)
 {
 	count_dimensions(map()->data);
 	fill_rows_with_spaces(map()->data);
+	if (closed_walls(map()->data))
+		printf("closed_walls: true\n");
+	else
+		printf("closed_walls: false\n");
 	printf("\nprint_map()........\n");
 	
 	print_map();

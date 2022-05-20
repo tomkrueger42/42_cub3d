@@ -16,7 +16,8 @@ OBJS		=	$(addprefix $(OBJ_PATH), $(SRCS:.c=.o))
 #	Sources																	   #
 # **************************************************************************** #
 
-SRCS		=	minimap.c draw.c player.c utils.c main.c read_file.c parse_map.c
+SRCS		=	minimap.c draw.c player.c utils.c main.c read_file.c parse_map.c\
+				map_check_walls.c
 
 # **************************************************************************** #
 #	Libraries																   #
