@@ -1,34 +1,6 @@
-#include <stdio.h>
 #include "cub3d.h"
+#include <stdio.h>
 #include <stdlib.h>
-
-// void make_map(t_vars vars)
-// {
-// 	map()->data = ft_calloc(10, sizeof(char *));
-// 	map()->data[0] = ft_strdup("1111111");
-// 	map()->data[1] = ft_strdup("1 01001");
-// 	map()->data[2] = ft_strdup("1001101");
-// 	map()->data[3] = ft_strdup("11 1 00");
-// 	map()->data[4] = ft_strdup("1111111");
-// 	map()->data[5] = ft_strdup("       ");
-// 	map()->data[6] = ft_strdup("0000000");
-// 	map()->data[7] = ft_strdup("0001010");
-// 	map()->data[8] = ft_strdup("1110101");
-// 	map()->data[9] = NULL;
-// 	map()->width = 7;
-// 	map()->len = 9;
-// 	if (map()->width > map()->len)
-// 		map()->box_size = MINIMAP_SIZE / map()->width;
-// 	else
-// 		map()->box_size = MINIMAP_SIZE / map()->len;
-// 	map()->minimap = ft_calloc(1, sizeof(t_img));
-// 	if (map()->minimap == NULL)
-// 		put_error_and_exit("malloc failure in make_map()", 1);
-// 	map()->minimap->img = mlx_new_image(vars.mlx, MINIMAP_SIZE, MINIMAP_SIZE);
-// 	map()->minimap->addr = mlx_get_data_addr(map()->minimap->img,
-// 		&map()->minimap->bits_per_pixel, &map()->minimap->line_length,
-// 		&map()->minimap->endian);
-// }
 
 void	draw_box(int x_pos, int y_pos)
 {
@@ -36,18 +8,18 @@ void	draw_box(int x_pos, int y_pos)
 	int	y_px;
 	int	color;
 
-	y_px = /* 1 */ 0;
-	while (y_px < map()->box_size - /* 1 */ 0)
+	y_px = 0;
+	while (y_px < map()->box_size - 0)
 	{
-		x_px = /* 1 */ 0;
-		while (x_px < map()->box_size - /* 1 */ 0)
+		x_px = 0;
+		while (x_px < map()->box_size - 0)
 		{
 			if (map()->data[y_pos][x_pos] == '1')
 				color = 0x00444444;
-			else if (map()->data[y_pos][x_pos] == '0')
-				color = 0x00bbbbbb;
 			else if (map()->data[y_pos][x_pos] == ' ')
 				color = 0x000000;
+			else
+				color = 0x00bbbbbb;
 			if (y_px == 0 || y_px == map()->box_size - 1 || x_px == 0 || x_px == map()->box_size -1)
 				color = 0x0;
 			my_mlx_pixel_put(&map()->minimap, (x_pos * map()->box_size) + x_px,
@@ -60,39 +32,29 @@ void	draw_box(int x_pos, int y_pos)
 
 void	render_minimap(t_vars *vars)
 {
-	static int	re_render = 1;
 	int	x_pos;
 	int	y_pos;
 
-	if (re_render == 0)
+	y_pos = 0;
+	while (y_pos < map()->len)
 	{
-		y_pos = 0;
-		while (y_pos < map()->len)
-		{
-			x_pos = 0;
-			while (x_pos < map()->width)
-				draw_box(x_pos++, y_pos);
-			y_pos++;
-		}
-		re_render = 0;	// 0 = will re-render minimap, 1 = will not re-render minimap
+		x_pos = 0;
+		while (x_pos < map()->width)
+			draw_box(x_pos++, y_pos);
+		y_pos++;
 	}
-	my_mlx_pixel_put(map()->minimap, 10, 10, 0xFFFFFF);
-	my_mlx_pixel_put(map()->minimap, 10, 11, 0xFFFFFF);
-	my_mlx_pixel_put(map()->minimap, 11, 10, 0xFFFFFF);
-	my_mlx_pixel_put(map()->minimap, 11, 11, 0xFFFFFF);
-	mlx_put_image_to_window(vars->mlx, vars->win, &map()->minimap.img, 0, 0);
-	// render_player(vars);
+	render_player(vars);
 }
 
 int	key_hook(int keycode, t_vars *vars)
 {
-	// printf("keyhook: %i\n", keycode);
-	if (keycode == 53)
+	if (keycode == ESC_KEY)
 	{
 		mlx_destroy_window(vars->mlx, vars->win);
 		exit(0);
 	}
-	else if (keycode == 13 || keycode == 0 || keycode == 1 || keycode == 2 || keycode == 123 || keycode == 124)
+	else if (keycode == W_KEY || keycode == A_KEY || keycode == S_KEY || keycode == D_KEY
+				|| keycode == ARROW_LEFT_KEY || keycode == ARROW_RIGHT_KEY)
 	{
 		move_player(keycode);
 		render_minimap(vars);

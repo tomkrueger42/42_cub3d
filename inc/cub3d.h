@@ -13,11 +13,19 @@
 /* ************************************************************************** */
 
 # define MAP_CHARS		" 01NESW"
-# define MOVEMENT_SPEED	10
+# define MOVEMENT_SPEED	4
 # define ROTATION_SPEED	0.1
 # define RAD			0.0174533
 # define PI				3.1415926535
 # define MINIMAP_SIZE	500
+
+# define ESC_KEY		53
+# define W_KEY			13
+# define A_KEY			0
+# define S_KEY			1
+# define D_KEY			2
+# define ARROW_LEFT_KEY	123
+# define ARROW_RIGHT_KEY 124
 
 /* ************************************************************************** */
 /* STRUCTS																	  */
@@ -64,6 +72,7 @@ typedef struct s_player
 	double	x_del;
 	double	y_del;
 	double	direction;
+	int		speed;
 	int		size;
 }	t_player;
 

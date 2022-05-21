@@ -3,6 +3,7 @@
 cub3d
 .vscode/
 ..vscode/
+.DS_Store
 
 # Object files
 *.o

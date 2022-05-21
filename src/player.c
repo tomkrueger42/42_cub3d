@@ -13,12 +13,6 @@ t_player	*player(void)
 		player = ft_calloc(1, sizeof(t_player));
 		if (player == NULL)
 			put_error_and_exit("malloc failure in player()", 1);
-		player->x_pos = 300;
-		player->y_pos = 300;
-		player->y_del = -1;
-		player->y_del = -1;
-		player->direction = 1.5 * PI;
-		player->size = map()->box_size / 2;
 	}
 	return (player);
 }
@@ -69,36 +63,29 @@ void	draw_ray(__unused t_vars *vars)
 	}
 }
 
-#define W_KEY 13
-#define A_KEY 0
-#define S_KEY 1
-#define D_KEY 2
-#define ARROW_LEFT_KEY 123
-#define ARROW_RIGHT_KEY 123
-
 void	move_player(int keycode)
 {
 	// they do some weird stuff still -> not going straight to the direction the player is pointing to (but probably not really noticeable)
 
 	if (keycode == W_KEY)
 	{
-		player()->x_pos += player()->x_del * MOVEMENT_SPEED;
-		player()->y_pos += player()->y_del * MOVEMENT_SPEED;
+		player()->x_pos += player()->x_del * player()->speed;
+		player()->y_pos += player()->y_del * player()->speed;
 	}
 	if (keycode == A_KEY)
 	{
-		player()->x_pos += player()->y_del * MOVEMENT_SPEED;
-		player()->y_pos -= player()->x_del * MOVEMENT_SPEED;
+		player()->x_pos += player()->y_del * player()->speed;
+		player()->y_pos -= player()->x_del * player()->speed;
 	}
 	else if (keycode == S_KEY)
 	{
-		player()->x_pos -= player()->x_del * MOVEMENT_SPEED;
-		player()->y_pos -= player()->y_del * MOVEMENT_SPEED;
+		player()->x_pos -= player()->x_del * player()->speed;
+		player()->y_pos -= player()->y_del * player()->speed;
 	}
 	else if (keycode == D_KEY)
 	{
-		player()->x_pos -= player()->y_del * MOVEMENT_SPEED;
-		player()->y_pos += player()->x_del * MOVEMENT_SPEED;
+		player()->x_pos -= player()->y_del * player()->speed;
+		player()->y_pos += player()->x_del * player()->speed;
 	}
 	else if (keycode == ARROW_LEFT_KEY)
 	{

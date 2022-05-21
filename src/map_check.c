@@ -1,6 +1,7 @@
 #include "cub3d.h"
 #include <stdlib.h>
 #include <stdio.h>
+#include <math.h>
 
 int		blanks_nearby(char **data, int x, int y);
 int		player_check(char **data);
@@ -84,11 +85,15 @@ void	populate_player(int x, int y, char heading)
 	player()->y_pos = (y + 0.5) * map()->box_size;
 	player()->x_pos = (x + 0.5) * map()->box_size;
 	if (heading == 'N')
-		player()->direction = 0.5 * PI;
+		player()->direction = 1.5 * PI;
 	else if (heading == 'E')
 		player()->direction = 0;
 	else if (heading == 'S')
-		player()->direction = 1.5 * PI;
+		player()->direction = 0.5 * PI;
 	else if (heading == 'W')
 		player()->direction = PI;
+	player()->size = map()->box_size * 2 / 3;
+	player()->x_del = cos(player()->direction);
+	player()->y_del = sin(player()->direction);
+	player()->speed = map()->box_size / MOVEMENT_SPEED;
 }
