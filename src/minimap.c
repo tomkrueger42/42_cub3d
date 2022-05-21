@@ -2,33 +2,33 @@
 #include "cub3d.h"
 #include <stdlib.h>
 
-void make_map(t_vars vars)
-{
-	map()->data = ft_calloc(10, sizeof(char *));
-	map()->data[0] = ft_strdup("1111111");
-	map()->data[1] = ft_strdup("1 01001");
-	map()->data[2] = ft_strdup("1001101");
-	map()->data[3] = ft_strdup("11 1 00");
-	map()->data[4] = ft_strdup("1111111");
-	map()->data[5] = ft_strdup("       ");
-	map()->data[6] = ft_strdup("0000000");
-	map()->data[7] = ft_strdup("0001010");
-	map()->data[8] = ft_strdup("1110101");
-	map()->data[9] = NULL;
-	map()->width = 7;
-	map()->len = 9;
-	if (map()->width > map()->len)
-		map()->box_size = MINIMAP_SIZE / map()->width;
-	else
-		map()->box_size = MINIMAP_SIZE / map()->len;
-	map()->minimap = ft_calloc(1, sizeof(t_img));
-	if (map()->minimap == NULL)
-		put_error_and_exit("malloc failure in make_map()", 1);
-	map()->minimap->img = mlx_new_image(vars.mlx, MINIMAP_SIZE, MINIMAP_SIZE);
-	map()->minimap->addr = mlx_get_data_addr(map()->minimap->img,
-		&map()->minimap->bits_per_pixel, &map()->minimap->line_length,
-		&map()->minimap->endian);
-}
+// void make_map(t_vars vars)
+// {
+// 	map()->data = ft_calloc(10, sizeof(char *));
+// 	map()->data[0] = ft_strdup("1111111");
+// 	map()->data[1] = ft_strdup("1 01001");
+// 	map()->data[2] = ft_strdup("1001101");
+// 	map()->data[3] = ft_strdup("11 1 00");
+// 	map()->data[4] = ft_strdup("1111111");
+// 	map()->data[5] = ft_strdup("       ");
+// 	map()->data[6] = ft_strdup("0000000");
+// 	map()->data[7] = ft_strdup("0001010");
+// 	map()->data[8] = ft_strdup("1110101");
+// 	map()->data[9] = NULL;
+// 	map()->width = 7;
+// 	map()->len = 9;
+// 	if (map()->width > map()->len)
+// 		map()->box_size = MINIMAP_SIZE / map()->width;
+// 	else
+// 		map()->box_size = MINIMAP_SIZE / map()->len;
+// 	map()->minimap = ft_calloc(1, sizeof(t_img));
+// 	if (map()->minimap == NULL)
+// 		put_error_and_exit("malloc failure in make_map()", 1);
+// 	map()->minimap->img = mlx_new_image(vars.mlx, MINIMAP_SIZE, MINIMAP_SIZE);
+// 	map()->minimap->addr = mlx_get_data_addr(map()->minimap->img,
+// 		&map()->minimap->bits_per_pixel, &map()->minimap->line_length,
+// 		&map()->minimap->endian);
+// }
 
 void	draw_box(int x_pos, int y_pos)
 {
@@ -42,15 +42,15 @@ void	draw_box(int x_pos, int y_pos)
 		x_px = /* 1 */ 0;
 		while (x_px < map()->box_size - /* 1 */ 0)
 		{
-			if (map()->data[y_pos][x_pos] == '1')								// wall
+			if (map()->data[y_pos][x_pos] == '1')
 				color = 0x00444444;
-			else if (map()->data[y_pos][x_pos] == ' ')							// black, should later be transparent
+			else if (map()->data[y_pos][x_pos] == '0')
+				color = 0x00bbbbbb;
+			else if (map()->data[y_pos][x_pos] == ' ')
 				color = 0x000000;
-			else
-				color = 0x00bbbbbb;												// ground below player / sprite
 			if (y_px == 0 || y_px == map()->box_size - 1 || x_px == 0 || x_px == map()->box_size -1)
 				color = 0x0;
-			my_mlx_pixel_put(map()->minimap, (x_pos * map()->box_size) + x_px,
+			my_mlx_pixel_put(&map()->minimap, (x_pos * map()->box_size) + x_px,
 				(y_pos * map()->box_size) + y_px, color);
 			x_px++;
 		}
@@ -60,14 +60,10 @@ void	draw_box(int x_pos, int y_pos)
 
 void	render_minimap(t_vars *vars)
 {
-	static int	re_render = 0;
+	static int	re_render = 1;
 	int	x_pos;
 	int	y_pos;
 
-	// my_mlx_pixel_put(map()->minimap, 10, 10, 0xFFFFFF);
-	// my_mlx_pixel_put(map()->minimap, 10, 11, 0xFFFFFF);
-	// my_mlx_pixel_put(map()->minimap, 11, 10, 0xFFFFFF);
-	// my_mlx_pixel_put(map()->minimap, 11, 11, 0xFFFFFF);
 	if (re_render == 0)
 	{
 		y_pos = 0;
@@ -80,8 +76,12 @@ void	render_minimap(t_vars *vars)
 		}
 		re_render = 0;	// 0 = will re-render minimap, 1 = will not re-render minimap
 	}
-	// mlx_put_image_to_window(vars->mlx, vars->win, map()->minimap, 0, 0);
-	render_player(vars);
+	my_mlx_pixel_put(map()->minimap, 10, 10, 0xFFFFFF);
+	my_mlx_pixel_put(map()->minimap, 10, 11, 0xFFFFFF);
+	my_mlx_pixel_put(map()->minimap, 11, 10, 0xFFFFFF);
+	my_mlx_pixel_put(map()->minimap, 11, 11, 0xFFFFFF);
+	mlx_put_image_to_window(vars->mlx, vars->win, &map()->minimap.img, 0, 0);
+	// render_player(vars);
 }
 
 int	key_hook(int keycode, t_vars *vars)

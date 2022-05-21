@@ -34,13 +34,13 @@ void	render_player(t_vars *vars)
 		x_px = - (player()->size / 3);
 		while (x_px < player()->size / 3)
 		{
-			my_mlx_pixel_put(map()->minimap, player()->x_pos + x_px, player()->y_pos + y_px, 0xffff00);
+			my_mlx_pixel_put(&map()->minimap, player()->x_pos + x_px, player()->y_pos + y_px, 0xffff00);
 			x_px++;
 		}
 		y_px++;
 	}
 	draw_ray(vars);
-	mlx_put_image_to_window(vars->mlx, vars->win, map()->minimap->img, 0, 0);
+	mlx_put_image_to_window(vars->mlx, vars->win, map()->minimap.img, 0, 0);
 }
 
 void	draw_ray(__unused t_vars *vars)
@@ -57,7 +57,7 @@ void	draw_ray(__unused t_vars *vars)
 		xy = player()->x_del / player()->y_del;
 	while (x != 0 || y != 0)
 	{
-		my_mlx_pixel_put(map()->minimap, player()->x_pos + x, player()->y_pos + y, 0xFF00);
+		my_mlx_pixel_put(&map()->minimap, player()->x_pos + x, player()->y_pos + y, 0xFF00);
 		if (x > 0 && (y == 0 || (x / y >= xy && xy > 0) || (x / y < xy && xy < 0)))
 			x--;
 		else if (x < 0 && (y == 0 || (x / y <= xy && xy < 0) || (x / y > xy && xy > 0)))
@@ -69,35 +69,38 @@ void	draw_ray(__unused t_vars *vars)
 	}
 }
 
+#define W_KEY 13
+#define A_KEY 0
+#define S_KEY 1
+#define D_KEY 2
+#define ARROW_LEFT_KEY 123
+#define ARROW_RIGHT_KEY 123
+
 void	move_player(int keycode)
 {
 	// they do some weird stuff still -> not going straight to the direction the player is pointing to (but probably not really noticeable)
 
-	if (keycode == 13)	// W key // this movement tends to go slightly to the left
+	if (keycode == W_KEY)
 	{
 		player()->x_pos += player()->x_del * MOVEMENT_SPEED;
 		player()->y_pos += player()->y_del * MOVEMENT_SPEED;
-		// printf("+ %f to x and + %f to y\n", player()->x_del * MOVEMENT_SPEED, player()->y_del * MOVEMENT_SPEED);
 	}
-	if (keycode == 0)	// A key
+	if (keycode == A_KEY)
 	{
 		player()->x_pos += player()->y_del * MOVEMENT_SPEED;
 		player()->y_pos -= player()->x_del * MOVEMENT_SPEED;
-		// printf("+ %f to x and - %f to y\n", player()->x_del * MOVEMENT_SPEED, player()->y_del * MOVEMENT_SPEED);
 	}
-	else if (keycode == 1)	// S key
+	else if (keycode == S_KEY)
 	{
 		player()->x_pos -= player()->x_del * MOVEMENT_SPEED;
 		player()->y_pos -= player()->y_del * MOVEMENT_SPEED;
-		// printf("- %f to x and - %f to y\n", player()->x_del * MOVEMENT_SPEED, player()->y_del * MOVEMENT_SPEED);
 	}
-	else if (keycode == 2)	// D key // this movement tends to go slightly to the left
+	else if (keycode == D_KEY)
 	{
 		player()->x_pos -= player()->y_del * MOVEMENT_SPEED;
 		player()->y_pos += player()->x_del * MOVEMENT_SPEED;
-		// printf("- %f to x and + %f to y\n", player()->x_del * MOVEMENT_SPEED, player()->y_del * MOVEMENT_SPEED);
 	}
-	else if (keycode == 123) // Arrow left key
+	else if (keycode == ARROW_LEFT_KEY)
 	{
 		player()->direction -= ROTATION_SPEED;
 		if (player()->direction < 0 * PI)
@@ -105,7 +108,7 @@ void	move_player(int keycode)
 		player()->x_del = cos(player()->direction);
 		player()->y_del = sin(player()->direction);
 	}
-	else if (keycode == 124) // Arrow right key
+	else if (keycode == ARROW_RIGHT_KEY)
 	{
 		player()->direction += ROTATION_SPEED;
 		if (player()->direction >= 2 * PI)
@@ -113,5 +116,4 @@ void	move_player(int keycode)
 		player()->x_del = cos(player()->direction);
 		player()->y_del = sin(player()->direction);
 	}
-	// printf("x: %d, y: %d, x_d: %f, y_d: %f, dir: %f\n", player()->x_pos, player()->y_pos, player()->x_del, player()->y_del, player()->direction);
 }

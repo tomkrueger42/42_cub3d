@@ -44,7 +44,7 @@ typedef struct s_map
 	int		width;
 	int		len;
 	int		box_size;
-	t_img	*minimap;
+	t_img	minimap;
 }	t_map;
 
 typedef struct s_style
