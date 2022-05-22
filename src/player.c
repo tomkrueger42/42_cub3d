@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include <math.h>
 
-void	draw_ray(t_vars *vars);
+void	draw_ray(void);
 
 t_player	*player(void)
 {
@@ -15,6 +15,14 @@ t_player	*player(void)
 			put_error_and_exit("malloc failure in player()", 1);
 	}
 	return (player);
+}
+
+void	free_player(void)
+{
+	t_player	*ptr;
+
+	ptr = player();
+	ft_free((void **)&ptr);
 }
 
 void	render_player(t_vars *vars)
@@ -33,22 +41,22 @@ void	render_player(t_vars *vars)
 		}
 		y_px++;
 	}
-	draw_ray(vars);
+	draw_ray();
 	mlx_put_image_to_window(vars->mlx, vars->win, map()->minimap.img, 0, 0);
 }
 
-void	draw_ray(__unused t_vars *vars)
+void	draw_ray(void)
 {
 	double	x;
 	double	y;
 	double	xy;
 
-	x = round(player()->x_del * 100);
-	y = round(player()->y_del * 100);
-	if (player()->y_del == 0)
+	x = round(player()->x_delta * 100);
+	y = round(player()->y_delta * 100);
+	if (player()->y_delta == 0)
 		xy = __INT_FAST64_MAX__;
 	else
-		xy = player()->x_del / player()->y_del;
+		xy = player()->x_delta / player()->y_delta;
 	while (x != 0 || y != 0)
 	{
 		my_mlx_pixel_put(&map()->minimap, player()->x_pos + x, player()->y_pos + y, 0xFF00);
@@ -69,38 +77,33 @@ void	move_player(int keycode)
 
 	if (keycode == W_KEY)
 	{
-		player()->x_pos += player()->x_del * player()->speed;
-		player()->y_pos += player()->y_del * player()->speed;
+		player()->x_pos += player()->x_delta * player()->speed;
+		player()->y_pos += player()->y_delta * player()->speed;
 	}
 	if (keycode == A_KEY)
 	{
-		player()->x_pos += player()->y_del * player()->speed;
-		player()->y_pos -= player()->x_del * player()->speed;
+		player()->x_pos += player()->y_delta * player()->speed;
+		player()->y_pos -= player()->x_delta * player()->speed;
 	}
 	else if (keycode == S_KEY)
 	{
-		player()->x_pos -= player()->x_del * player()->speed;
-		player()->y_pos -= player()->y_del * player()->speed;
+		player()->x_pos -= player()->x_delta * player()->speed;
+		player()->y_pos -= player()->y_delta * player()->speed;
 	}
 	else if (keycode == D_KEY)
 	{
-		player()->x_pos -= player()->y_del * player()->speed;
-		player()->y_pos += player()->x_del * player()->speed;
+		player()->x_pos -= player()->y_delta * player()->speed;
+		player()->y_pos += player()->x_delta * player()->speed;
 	}
 	else if (keycode == ARROW_LEFT_KEY)
-	{
 		player()->direction -= ROTATION_SPEED;
-		if (player()->direction < 0 * PI)
-			player()->direction += 2 * PI;
-		player()->x_del = cos(player()->direction);
-		player()->y_del = sin(player()->direction);
-	}
 	else if (keycode == ARROW_RIGHT_KEY)
-	{
 		player()->direction += ROTATION_SPEED;
-		if (player()->direction >= 2 * PI)
-			player()->direction -= 2 * PI;
-		player()->x_del = cos(player()->direction);
-		player()->y_del = sin(player()->direction);
-	}
+	if (player()->direction < 0 * PI)
+		player()->direction += 2 * PI;
+	else if (player()->direction >= 2 * PI)
+		player()->direction -= 2 * PI;
+	player()->x_delta = cos(player()->direction);
+	player()->y_delta = sin(player()->direction);
+	// printf("x: %d, y: %d, x_d: %f, y_d: %f, dir: %f\n", player()->x_pos, player()->y_pos, player()->x_delta, player()->y_delta, player()->direction);
 }

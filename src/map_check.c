@@ -93,7 +93,7 @@ void	populate_player(int x, int y, char heading)
 	else if (heading == 'W')
 		player()->direction = PI;
 	player()->size = map()->box_size * 2 / 3;
-	player()->x_del = cos(player()->direction);
-	player()->y_del = sin(player()->direction);
+	player()->x_delta = cos(player()->direction);
+	player()->y_delta = sin(player()->direction);
 	player()->speed = map()->box_size / MOVEMENT_SPEED;
 }

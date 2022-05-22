@@ -61,16 +61,3 @@ int	key_hook(int keycode, t_vars *vars)
 	}
 	return (0);
 }
-
-t_map	*map(void)
-{
-	static t_map	*map;
-
-	if (map == NULL)
-	{
-		map = ft_calloc(1, sizeof(t_map));
-		if (map == NULL)
-			put_error_and_exit("malloc failure in map()", 1);
-	}
-	return (map);
-}

@@ -2,20 +2,47 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-void	count_dimensions(char **data);
-void	fill_rows_with_spaces(char **data);
-void	print_map(void);
+bool	valid_line(char *line);
 
-int	parse_map(void)
+// This function searches for the first valid line of the map and if there is 
+// ANY NON VALID line afterwards it says 'invalid map'
+char	*find_map(char *lines)
 {
-	count_dimensions(map()->data);
-	fill_rows_with_spaces(map()->data);
-	if (map_check(map()->data) || player_check(map()->data))
-		return (EXIT_FAILURE);
-	printf("\nprint_map()........\n");
-	
-	print_map();
-	return (1);
+	char	*line;
+	char	*map_start;
+
+	line = lines;
+	while (*line != '\0' && valid_line(line) == false)
+	{
+		line = ft_strchr(line, '\n') + 1;
+	}
+	map_start = line;
+	while (*line != '\0')
+	{
+		if (valid_line(line) == false)
+			put_error_and_exit("invalid map", 2);
+		if (ft_strchr(line, '\n'))
+			line = ft_strchr(line, '\n') + 1;
+		else
+			break ;
+	}
+	return (map_start);
+}
+
+// This function checks if a line of the map is valid
+bool	valid_line(char *line)
+{
+	size_t	index;
+
+	index = 0;
+	while (line[index] != '\0' && line[index] != '\n')
+	{
+		if (ft_strchr(MAP_CHARS, line[index]))
+			index++;
+		else
+			return (false);
+	}
+	return (true);
 }
 
 void	count_dimensions(char **data)
@@ -33,6 +60,7 @@ void	count_dimensions(char **data)
 	map()->box_size = MINIMAP_SIZE / map()->width;
 	if (map()->len > map()->width)
 		map()->box_size = MINIMAP_SIZE / map()->len;
+	fill_rows_with_spaces(data);
 }
 
 void	fill_rows_with_spaces(char **data)
@@ -62,7 +90,6 @@ void	fill_rows_with_spaces(char **data)
 		}
 		y++;
 	}
-	return ;
 }
 
 void	print_map(void)
