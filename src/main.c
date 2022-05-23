@@ -1,9 +1,10 @@
 #include "cub3d.h"
+#include <stdlib.h>
 
-int	main(void)
+int	key_hook(int keycode)
+
+int	main(void) // needs argc, **argv
 {
-	t_vars	vars;
-
 	read_file("x.cub");
 	count_dimensions(map()->data);
 	fill_rows_with_spaces(map()->data);
@@ -12,16 +13,29 @@ int	main(void)
 		free_style();
 		free_map();
 		free_player();
-		return (1);
+		return (EXIT_FAILURE);
 	}
-	vars.mlx = mlx_init();
-	vars.win = mlx_new_window(vars.mlx, map()->width * map()->box_size, map()->len * map()->box_size, "cub3d minimap");
-	map()->minimap.img = mlx_new_image(vars.mlx, map()->width * map()->box_size, map()->len * map()->box_size);
-	map()->minimap.addr = mlx_get_data_addr(map()->minimap.img,
-		&map()->minimap.bits_per_pixel, &map()->minimap.line_length,
-		&map()->minimap.endian);
-	render_minimap(&vars);
-	mlx_hook(vars.win, 02, 1L<<0, key_hook, &vars);
-	mlx_loop(vars.mlx);
+	render_minimap();
+	mlx_hook(graphics()->win, 02, 1L<<0, key_hook, NULL);
+	mlx_loop(graphics()->mlx);
+	return (EXIT_SUCCESS);
+}
+
+int	key_hook(int keycode)
+{
+	if (keycode == ESC_KEY)
+	{
+		free_graphics();
+		free_player();
+		free_map();
+		free_style();
+		exit(0);
+	}
+	else if (keycode == W_KEY || keycode == A_KEY || keycode == S_KEY || keycode == D_KEY
+				|| keycode == ARROW_LEFT_KEY || keycode == ARROW_RIGHT_KEY)
+	{
+		move_player(keycode);
+		render_minimap();
+	}
 	return (0);
 }

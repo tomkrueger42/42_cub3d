@@ -4,9 +4,9 @@
 
 void	draw_box(int x_pos, int y_pos)
 {
-	int	x_px;
-	int	y_px;
-	int	color;
+	int		x_px;
+	int		y_px;
+	size_t	color;
 
 	y_px = 0;
 	while (y_px < map()->box_size - 0)
@@ -17,12 +17,12 @@ void	draw_box(int x_pos, int y_pos)
 			if (map()->data[y_pos][x_pos] == '1')
 				color = 0x00444444;
 			else if (map()->data[y_pos][x_pos] == ' ')
-				color = 0x000000;
+				color = 0xFF000000;
 			else
 				color = 0x00bbbbbb;
-			if (y_px == 0 || y_px == map()->box_size - 1 || x_px == 0 || x_px == map()->box_size -1)
+			if ((y_px == 0 || x_px == 0) && 0xFF000000 != color) // borders between tiles
 				color = 0x0;
-			my_mlx_pixel_put(&map()->minimap, (x_pos * map()->box_size) + x_px,
+			my_mlx_pixel_put(graphics(), (x_pos * map()->box_size) + x_px,
 				(y_pos * map()->box_size) + y_px, color);
 			x_px++;
 		}
@@ -30,7 +30,7 @@ void	draw_box(int x_pos, int y_pos)
 	}
 }
 
-void	render_minimap(t_vars *vars)
+void	render_minimap(void)
 {
 	int	x_pos;
 	int	y_pos;
@@ -43,21 +43,5 @@ void	render_minimap(t_vars *vars)
 			draw_box(x_pos++, y_pos);
 		y_pos++;
 	}
-	render_player(vars);
-}
-
-int	key_hook(int keycode, t_vars *vars)
-{
-	if (keycode == ESC_KEY)
-	{
-		mlx_destroy_window(vars->mlx, vars->win);
-		exit(0);
-	}
-	else if (keycode == W_KEY || keycode == A_KEY || keycode == S_KEY || keycode == D_KEY
-				|| keycode == ARROW_LEFT_KEY || keycode == ARROW_RIGHT_KEY)
-	{
-		move_player(keycode);
-		render_minimap(vars);
-	}
-	return (0);
+	render_player();
 }

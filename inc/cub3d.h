@@ -13,11 +13,13 @@
 /* ************************************************************************** */
 
 # define MAP_CHARS		" 01NESW"
-# define MOVEMENT_SPEED	4
-# define ROTATION_SPEED	0.1
+# define MOVEMENT_SPEED	4				// number of clicks to walk across tiles
+# define ROTATION_SPEED	0.075
 # define RAD			0.0174533
 # define PI				3.1415926535
-# define MINIMAP_SIZE	500
+# define MINIMAP_SIZE	600
+# define WINDOW_WIDTH	1200
+# define WINDOW_HEIGHT	700
 
 # define ESC_KEY		53
 # define W_KEY			13
@@ -31,20 +33,16 @@
 /* STRUCTS																	  */
 /* ************************************************************************** */
 
-typedef struct	s_vars
+typedef struct	s_graphics
 {
 	void	*mlx;
 	void	*win;
-}	t_vars;
-
-typedef struct	s_img
-{
 	void	*img;
 	char	*addr;
 	int		bits_per_pixel;
 	int		line_length;
 	int		endian;
-}	t_img;
+}	t_graphics;
 
 typedef struct s_map
 {
@@ -52,7 +50,6 @@ typedef struct s_map
 	int		width;
 	int		len;
 	int		box_size;
-	t_img	minimap;
 }	t_map;
 
 typedef struct s_style
@@ -81,9 +78,13 @@ typedef struct s_player
 /* ************************************************************************** */
 
 // draw.c
-void	my_mlx_pixel_put(t_img *data, int x, int y, int color);
+void	my_mlx_pixel_put(t_graphics *data, int x, int y, int color);
 int		create_trgb(unsigned char t, unsigned char r, unsigned char g,
 			unsigned char b);
+
+// graphics.c
+t_graphics	*graphics(void);
+void		free_graphics(void);
 
 // main.c
 int	main(void);
@@ -103,14 +104,12 @@ t_map	*map(void);
 void	free_map(void);
 
 // minimap.c
-t_map	*map(void);
-int		key_hook(int keycode, t_vars *vars);
-void	render_minimap(t_vars *vars);
+void	render_minimap(void);
 
 // player.c
 t_player	*player(void);
 void		free_player(void);
-void		render_player(t_vars *vars);
+void		render_player(void);
 void		move_player(int keycode);
 
 // read_file.c
