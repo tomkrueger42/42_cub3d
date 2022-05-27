@@ -17,7 +17,7 @@
 # define ROTATION_SPEED	0.075
 # define RAD			0.0174533
 # define PI				3.1415926535
-# define MINIMAP_SIZE	600
+# define MINIMAP_SIZE	800
 # define WINDOW_WIDTH	1200
 # define WINDOW_HEIGHT	700
 
@@ -49,7 +49,7 @@ typedef struct s_map
 	char	**data;
 	int		width;
 	int		len;
-	int		box_size;
+	int		tile_size;
 }	t_map;
 
 typedef struct s_style
