@@ -25,7 +25,7 @@ void	free_player(void)
 	ft_free((void **)&ptr);
 }
 
-void	render_player(t_vars *vars)
+void	render_player(void)
 {
 	int	x_px;
 	int	y_px;
@@ -36,13 +36,13 @@ void	render_player(t_vars *vars)
 		x_px = - (player()->size / 3);
 		while (x_px < player()->size / 3)
 		{
-			my_mlx_pixel_put(&map()->minimap, player()->x_pos + x_px, player()->y_pos + y_px, 0xffff00);
+			my_mlx_pixel_put(graphics(), player()->x_pos + x_px, player()->y_pos + y_px, 0xffff00);
 			x_px++;
 		}
 		y_px++;
 	}
 	draw_ray();
-	mlx_put_image_to_window(vars->mlx, vars->win, map()->minimap.img, 0, 0);
+	mlx_put_image_to_window(graphics()->mlx, graphics()->win, graphics()->img, 0, 0);
 }
 
 void	draw_ray(void)
@@ -51,15 +51,15 @@ void	draw_ray(void)
 	double	y;
 	double	xy;
 
-	x = round(player()->x_delta * 100);
-	y = round(player()->y_delta * 100);
+	x = round(player()->x_delta * MINIMAP_SIZE);
+	y = round(player()->y_delta * MINIMAP_SIZE);
 	if (player()->y_delta == 0)
 		xy = __INT_FAST64_MAX__;
 	else
 		xy = player()->x_delta / player()->y_delta;
 	while (x != 0 || y != 0)
 	{
-		my_mlx_pixel_put(&map()->minimap, player()->x_pos + x, player()->y_pos + y, 0xFF00);
+		my_mlx_pixel_put(graphics(), player()->x_pos + x, player()->y_pos + y, 0xFF00);
 		if (x > 0 && (y == 0 || (x / y >= xy && xy > 0) || (x / y < xy && xy < 0)))
 			x--;
 		else if (x < 0 && (y == 0 || (x / y <= xy && xy < 0) || (x / y > xy && xy > 0)))

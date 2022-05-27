@@ -57,9 +57,9 @@ void	count_dimensions(char **data)
 		y++;
 	}
 	map()->len = y;
-	map()->box_size = MINIMAP_SIZE / map()->width;
+	map()->tile_size = MINIMAP_SIZE / map()->width;
 	if (map()->len > map()->width)
-		map()->box_size = MINIMAP_SIZE / map()->len;
+		map()->tile_size = MINIMAP_SIZE / map()->len;
 	fill_rows_with_spaces(data);
 }
 
@@ -105,7 +105,7 @@ void	print_map(void)
 	printf("CEILING COLOUR = %x\n", style()->ceiling_color);
 	printf("x_max = %d\n", map()->width);
 	printf("y_max = %d\n", map()->len);
-	printf("box_size = %d\n", map()->box_size);
+	printf("tile_size = %d\n", map()->tile_size);
 	printf("\n____________________\nPLAYER INFOS\n");
 	printf("Player direction = %f\n", player()->direction);
 	printf("Player starts at = (%d|%d)\n", player()->x_pos, player()->y_pos);
