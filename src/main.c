@@ -1,25 +1,7 @@
 #include "cub3d.h"
 #include <stdlib.h>
 
-int	key_hook(int keycode)
 
-int	main(void) // needs argc, **argv
-{
-	read_file("x.cub");
-	count_dimensions(map()->data);
-	fill_rows_with_spaces(map()->data);
-	if (map_check(map()->data) || player_check(map()->data))
-	{
-		free_style();
-		free_map();
-		free_player();
-		return (EXIT_FAILURE);
-	}
-	render_minimap();
-	mlx_hook(graphics()->win, 02, 1L<<0, key_hook, NULL);
-	mlx_loop(graphics()->mlx);
-	return (EXIT_SUCCESS);
-}
 
 int	key_hook(int keycode)
 {
@@ -38,4 +20,23 @@ int	key_hook(int keycode)
 		render_minimap();
 	}
 	return (0);
+}
+
+
+int	main(void) // needs argc, **argv
+{
+	read_file("x.cub");
+	count_dimensions(map()->data);
+	fill_rows_with_spaces(map()->data);
+	if (map_check(map()->data) || player_check(map()->data))
+	{
+		free_style();
+		free_map();
+		free_player();
+		return (EXIT_FAILURE);
+	}
+	render_minimap();
+	mlx_hook(graphics()->win, 02, 1L<<0, key_hook, NULL);
+	mlx_loop(graphics()->mlx);
+	return (EXIT_SUCCESS);
 }

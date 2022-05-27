@@ -51,8 +51,8 @@ void	draw_ray(void)
 	double	y;
 	double	xy;
 
-	x = round(player()->x_delta * map()->box_size * 2);
-	y = round(player()->y_delta * map()->box_size * 2);
+	x = round(player()->x_delta * MINIMAP_SIZE);
+	y = round(player()->y_delta * MINIMAP_SIZE);
 	if (player()->y_delta == 0)
 		xy = __INT_FAST64_MAX__;
 	else

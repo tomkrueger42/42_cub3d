@@ -82,8 +82,8 @@ int	player_check(char **data)
 
 void	populate_player(int x, int y, char heading)
 {
-	player()->y_pos = (y + 0.5) * map()->box_size;
-	player()->x_pos = (x + 0.5) * map()->box_size;
+	player()->y_pos = (y + 0.5) * map()->tile_size;
+	player()->x_pos = (x + 0.5) * map()->tile_size;
 	if (heading == 'N')
 		player()->direction = 1.5 * PI;
 	else if (heading == 'E')
@@ -92,8 +92,8 @@ void	populate_player(int x, int y, char heading)
 		player()->direction = 0.5 * PI;
 	else if (heading == 'W')
 		player()->direction = PI;
-	player()->size = map()->box_size;
+	player()->size = map()->tile_size;
 	player()->x_delta = cos(player()->direction);
 	player()->y_delta = sin(player()->direction);
-	player()->speed = map()->box_size / MOVEMENT_SPEED;
+	player()->speed = map()->tile_size / MOVEMENT_SPEED;
 }
