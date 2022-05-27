@@ -25,6 +25,8 @@ void	free_player(void)
 	ft_free((void **)&ptr);
 }
 
+int     first_hori_intersect(void);
+
 void	render_player(void)
 {
 	int	x_px;
@@ -42,6 +44,7 @@ void	render_player(void)
 		y_px++;
 	}
 	draw_ray();
+	first_hori_intersect();
 	mlx_put_image_to_window(graphics()->mlx, graphics()->win, graphics()->img, 0, 0);
 }
 
