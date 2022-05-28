@@ -29,6 +29,11 @@
 # define ARROW_LEFT_KEY	123
 # define ARROW_RIGHT_KEY 124
 
+# define HORI			1
+# define VERTI			2
+# define X				3
+# define Y				4
+
 /* ************************************************************************** */
 /* STRUCTS																	  */
 /* ************************************************************************** */
@@ -72,6 +77,21 @@ typedef struct s_player
 	int		speed;
 	int		size;
 }	t_player;
+
+
+typedef struct s_ray
+{
+	int	x_tile_play_pos;
+	int	y_tile_play_pos;
+	int	x_intersect_pos;
+	int	y_intersect_pos;
+	int	x_step;
+	int	y_step;
+	int	len_hit_hori;
+	int	len_hit_verti;
+	int	len_hit_wall;
+
+}	t_ray;
 
 /* ************************************************************************** */
 /* FUNCTION PROTOTYPES														  */
