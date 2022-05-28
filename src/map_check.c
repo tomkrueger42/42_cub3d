@@ -92,7 +92,7 @@ void	populate_player(int x, int y, char heading)
 		player()->direction = 0.5 * PI;
 	else if (heading == 'W')
 		player()->direction = PI;
-	player()->size = map()->tile_size;
+	player()->size = map()->tile_size * 2 / 3;
 	player()->x_delta = cos(player()->direction);
 	player()->y_delta = sin(player()->direction);
 	player()->speed = map()->tile_size / MOVEMENT_SPEED;
