@@ -32,7 +32,7 @@ int	map_check(char **data)
 	return (EXIT_SUCCESS);
 }
 
-int	blanks_nearby(char **data, int x, int y)
+int	blanks_nearby(char **data, int x, int y) // segfault when longest map->data line ends with 0 and no blanks nearby
 {
 	if (x == 0 || y == 0
 		|| data[y - 1][x - 1] == ' '
@@ -82,8 +82,8 @@ int	player_check(char **data)
 
 void	populate_player(int x, int y, char heading)
 {
-	player()->y_pos = (y + 0.5) * map()->tile_size;
-	player()->x_pos = (x + 0.5) * map()->tile_size;
+	player()->y_pos = y + 0.5;
+	player()->x_pos = x + 0.5;
 	if (heading == 'N')
 		player()->direction = 1.5 * PI;
 	else if (heading == 'E')
@@ -95,5 +95,5 @@ void	populate_player(int x, int y, char heading)
 	player()->size = map()->tile_size * 2 / 3;
 	player()->x_delta = cos(player()->direction);
 	player()->y_delta = sin(player()->direction);
-	player()->speed = map()->tile_size / MOVEMENT_SPEED;
+	player()->speed =/*  map()->tile_size / MOVEMENT_SPEED */ 0.2;
 }
