@@ -95,5 +95,5 @@ void	populate_player(int x, int y, char heading)
 	player()->size = map()->tile_size * 2 / 3;
 	player()->x_delta = cos(player()->direction);
 	player()->y_delta = sin(player()->direction);
-	player()->speed =/*  map()->tile_size / MOVEMENT_SPEED */ 0.2;
+	player()->speed = 1 / MOVEMENT_SPEED;
 }

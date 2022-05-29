@@ -13,13 +13,13 @@
 /* ************************************************************************** */
 
 # define MAP_CHARS		" 01NESW"
-# define MOVEMENT_SPEED	4				// number of clicks to walk across tiles
+# define MOVEMENT_SPEED	5				// number of clicks to walk across tiles
 # define ROTATION_SPEED	0.1
 # define RAD			0.0174533
 # define PI				3.1415926535
 # define MINIMAP_SIZE	2000
 # define WINDOW_WIDTH	2000
-# define WINDOW_HEIGHT	1200
+# define WINDOW_HEIGHT	1500
 
 # define ESC_KEY		53
 # define W_KEY			13

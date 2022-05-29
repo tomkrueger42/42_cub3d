@@ -25,9 +25,7 @@ void	free_player(void)
 	ft_free((void **)&ptr);
 }
 
-int	first_intersect_hori(void);
-int	first_intersect_verti(void);
-int	len_hit_wall();
+int	closest_wall();
 
 void	render_player(void)
 {
@@ -47,11 +45,8 @@ void	render_player(void)
 	}
 	draw_ray();
 
-	//
- 	first_intersect_hori();
-	first_intersect_verti();
-	len_hit_wall();
-	//
+	closest_wall();
+
 	mlx_put_image_to_window(graphics()->mlx, graphics()->win, graphics()->img, 0, 0);
 }
 
@@ -83,8 +78,6 @@ void	draw_ray(void)
 
 void	move_player(int keycode)
 {
-	// they do some weird stuff still -> not going straight to the direction the player is pointing to (but probably not really noticeable)
-
 	if (keycode == W_KEY)
 	{
 		player()->x_pos += player()->x_delta * player()->speed;
@@ -115,5 +108,5 @@ void	move_player(int keycode)
 		player()->direction -= 2 * PI;
 	player()->x_delta = cos(player()->direction);
 	player()->y_delta = sin(player()->direction);
-	printf("x: %f, y: %f, x_d: %f, y_d: %f, dir: %f, speed: %f\n", player()->x_pos, player()->y_pos, player()->x_delta, player()->y_delta, player()->direction, player()->speed);
+	// printf("x: %f, y: %f, x_d: %f, y_d: %f, dir: %f, speed: %f\n", player()->x_pos, player()->y_pos, player()->x_delta, player()->y_delta, player()->direction, player()->speed);
 }
