@@ -21,29 +21,26 @@ int	first_intersect_hori(void)
 	int	len;
 	int adjacent;
 
-	ray()->x_tile_play_pos = player()->x_pos % map()->tile_size;
-	ray()->y_tile_play_pos = player()->y_pos % map()->tile_size;
+	ray()->y_tile_play_pos = player()->y_pos - (int)player()->y_pos;
 
 	if (player()->direction < PI)
 	{
-		ray()->y_intersect_pos = player()->y_pos - ray()->y_tile_play_pos + map()->tile_size;
-		ray()->x_intersect_pos = player()->x_pos + ray()->y_tile_play_pos / sin(player()->direction) * cos(player()->direction);
+		ray()->y_intersect_pos = (int)player()->y_pos + 1;
+		ray()->x_intersect_pos = player()->x_pos + ray()->y_tile_play_pos / tan(player()->direction);
 	}
 	else
 	{
-		ray()->y_intersect_pos = player()->y_pos - ray()->y_tile_play_pos;
-		ray()->x_intersect_pos = player()->x_pos - ray()->y_tile_play_pos / sin(player()->direction) * cos(player()->direction);
+		ray()->y_intersect_pos = (int)player()->y_pos;
+		ray()->x_intersect_pos = player()->x_pos - ray()->y_tile_play_pos / tan(player()->direction);
 	}
 
 	adjacent = (ray()->y_intersect_pos - ray()->y_tile_play_pos) / tan(player()->direction);
 	len = (adjacent / cos(player()->direction));
 
-	//
-	// my_mlx_pixel_put(graphics(), ray()->x_intersect_pos - 1, ray()->y_intersect_pos, 0xff0000);
-	// my_mlx_pixel_put(graphics(), ray()->x_intersect_pos, ray()->y_intersect_pos, 0xff0000);
-	// my_mlx_pixel_put(graphics(), ray()->x_intersect_pos + 1, ray()->y_intersect_pos, 0xff0000);
-	// my_mlx_pixel_put(graphics(), ray()->x_intersect_pos + 1, ray()->y_intersect_pos, 0xff0000);
-	//
+	my_mlx_pixel_put(graphics(), ray()->x_intersect_pos * map()->tile_size - 1, ray()->y_intersect_pos * map()->tile_size, 0xFFFFFF);
+	my_mlx_pixel_put(graphics(), ray()->x_intersect_pos * map()->tile_size, ray()->y_intersect_pos * map()->tile_size, 0xFF0000);
+	my_mlx_pixel_put(graphics(), ray()->x_intersect_pos * map()->tile_size + 1, ray()->y_intersect_pos * map()->tile_size, 0xFFFFFF);
+	
 	return (len);
 }
 
@@ -53,28 +50,27 @@ int	first_intersect_verti(void)
 	int	opposite;
 	int hypotenuse;
 
-	ray()->x_tile_play_pos = player()->x_pos % map()->tile_size;
-	ray()->y_tile_play_pos = player()->y_pos % map()->tile_size;
+	ray()->x_tile_play_pos = player()->x_pos - (int)player()->x_pos;
 	opposite = tan(player()->direction) * (map()->tile_size - ray()->x_tile_play_pos);
 
-	if (player()->direction > 1.5 * PI)
+	if (player()->direction < 0.5 * PI || player()->direction > 1.5 * PI)
 	{
-		ray()->y_intersect_pos = player()->y_pos +ray()->x_tile_play_pos - ray()->y_tile_play_pos + opposite;
-		ray()->x_intersect_pos = player()->x_pos + ray()->x_tile_play_pos;
+		ray()->y_intersect_pos = player()->y_pos + ray()->x_tile_play_pos / cos(player()->direction) * sin(player()->direction);
+		ray()->x_intersect_pos = (int)player()->x_pos + 1;
 	}
 	else
 	{
-		ray()->y_intersect_pos = player()->y_pos - ray()->x_tile_play_pos + ray()->y_tile_play_pos - opposite;
-		ray()->x_intersect_pos = player()->x_pos - ray()->x_tile_play_pos;
+		ray()->y_intersect_pos = player()->y_pos - ray()->x_tile_play_pos / cos(player()->direction) * sin(player()->direction);
+		ray()->x_intersect_pos = (int)player()->x_pos;
 	}
 
 	hypotenuse = opposite / sin(player()->direction);
 
-	//
-	// my_mlx_pixel_put(graphics(), ray()->x_intersect_pos, ray()->y_intersect_pos - 1, 0xff0000);
-	// my_mlx_pixel_put(graphics(), ray()->x_intersect_pos, ray()->y_intersect_pos, 0xff0000);
-	// my_mlx_pixel_put(graphics(), ray()->x_intersect_pos, ray()->y_intersect_pos + 1, 0xff0000);
-	//
+	
+	my_mlx_pixel_put(graphics(), ray()->x_intersect_pos * map()->tile_size, ray()->y_intersect_pos * map()->tile_size - 1, 0xff0000);
+	my_mlx_pixel_put(graphics(), ray()->x_intersect_pos * map()->tile_size, ray()->y_intersect_pos * map()->tile_size, 0xff0000);
+	my_mlx_pixel_put(graphics(), ray()->x_intersect_pos * map()->tile_size, ray()->y_intersect_pos * map()->tile_size + 1, 0xff0000);
+	
 	return (hypotenuse);
 }
 
@@ -94,7 +90,7 @@ int	len_first_intersect(int modus)
 // if modus is HORI, func will add up xsteps until wall-hit else if VERTI func will add up ysteps
 int	loop_step_till_wall(int modus)
 {
-	int len_till_wall;
+	// int len_till_wall;
 	int	len_intersect;
 	int total_xstep;
 	int total_ystep;
@@ -104,38 +100,38 @@ int	loop_step_till_wall(int modus)
 	total_ystep = ray()->y_step;
 	/* printf("x_inter: %d, x_step: %d\n", ray()->x_intersect_pos, total_xstep);
 	printf("y_inter: %d, y_step: %d\n", ray()->y_intersect_pos, total_ystep); */
-	while(ray()->y_intersect_pos + total_ystep < map()->len * map()->tile_size && ray()->x_intersect_pos + total_xstep < map()->width * map()->tile_size)
-	{
-		len_till_wall = 0;
-		printf("x_inter: %d, x_step: %d\n", ray()->x_intersect_pos, total_xstep);
-		if (map()->data[ray()->y_intersect_pos + total_ystep][ray()->x_intersect_pos + total_xstep] == 1)
-		{
-			printf("inside if()\n");
-			printf("x: %d, y: %d\n", ray()->x_intersect_pos + total_xstep, ray()->y_intersect_pos + total_ystep);
-			// my_mlx_pixel_put(graphics(), ray()->x_intersect_pos + total_xstep - 1, ray()->y_intersect_pos + total_ystep - 1, 0xffffff);
-			// my_mlx_pixel_put(graphics(), ray()->x_intersect_pos + total_xstep, ray()->y_intersect_pos + total_ystep - 1, 0xffffff);
-			// my_mlx_pixel_put(graphics(), ray()->x_intersect_pos + total_xstep + 1, ray()->y_intersect_pos + total_ystep - 1, 0xffffff);
-			// my_mlx_pixel_put(graphics(), ray()->x_intersect_pos + total_xstep - 1, ray()->y_intersect_pos + total_ystep, 0xffffff);
-			// my_mlx_pixel_put(graphics(), ray()->x_intersect_pos + total_xstep, ray()->y_intersect_pos + total_ystep, 0xffffff);
-			// my_mlx_pixel_put(graphics(), ray()->x_intersect_pos + total_xstep + 1, ray()->y_intersect_pos + total_ystep, 0xffffff);
-			// my_mlx_pixel_put(graphics(), ray()->x_intersect_pos + total_xstep - 1, ray()->y_intersect_pos + total_ystep + 1, 0xffffff);
-			// my_mlx_pixel_put(graphics(), ray()->x_intersect_pos + total_xstep, ray()->y_intersect_pos + total_ystep + 1, 0xffffff);
-			// my_mlx_pixel_put(graphics(), ray()->x_intersect_pos + total_xstep + 1, ray()->y_intersect_pos + total_ystep + 1, 0xffffff);
-			if (modus == HORI)
-			{
-				len_till_wall = len_intersect + total_xstep;
-				break ;
-			}
-			if (modus == VERTI)
-			{
-				len_till_wall = len_intersect + total_ystep;
-				break ;
-			}
-		}
-		total_xstep += ray()->x_step;
-		total_ystep += ray()->y_step;
-	}
-	return (len_till_wall);
+	// while(ray()->y_intersect_pos + total_ystep < map()->len * map()->tile_size && ray()->x_intersect_pos + total_xstep < map()->width * map()->tile_size)
+	// {
+	// 	len_till_wall = 0;
+	// 	printf("x_inter: %d, x_step: %d\n", ray()->x_intersect_pos, total_xstep);
+	// 	if (map()->data[ray()->y_intersect_pos + total_ystep][ray()->x_intersect_pos + total_xstep] == 1)
+	// 	{
+	// 		printf("inside if()\n");
+	// 		printf("x: %d, y: %d\n", ray()->x_intersect_pos + total_xstep, ray()->y_intersect_pos + total_ystep);
+	// 		// my_mlx_pixel_put(graphics(), ray()->x_intersect_pos + total_xstep - 1, ray()->y_intersect_pos + total_ystep - 1, 0xffffff);
+	// 		// my_mlx_pixel_put(graphics(), ray()->x_intersect_pos + total_xstep, ray()->y_intersect_pos + total_ystep - 1, 0xffffff);
+	// 		// my_mlx_pixel_put(graphics(), ray()->x_intersect_pos + total_xstep + 1, ray()->y_intersect_pos + total_ystep - 1, 0xffffff);
+	// 		// my_mlx_pixel_put(graphics(), ray()->x_intersect_pos + total_xstep - 1, ray()->y_intersect_pos + total_ystep, 0xffffff);
+	// 		// my_mlx_pixel_put(graphics(), ray()->x_intersect_pos + total_xstep, ray()->y_intersect_pos + total_ystep, 0xffffff);
+	// 		// my_mlx_pixel_put(graphics(), ray()->x_intersect_pos + total_xstep + 1, ray()->y_intersect_pos + total_ystep, 0xffffff);
+	// 		// my_mlx_pixel_put(graphics(), ray()->x_intersect_pos + total_xstep - 1, ray()->y_intersect_pos + total_ystep + 1, 0xffffff);
+	// 		// my_mlx_pixel_put(graphics(), ray()->x_intersect_pos + total_xstep, ray()->y_intersect_pos + total_ystep + 1, 0xffffff);
+	// 		// my_mlx_pixel_put(graphics(), ray()->x_intersect_pos + total_xstep + 1, ray()->y_intersect_pos + total_ystep + 1, 0xffffff);
+	// 		if (modus == HORI)
+	// 		{
+	// 			len_till_wall = len_intersect + total_xstep;
+	// 			break ;
+	// 		}
+	// 		if (modus == VERTI)
+	// 		{
+	// 			len_till_wall = len_intersect + total_ystep;
+	// 			break ;
+	// 		}
+	// 	}
+	// 	total_xstep += ray()->x_step;
+	// 	total_ystep += ray()->y_step;
+	// }
+	return (/* len_till_wall */ 0);
 }
 
 // adds up first_intersect + (multiple) x/y-steps until it hits wall
@@ -151,9 +147,9 @@ int	len_hit_hori_or_verti(int modus)
 		ray()->x_step = ray()->y_step / tan(player()->direction);
 
 		//
-		printf("tan() is %f\n", tan(player()->direction));
-		printf("player-dir  is %f\n", player()->direction);
-		printf("x_step is: %d, y_step is: %d\n", ray()->x_step, ray()->y_step);
+		// printf("tan() is %f\n", tan(player()->direction));
+		// printf("player-dir  is %f\n", player()->direction);
+		// printf("x_step is: %f, y_step is: %f\n", ray()->x_step, ray()->y_step);
 		//
 
 		till_wall = loop_step_till_wall(HORI);
@@ -164,7 +160,7 @@ int	len_hit_hori_or_verti(int modus)
 		ray()->y_step = ray()->x_step / cos(player()->direction);
 
 		//
-		printf("x_step is: %d, y_step is: %d\n", ray()->x_step, ray()->y_step);
+		// printf("x_step is: %f, y_step is: %f\n", ray()->x_step, ray()->y_step);
 		//
 		till_wall = loop_step_till_wall(VERTI);
 	}

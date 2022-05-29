@@ -48,8 +48,8 @@ void	render_player(void)
 	draw_ray();
 
 	//
-/* 	first_intersect_hori();
-	first_intersect_verti(); */
+ 	first_intersect_hori();
+	first_intersect_verti();
 	len_hit_wall();
 	//
 	mlx_put_image_to_window(graphics()->mlx, graphics()->win, graphics()->img, 0, 0);

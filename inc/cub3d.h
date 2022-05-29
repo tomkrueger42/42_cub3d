@@ -17,8 +17,8 @@
 # define ROTATION_SPEED	0.1
 # define RAD			0.0174533
 # define PI				3.1415926535
-# define MINIMAP_SIZE	1600
-# define WINDOW_WIDTH	1600
+# define MINIMAP_SIZE	2000
+# define WINDOW_WIDTH	2000
 # define WINDOW_HEIGHT	1200
 
 # define ESC_KEY		53
@@ -82,12 +82,12 @@ typedef struct s_player
 
 typedef struct s_ray
 {
-	int	x_tile_play_pos;
-	int	y_tile_play_pos;
-	int	x_intersect_pos;
-	int	y_intersect_pos;
-	int	x_step;
-	int	y_step;
+	double	x_tile_play_pos;
+	double	y_tile_play_pos;
+	double	x_intersect_pos;
+	double	y_intersect_pos;
+	double	x_step;
+	double	y_step;
 	int	len_hit_hori;
 	int	len_hit_verti;
 	int	len_hit_wall;
