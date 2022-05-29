@@ -147,10 +147,10 @@ int	loop_step_till_wall(int modus)
 	len_intersect = len_first_intersect(modus);
 	total_xstep = ray()->x_step;
 	total_ystep = ray()->y_step;
-	while(1)
+	while(ray()->y_intersect_pos + total_ystep < map()->len && ray()->x_intersect_pos + total_xstep < map()->width)
 	{
-
-		if (map()->data[ray()->y_tile_play_pos + total_ystep][ray()->x_tile_play_pos + total_xstep] == 1)
+		len_till_wall = 0;
+		if (map()->data[ray()->y_intersect_pos + total_ystep][ray()->x_intersect_pos + total_xstep] == 1)
 		{
 			if (modus == HORI)
 			{
@@ -189,6 +189,9 @@ int	len_hit_hori_or_verti(int modus)
 		till_wall = loop_step_till_wall(VERTI);
 	}
 
+	//
+	my_mlx_pixel_put(graphics(), ray()->x_tile_play_pos + till_wall, ray()->y_tile_play_pos + till_wall, 0xffff00);
+	//
 	return (till_wall);
 }
 

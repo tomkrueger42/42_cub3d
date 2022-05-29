@@ -46,9 +46,12 @@ void	render_player(void)
 		y_px++;
 	}
 	draw_ray();
+
+	//
 	first_intersect_hori();
 	first_intersect_verti();
-	//mlx_string_put(graphics()->mlx, graphics()->win, 10, 10, 0xffff00, ft_itoa(len_hit_wall()));
+	len_hit_wall();
+	//
 	mlx_put_image_to_window(graphics()->mlx, graphics()->win, graphics()->img, 0, 0);
 }
 
