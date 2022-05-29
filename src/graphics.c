@@ -18,11 +18,14 @@ t_graphics	*graphics(void)
 	return (graphics);
 }
 
+#include <stdio.h>
+
 void	free_graphics(void)
 {
 	t_graphics	*ptr;
 
 	ptr = graphics();
+	printf("free_graphics()\n");
 	if (ptr != NULL)
 	{
 		mlx_destroy_image(ptr->mlx, ptr->img);
