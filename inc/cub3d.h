@@ -17,15 +17,9 @@
 # define ROTATION_SPEED	0.1
 # define RAD			0.0174533
 # define PI				3.1415926535
-<<<<<<< Updated upstream
-# define MINIMAP_SIZE	1200
-# define WINDOW_WIDTH	1200
-# define WINDOW_HEIGHT	700
-=======
 # define MINIMAP_SIZE	1600
 # define WINDOW_WIDTH	1600
 # define WINDOW_HEIGHT	1200
->>>>>>> Stashed changes
 
 # define ESC_KEY		53
 # define W_KEY			13
