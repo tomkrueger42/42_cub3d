@@ -14,10 +14,10 @@
 
 # define MAP_CHARS		" 01NESW"
 # define MOVEMENT_SPEED	4				// number of clicks to walk across tiles
-# define ROTATION_SPEED	0.075
+# define ROTATION_SPEED	0.1
 # define RAD			0.0174533
 # define PI				3.1415926535
-# define MINIMAP_SIZE	800
+# define MINIMAP_SIZE	1200
 # define WINDOW_WIDTH	1200
 # define WINDOW_HEIGHT	700
 
@@ -71,12 +71,12 @@ typedef struct s_style
 
 typedef struct s_player
 {
-	int		x_pos;
-	int		y_pos;
+	double	x_pos;
+	double	y_pos;
 	double	x_delta;
 	double	y_delta;
 	double	direction;
-	int		speed;
+	double	speed;
 	int		size;
 }	t_player;
 

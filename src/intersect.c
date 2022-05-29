@@ -1,8 +1,3 @@
-
-
-
-
-
 #include "cub3d.h"
 #include <math.h>
 #include <stdio.h>
@@ -24,7 +19,7 @@ t_ray	*ray(void)
 *
 */
 
-/* int	first_hori_intersect(void)
+int	first_hori_intersect(void)
 {
 	int	x_tile_play_pos;
 	int	y_tile_play_pos;
@@ -36,22 +31,18 @@ t_ray	*ray(void)
 	if (player()->direction < PI)
 	{
 		y_intersect_pos = player()->y_pos - y_tile_play_pos + map()->tile_size;
-		x_intersect_pos = player()->x_pos + y_tile_play_pos / sin(player()->direction) * cos(player()->direction);
+		x_intersect_pos = player()->x_pos + y_tile_play_pos / tan(player()->direction);
 	}
 	else
 	{
 		y_intersect_pos = player()->y_pos - y_tile_play_pos;
-		x_intersect_pos = player()->x_pos - y_tile_play_pos / sin(player()->direction) * cos(player()->direction);
+		x_intersect_pos = player()->x_pos - y_tile_play_pos / tan(player()->direction);
 	}
-
-	my_mlx_pixel_put(graphics(), x_intersect_pos, y_intersect_pos, 0xff0000);
-	my_mlx_pixel_put(graphics(), x_intersect_pos + 1, y_intersect_pos, 0xff0000);
-
 
 	int	x_step = map()->tile_size / y_tile_play_pos * (x_intersect_pos - player()->x_pos);
 
-	my_mlx_pixel_put(graphics(), x_intersect_pos + x_step, y_intersect_pos - map()->tile_size, 0xFFFFFF);
-	my_mlx_pixel_put(graphics(), x_intersect_pos + x_step + 1, y_intersect_pos - map()->tile_size, 0xFFFFFF);
+	scetch_hori_intersect(x_intersect_pos, y_intersect_pos, x_step);
+
 	//calc the distance btw player and intersection with horizontal
 
 

@@ -108,7 +108,7 @@ void	print_map(void)
 	printf("tile_size = %d\n", map()->tile_size);
 	printf("\n____________________\nPLAYER INFOS\n");
 	printf("Player direction = %f\n", player()->direction);
-	printf("Player starts at = (%d|%d)\n", player()->x_pos, player()->y_pos);
+	printf("Player starts at = (%f|%f)\n", player()->x_pos, player()->y_pos);
 	printf("\n___________________\nMAP:\n");
 	if (map()->data == NULL)
 	{
