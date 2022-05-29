@@ -87,6 +87,10 @@ int	first_intersect_hori(void)
 	adjacent = (ray()->y_intersect_pos - ray()->y_tile_play_pos) / tan(player()->direction);
 	len = (adjacent / cos(player()->direction));
 
+	//
+	//my_mlx_pixel_put(graphics(), ray()->x_intersect_pos, ray()->y_intersect_pos, 0xff0000);
+	//my_mlx_pixel_put(graphics(), ray()->x_intersect_pos + 1, ray()->y_intersect_pos, 0xff0000);
+	//
 	return (len);
 }
 
@@ -111,11 +115,11 @@ int	first_intersect_verti(void)
 		ray()->x_intersect_pos = player()->x_pos - ray()->x_tile_play_pos;
 	}
 
-	my_mlx_pixel_put(graphics(), ray()->x_intersect_pos, ray()->y_intersect_pos, 0xff0000);
-	//my_mlx_pixel_put(graphics(), ray()->x_intersect_pos + 1, ray()->y_intersect_pos, 0xff0000);
-
 	hypotenuse = opposite / sin(player()->direction);
 
+	//
+	my_mlx_pixel_put(graphics(), ray()->x_intersect_pos, ray()->y_intersect_pos, 0xff0000);
+	//
 	return (hypotenuse);
 }
 
@@ -131,41 +135,68 @@ int	len_first_intersect(int modus)
 	return (len);
 }
 
-int	loop_step_till_wall(int len_first_intersect, int modus)
+
+// if modus is HORI, func will add up xsteps until wall-hit else if VERTI func will add up ysteps
+int	loop_step_till_wall(int modus)
 {
-	return (len_first_intersect + modus);
+	int len_till_wall;
+	int	len_intersect;
+	int total_xstep;
+	int total_ystep;
+
+	len_intersect = len_first_intersect(modus);
+	total_xstep = ray()->x_step;
+	total_ystep = ray()->y_step;
+	while(1)
+	{
+
+		if (map()->data[ray()->y_tile_play_pos + total_ystep][ray()->x_tile_play_pos + total_xstep] == 1)
+		{
+			if (modus == HORI)
+			{
+				len_till_wall = len_intersect + total_xstep;
+				break ;
+			}
+			if (modus == VERTI)
+			{
+				len_till_wall = len_intersect + total_ystep;
+				break ;
+			}
+		}
+		total_xstep += ray()->x_step;
+		total_ystep += ray()->y_step;
+	}
+	return (len_till_wall);
 }
 
 // adds up first_intersect + (multiple) x/y-steps until it hits wall
 int	len_hit_hori_or_verti(int modus)
 {
-	int	len_intersect;
 	int	till_wall;
 
 	till_wall = 0;
-	len_intersect = len_first_intersect(modus);
-	
+
 	if (modus == HORI)
 	{
-		ray()->x_step = map()->tile_size / ray()->y_tile_play_pos * (ray()->x_intersect_pos - player()->x_pos);
-		//ray()->y_step = ; ///to - do
-		till_wall = loop_step_till_wall(len_intersect, X);
+		ray()->y_step = map()->tile_size;
+		ray()->x_step = ray()->y_step / tan(player()->direction);
+		till_wall = loop_step_till_wall(HORI);
 	}
-	else if (modus == VERTI)
+	if (modus == VERTI)
 	{
-		ray()->x_step = map()->tile_size / ray()->y_tile_play_pos * (ray()->x_intersect_pos - player()->x_pos);
-		//ray()->y_step = ; ///to - do
-		till_wall = loop_step_till_wall(len_intersect, Y);
+		ray()->x_step = map()->tile_size;
+		ray()->y_step = ray()->x_step / cos(player()->direction);
+		till_wall = loop_step_till_wall(VERTI);
 	}
 
 	return (till_wall);
 }
 
 // decides which hit (hori or verti) is closer to player --> this will be the length of the ray hitting the wall
-void	len_hit_wall(void)
+int	len_hit_wall(void)
 {
 	if (len_hit_hori_or_verti(HORI) < len_hit_hori_or_verti(VERTI))
-		ray()->len_hit_wall = len_hit_hori_or_verti(HORI);
+		return(len_hit_hori_or_verti(HORI));
 	else
-		ray()->len_hit_wall = len_hit_hori_or_verti(VERTI);
+		return(len_hit_hori_or_verti(VERTI));
 }

@@ -25,7 +25,9 @@ void	free_player(void)
 	ft_free((void **)&ptr);
 }
 
+int	first_intersect_hori(void);
 int	first_intersect_verti(void);
+int	len_hit_wall();
 
 void	render_player(void)
 {
@@ -44,7 +46,9 @@ void	render_player(void)
 		y_px++;
 	}
 	draw_ray();
+	first_intersect_hori();
 	first_intersect_verti();
+	//mlx_string_put(graphics()->mlx, graphics()->win, 10, 10, 0xffff00, ft_itoa(len_hit_wall()));
 	mlx_put_image_to_window(graphics()->mlx, graphics()->win, graphics()->img, 0, 0);
 }
 
