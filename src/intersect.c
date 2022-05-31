@@ -55,14 +55,14 @@ double	intersect_verti(void)
 	if (cos(player()->direction) > 0)
 	{
 		ray()->x_intersect_pos = (int)player()->x_pos + 1;
-		ray()->y_intersect_pos = player()->y_pos + ray()->x_tile_play_pos / cos(player()->direction) * sin(player()->direction);
+		ray()->y_intersect_pos = player()->y_pos + ray()->x_tile_play_pos * tan(player()->direction);
 		ray()->x_step = 1;
 		ray()->y_step = tan(player()->direction);
 	}
 	else
 	{
 		ray()->x_intersect_pos = (int)player()->x_pos;
-		ray()->y_intersect_pos = player()->y_pos - ray()->x_tile_play_pos / cos(player()->direction) * sin(player()->direction);
+		ray()->y_intersect_pos = player()->y_pos - ray()->x_tile_play_pos * tan(player()->direction);
 		ray()->x_step = -1;
 		ray()->y_step = - (tan(player()->direction));
 	}
@@ -95,7 +95,7 @@ int	intersect_loop(int mode)
 			&& (int)(ray()->x_intersect_pos + ray()->x_step * index) < map()->width
 			&& (int)(ray()->x_intersect_pos + ray()->x_step * index) > 0)
 	{
-		highlight((ray()->x_intersect_pos + ray()->x_step * index) * map()->tile_size, (ray()->y_intersect_pos + ray()->y_step * index) * map()->tile_size, 3, 0xFF0000);
+		// highlight((ray()->x_intersect_pos + ray()->x_step * index) * map()->tile_size, (ray()->y_intersect_pos + ray()->y_step * index) * map()->tile_size, 3, 0xFF0000);
 		if (wall_hit(ray()->x_intersect_pos + ray()->x_step * index, ray()->y_intersect_pos + ray()->y_step * index, mode))
 		{
 			highlight((ray()->x_intersect_pos + ray()->x_step * index) * map()->tile_size, (ray()->y_intersect_pos + ray()->y_step * index) * map()->tile_size, 3, 0xFFFFFF);
