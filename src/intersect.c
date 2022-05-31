@@ -2,7 +2,10 @@
 #include <math.h>
 #include <stdio.h>
 
-int		intersect_loop(void);
+#define HORI 1
+#define VERTI 2
+
+int		intersect_loop(int mode);
 void	highlight(int x, int y, int size, int color);
 
 t_ray	*ray(void)
@@ -39,7 +42,7 @@ double	intersect_hori(void)
 		ray()->x_step = - (1 / tan(player()->direction));
 	}
 	dist = sqrt(pow(ray()->y_intersect_pos - player()->y_pos, 2) + pow(ray()->x_intersect_pos - player()->x_pos, 2));
-	dist += sqrt(pow(ray()->y_step, 2) + pow(ray()->x_step, 2)) * intersect_loop();
+	dist += sqrt(pow(ray()->y_step, 2) + pow(ray()->x_step, 2)) * intersect_loop(HORI);
 	return (dist);
 }
 
@@ -64,25 +67,36 @@ double	intersect_verti(void)
 		ray()->y_step = - (tan(player()->direction));
 	}
 	dist = sqrt(pow(ray()->y_intersect_pos - player()->y_pos, 2) + pow(ray()->x_intersect_pos - player()->x_pos, 2));
-	dist += sqrt(pow(ray()->y_step, 2) + pow(ray()->x_step, 2)) * intersect_loop();
+	dist += sqrt(pow(ray()->y_step, 2) + pow(ray()->x_step, 2)) * intersect_loop(VERTI);
 	return (dist);
 }
 
+// checks whether a wall has been hit
+int	wall_hit(double x, double y, int mode)
+{
+	if (sin(player()->direction) < 0 && mode == HORI)
+		y -= 0.1;
+	if (cos(player()->direction) < 0 && mode == VERTI)
+		x -= 0.1;
+	if (map()->data[(int)y][(int)x] == '1')
+		return (1);
+	mode = 0;
+	return (0);
+}
+
 // loops until hits a wall
-int	intersect_loop(void)
+int	intersect_loop(int mode)
 {
 	int	index;
 
 	index = 0;
-	// printf("x_step: %f, y_step: %f\n", ray()->x_step, ray()->y_step);
 	while ((int)(ray()->y_intersect_pos + ray()->y_step * index) < map()->len
 			&& (int)(ray()->y_intersect_pos + ray()->y_step * index) > 0
 			&& (int)(ray()->x_intersect_pos + ray()->x_step * index) < map()->width
 			&& (int)(ray()->x_intersect_pos + ray()->x_step * index) > 0)
 	{
-		// printf("index: %d\t%c\n", index, map()->data[(int)(ray()->y_intersect_pos + ray()->y_step * index)][(int)(ray()->x_intersect_pos + ray()->x_step * index)]);
 		highlight((ray()->x_intersect_pos + ray()->x_step * index) * map()->tile_size, (ray()->y_intersect_pos + ray()->y_step * index) * map()->tile_size, 3, 0xFF0000);
-		if (map()->data[(int)(ray()->y_intersect_pos + ray()->y_step * index)][(int)(ray()->x_intersect_pos + ray()->x_step * index)] == '1')
+		if (wall_hit(ray()->x_intersect_pos + ray()->x_step * index, ray()->y_intersect_pos + ray()->y_step * index, mode))
 		{
 			highlight((ray()->x_intersect_pos + ray()->x_step * index) * map()->tile_size, (ray()->y_intersect_pos + ray()->y_step * index) * map()->tile_size, 3, 0xFFFFFF);
 			return (index);
@@ -112,6 +126,7 @@ double	closest_wall(void)
 	}
 }
 
+// draws a box
 void	highlight(int x, int y, int size, int color)
 {
 	int	x_step;

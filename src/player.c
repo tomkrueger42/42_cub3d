@@ -47,7 +47,7 @@ void	render_player(void)
 
 	closest_wall();
 
-	mlx_put_image_to_window(graphics()->mlx, graphics()->win, graphics()->img, 0, 0);
+	mlx_put_image_to_window(graphics()->mlx, graphics()->win, graphics()->img, 10, 10);
 }
 
 void	draw_ray(void)
