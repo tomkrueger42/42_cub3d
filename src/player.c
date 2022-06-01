@@ -25,7 +25,7 @@ void	free_player(void)
 	ft_free((void **)&ptr);
 }
 
-int	closest_wall();
+void	fan_out(void);
 
 void	render_player(void)
 {
@@ -45,7 +45,7 @@ void	render_player(void)
 	}
 	draw_ray();
 
-	closest_wall();
+	fan_out();
 
 	mlx_put_image_to_window(graphics()->mlx, graphics()->win, graphics()->img, 10, 10);
 }

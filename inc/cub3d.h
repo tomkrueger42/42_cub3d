@@ -15,6 +15,7 @@
 # define MAP_CHARS		" 01NESW"
 # define MOVEMENT_SPEED	5				// number of clicks to walk across tiles
 # define ROTATION_SPEED	0.1
+# define FOV			60
 # define RAD			0.0174533
 # define PI				3.1415926535
 # define MINIMAP_SIZE	1200
@@ -28,9 +29,6 @@
 # define D_KEY			2
 # define ARROW_LEFT_KEY	123
 # define ARROW_RIGHT_KEY 124
-
-# define HORI			1
-# define VERTI			2
 
 
 /* ************************************************************************** */
