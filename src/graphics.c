@@ -33,3 +33,5 @@ void	free_graphics(void)
 	}
 	ft_free((void **)&ptr);
 }
+
+

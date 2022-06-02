@@ -15,11 +15,11 @@ void	draw_box(int x_pos, int y_pos)
 		while (x_px < map()->tile_size - 0)
 		{
 			if (map()->data[y_pos][x_pos] == '1')
-				color = 0x00444444;
+				color = 0x444444;
 			else if (map()->data[y_pos][x_pos] == ' ')
 				color = 0xFF000000;
 			else
-				color = 0x00bbbbbb;
+				color = 0xbbbbbb;
 			if ((y_px == 0 || x_px == 0) && color != 0xFF000000) // borders between tiles
 				color = 0x0;
 			my_mlx_pixel_put(graphics(), (x_pos * map()->tile_size) + x_px,

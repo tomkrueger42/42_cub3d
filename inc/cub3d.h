@@ -18,9 +18,11 @@
 # define FOV			60
 # define RAD			0.0174533
 # define PI				3.1415926535
-# define MINIMAP_SIZE	1200
+# define MINIMAP_SIZE	600
 # define WINDOW_WIDTH	2000
 # define WINDOW_HEIGHT	1200
+# define MAX_HEIGHT		600
+# define MAX_WIDTH		WINDOW_WIDTH / FOV
 
 # define ESC_KEY		53
 # define W_KEY			13

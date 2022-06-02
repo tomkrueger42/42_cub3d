@@ -44,10 +44,10 @@ void	render_player(void)
 		y_px++;
 	}
 
-	fan_out();
+	
 	draw_ray();
 
-	mlx_put_image_to_window(graphics()->mlx, graphics()->win, graphics()->img, 10, 10);
+	
 }
 
 void	draw_ray(void)

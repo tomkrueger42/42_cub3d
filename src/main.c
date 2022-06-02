@@ -1,7 +1,7 @@
 #include "cub3d.h"
 #include <stdlib.h>
 
-
+void	fan_out(void);
 
 int	key_hook(int keycode)
 {
@@ -17,7 +17,11 @@ int	key_hook(int keycode)
 				|| keycode == ARROW_LEFT_KEY || keycode == ARROW_RIGHT_KEY)
 	{
 		move_player(keycode);
+		mlx_destroy_image(graphics()->mlx, graphics()->img);
+		graphics()->img = mlx_new_image(graphics()->mlx, WINDOW_WIDTH, WINDOW_HEIGHT);
+		graphics()->addr = mlx_get_data_addr(graphics()->img, &graphics()->bits_per_pixel, &graphics()->line_length, &graphics()->endian);
 		render_minimap();
+		fan_out();
 	}
 	return (0);
 }

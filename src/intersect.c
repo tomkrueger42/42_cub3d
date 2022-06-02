@@ -5,7 +5,7 @@
 #define HORI 1
 #define VERTI 2
 
-int		intersect_loop(double angle, int mode);
+int		intersect_loop(t_ray *r, double angle, int mode);
 void	highlight(int x, int y, int size, int color);
 
 t_ray	*ray(void)
@@ -25,24 +25,25 @@ t_ray	*ray(void)
 double	intersect_hori(double angle)
 {
 	double	dist;
+	t_ray	*r = ray();
 
-	ray()->y_tile_play_pos = player()->y_pos - (int)player()->y_pos;
+	r->y_tile_play_pos = player()->y_pos - (int)player()->y_pos;
 	if (sin(angle) > 0)
 	{
-		ray()->y_intersect_pos = (int)player()->y_pos + 1;
-		ray()->x_intersect_pos = player()->x_pos + ray()->y_tile_play_pos / tan(angle);
-		ray()->y_step = 1;
-		ray()->x_step = 1 / tan(angle);
+		r->y_intersect_pos = (int)player()->y_pos + 1;
+		r->x_intersect_pos = player()->x_pos + r->y_tile_play_pos / tan(angle);
+		r->y_step = 1;
+		r->x_step = 1 / tan(angle);
 	}
 	else
 	{
-		ray()->y_intersect_pos = (int)player()->y_pos;
-		ray()->x_intersect_pos = player()->x_pos - ray()->y_tile_play_pos / tan(angle);
-		ray()->y_step = -1;
-		ray()->x_step = - (1 / tan(angle));
+		r->y_intersect_pos = (int)player()->y_pos;
+		r->x_intersect_pos = player()->x_pos - r->y_tile_play_pos / tan(angle);
+		r->y_step = -1;
+		r->x_step = - (1 / tan(angle));
 	}
-	dist = sqrt(pow(ray()->y_intersect_pos - player()->y_pos, 2) + pow(ray()->x_intersect_pos - player()->x_pos, 2));
-	dist += sqrt(pow(ray()->y_step, 2) + pow(ray()->x_step, 2)) * intersect_loop(angle, HORI);
+	dist = sqrt(pow(r->y_intersect_pos - player()->y_pos, 2) + pow(r->x_intersect_pos - player()->x_pos, 2));
+	dist += sqrt(pow(r->y_step, 2) + pow(r->x_step, 2)) * intersect_loop(r, angle, HORI);
 	return (dist);
 }
 
@@ -50,24 +51,25 @@ double	intersect_hori(double angle)
 double	intersect_verti(double angle)
 {
 	double	dist;
+	t_ray	*r = ray();
 
-	ray()->x_tile_play_pos = player()->x_pos - (int)player()->x_pos;
+	r->x_tile_play_pos = player()->x_pos - (int)player()->x_pos;
 	if (cos(angle) > 0)
 	{
-		ray()->x_intersect_pos = (int)player()->x_pos + 1;
-		ray()->y_intersect_pos = player()->y_pos + ray()->x_tile_play_pos * tan(angle);
-		ray()->x_step = 1;
-		ray()->y_step = tan(angle);
+		r->x_intersect_pos = (int)player()->x_pos + 1;
+		r->y_intersect_pos = player()->y_pos + r->x_tile_play_pos * tan(angle);
+		r->x_step = 1;
+		r->y_step = tan(angle);
 	}
 	else
 	{
-		ray()->x_intersect_pos = (int)player()->x_pos;
-		ray()->y_intersect_pos = player()->y_pos - ray()->x_tile_play_pos * tan(angle);
-		ray()->x_step = -1;
-		ray()->y_step = - (tan(angle));
+		r->x_intersect_pos = (int)player()->x_pos;
+		r->y_intersect_pos = player()->y_pos - r->x_tile_play_pos * tan(angle);
+		r->x_step = -1;
+		r->y_step = - (tan(angle));
 	}
-	dist = sqrt(pow(ray()->y_intersect_pos - player()->y_pos, 2) + pow(ray()->x_intersect_pos - player()->x_pos, 2));
-	dist += sqrt(pow(ray()->y_step, 2) + pow(ray()->x_step, 2)) * intersect_loop(angle, VERTI);
+	dist = sqrt(pow(r->y_intersect_pos - player()->y_pos, 2) + pow(r->x_intersect_pos - player()->x_pos, 2));
+	dist += sqrt(pow(r->y_step, 2) + pow(r->x_step, 2)) * intersect_loop(r, angle, VERTI);
 	return (dist);
 }
 
@@ -84,25 +86,25 @@ int	wall_hit(double x, double y, double angle, int mode)
 }
 
 // loops until hits a wall
-int	intersect_loop(double angle, int mode)
+int	intersect_loop(t_ray *r, double angle, int mode)
 {
 	int	index;
 
 	index = 0;
-	while ((int)(ray()->y_intersect_pos + ray()->y_step * index) < map()->len
-			&& (int)(ray()->y_intersect_pos + ray()->y_step * index) > 0
-			&& (int)(ray()->x_intersect_pos + ray()->x_step * index) < map()->width
-			&& (int)(ray()->x_intersect_pos + ray()->x_step * index) > 0)
+	while ((int)(r->y_intersect_pos + r->y_step * index) < map()->len
+			&& (int)(r->y_intersect_pos + r->y_step * index) > 0
+			&& (int)(r->x_intersect_pos + r->x_step * index) < map()->width
+			&& (int)(r->x_intersect_pos + r->x_step * index) > 0)
 	{
-		// highlight((ray()->x_intersect_pos + ray()->x_step * index) * map()->tile_size, (ray()->y_intersect_pos + ray()->y_step * index) * map()->tile_size, 3, 0xFF0000);
-		if (wall_hit(ray()->x_intersect_pos + ray()->x_step * index, ray()->y_intersect_pos + ray()->y_step * index, angle, mode))
+		// highlight((r->x_intersect_pos + r->x_step * index) * map()->tile_size, (r->y_intersect_pos + r->y_step * index) * map()->tile_size, 3, 0xFF0000);
+		if (wall_hit(r->x_intersect_pos + r->x_step * index, r->y_intersect_pos + r->y_step * index, angle, mode))
 		{
-			// highlight((ray()->x_intersect_pos + ray()->x_step * index) * map()->tile_size, (ray()->y_intersect_pos + ray()->y_step * index) * map()->tile_size, 3, 0xFFFFFF);
+			// highlight((r->x_intersect_pos + r->x_step * index) * map()->tile_size, (r->y_intersect_pos + r->y_step * index) * map()->tile_size, 3, 0xFFFFFF);
 			return (index);
 		}
 		index++;
 	}
-	return (0);
+	return (100);
 }
 
 // calls both functions for horizontal and vertical intersections and compares the output
@@ -115,12 +117,12 @@ double	closest_wall(double angle)
 	verti = intersect_verti(angle);
 	if (hori < verti)
 	{
-		printf("hori is shorter with %f vs %f\n", hori, verti);
+		// printf("hori is shorter with %f vs %f\n", hori, verti);
 		return (hori);
 	}
 	else
 	{
-		printf("verti is shorter with %f vs %f\n", verti, hori);
+		// printf("verti is shorter with %f vs %f\n", verti, hori);
 		return (verti);
 	}
 }
@@ -170,14 +172,41 @@ void	draw_fov(double angle, double distance)
 	}
 }
 
+void	draw_col(t_graphics *graphics_struct, double distance, int col_index)
+{
+	int	x;
+	int	y;
+
+	y = 0;
+	while (y < (1 / distance) * 600)
+	{
+		x = 0;
+		while (x < 3)
+		{
+			my_mlx_pixel_put(graphics_struct, x + col_index * 3, y + 400, 0xAAAAFF);
+			x++;
+		}
+
+		y++;
+	}
+}
+
 void	fan_out(void)
 {
 	double	radial;
+	double distance;
+	int		col_index;
+
+	col_index = 0;
 
 	radial = - FOV / 2;
 	while (radial < FOV / 2)
 	{
-		draw_fov(player()->direction + radial * RAD, closest_wall(player()->direction + radial * RAD));
+		distance = cos(radial * RAD) * closest_wall(player()->direction + radial * RAD),
+		draw_col(graphics(), distance, col_index);
+		draw_fov(player()->direction + radial * RAD, distance);
+		col_index++;
 		radial += RAD;
 	}
+	mlx_put_image_to_window(graphics()->mlx, graphics()->win, graphics()->img, 0, 0);
 }
