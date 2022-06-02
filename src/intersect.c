@@ -77,9 +77,13 @@ double	intersect_verti(double angle)
 int	wall_hit(double x, double y, double angle, int mode)
 {
 	if (sin(angle) < 0 && mode == HORI)
-		y -= 0.0000000001;
+	{
+		y -= 1;
+	}
 	if (cos(angle) < 0 && mode == VERTI)
-		x -= 0.00000000001;
+	{
+		x -= 1;
+	}
 	if (map()->data[(int)y][(int)x] == '1')
 		return (1);
 	return (0);
@@ -104,7 +108,9 @@ int	intersect_loop(t_ray *r, double angle, int mode)
 		}
 		index++;
 	}
-	return (100);
+	//free_graphics();
+	//printf("we are not supposed to get this far\n");
+	return (index);
 }
 
 // calls both functions for horizontal and vertical intersections and compares the output
@@ -117,12 +123,12 @@ double	closest_wall(double angle)
 	verti = intersect_verti(angle);
 	if (hori < verti)
 	{
-		// printf("hori is shorter with %f vs %f\n", hori, verti);
+		printf("hori is shorter with %f vs %f\n", hori, verti);
 		return (hori);
 	}
 	else
 	{
-		// printf("verti is shorter with %f vs %f\n", verti, hori);
+		printf("verti is shorter with %f vs %f\n", verti, hori);
 		return (verti);
 	}
 }
@@ -174,12 +180,14 @@ void	draw_fov(double angle, double distance)
 
 void	draw_col(t_graphics *graphics_struct, double distance, int col_index)
 {
-	int	y;
+	int		y;
+	double	column_height;
 
 	y = 0;
-	while (y < (1 / distance) * 600)
+	column_height = 1 / distance * WINDOW_HEIGHT;
+	while (y < column_height)
 	{
-		my_mlx_pixel_put(graphics_struct, col_index, y + 250, 0xAAAAFF);
+		my_mlx_pixel_put(graphics_struct, col_index, y + (WINDOW_HEIGHT - column_height) / 2, 0xAAAAFF);
 		y++;
 	}
 }
@@ -195,11 +203,11 @@ void	fan_out(void)
 	radial = - FOV / 2;
 	while (radial < FOV / 2)
 	{
-		distance = closest_wall(player()->direction + radial * RAD);
-		draw_col(graphics(), cos(radial * RAD) * distance, col_index);
-		draw_fov(player()->direction + radial * RAD, distance);
-		col_index++;
-		radial += (double)FOV / (double)WINDOW_WIDTH;
+	distance = closest_wall(player()->direction + radial * RAD);
+	draw_col(graphics(), cos(radial * RAD) * distance, col_index);
+	draw_fov(player()->direction + radial * RAD, distance);
+	col_index++;
+	radial += (double)FOV / (double)WINDOW_WIDTH;
 	}
 	mlx_put_image_to_window(graphics()->mlx, graphics()->win, graphics()->img, 0, 0);
 }
