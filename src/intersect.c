@@ -77,9 +77,9 @@ double	intersect_verti(double angle)
 int	wall_hit(double x, double y, double angle, int mode)
 {
 	if (sin(angle) < 0 && mode == HORI)
-		y -= 0.1;
+		y -= 0.0000000001;
 	if (cos(angle) < 0 && mode == VERTI)
-		x -= 0.1;
+		x -= 0.00000000001;
 	if (map()->data[(int)y][(int)x] == '1')
 		return (1);
 	return (0);
@@ -174,19 +174,12 @@ void	draw_fov(double angle, double distance)
 
 void	draw_col(t_graphics *graphics_struct, double distance, int col_index)
 {
-	int	x;
 	int	y;
 
 	y = 0;
 	while (y < (1 / distance) * 600)
 	{
-		x = 0;
-		while (x < 3)
-		{
-			my_mlx_pixel_put(graphics_struct, x + col_index * 3, y + 400, 0xAAAAFF);
-			x++;
-		}
-
+		my_mlx_pixel_put(graphics_struct, col_index, y + 250, 0xAAAAFF);
 		y++;
 	}
 }
@@ -194,7 +187,7 @@ void	draw_col(t_graphics *graphics_struct, double distance, int col_index)
 void	fan_out(void)
 {
 	double	radial;
-	double distance;
+	double 	distance;
 	int		col_index;
 
 	col_index = 0;
@@ -202,11 +195,11 @@ void	fan_out(void)
 	radial = - FOV / 2;
 	while (radial < FOV / 2)
 	{
-		distance = cos(radial * RAD) * closest_wall(player()->direction + radial * RAD),
-		draw_col(graphics(), distance, col_index);
+		distance = closest_wall(player()->direction + radial * RAD);
+		draw_col(graphics(), cos(radial * RAD) * distance, col_index);
 		draw_fov(player()->direction + radial * RAD, distance);
 		col_index++;
-		radial += RAD;
+		radial += (double)FOV / (double)WINDOW_WIDTH;
 	}
 	mlx_put_image_to_window(graphics()->mlx, graphics()->win, graphics()->img, 0, 0);
 }

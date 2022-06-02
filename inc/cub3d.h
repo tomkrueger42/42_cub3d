@@ -21,8 +21,6 @@
 # define MINIMAP_SIZE	600
 # define WINDOW_WIDTH	2000
 # define WINDOW_HEIGHT	1200
-# define MAX_HEIGHT		600
-# define MAX_WIDTH		WINDOW_WIDTH / FOV
 
 # define ESC_KEY		53
 # define W_KEY			13
