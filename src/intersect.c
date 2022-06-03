@@ -5,45 +5,33 @@
 #define HORI 1
 #define VERTI 2
 
-int		intersect_loop(t_ray *r, double angle, int mode);
+int		intersect_loop(t_ray r, double angle, int mode);
 void	highlight(int x, int y, int size, int color);
-
-t_ray	*ray(void)
-{
-	static t_ray	*ray;
-
-	if (ray == NULL)
-	{
-		ray = ft_calloc(1, sizeof(t_ray));
-		if (ray == NULL)
-			put_error_and_exit("malloc failure in player()", 1);
-	}
-	return (ray);
-}
 
 // returns the distance of the first horizontal intersection with a wall
 double	intersect_hori(double angle)
 {
 	double	dist;
-	t_ray	*r = ray();
+	t_ray	r;
 
-	r->y_tile_play_pos = player()->y_pos - (int)player()->y_pos;
+	r.y_tile_play_pos = player()->y_pos - (int)player()->y_pos;
 	if (sin(angle) > 0)
 	{
-		r->y_intersect_pos = (int)player()->y_pos + 1;
-		r->x_intersect_pos = player()->x_pos + r->y_tile_play_pos / tan(angle);
-		r->y_step = 1;
-		r->x_step = 1 / tan(angle);
+		r.y_intersect_pos = (int)player()->y_pos + 1;
+		r.x_intersect_pos = player()->x_pos + (1 - r.y_tile_play_pos) / tan(angle);
+		r.y_step = 1;
+		r.x_step = 1 / tan(angle);
 	}
 	else
 	{
-		r->y_intersect_pos = (int)player()->y_pos;
-		r->x_intersect_pos = player()->x_pos - r->y_tile_play_pos / tan(angle);
-		r->y_step = -1;
-		r->x_step = - (1 / tan(angle));
+		r.y_intersect_pos = (int)player()->y_pos;
+		r.x_intersect_pos = player()->x_pos - r.y_tile_play_pos / tan(angle);
+		r.y_step = -1;
+		r.x_step = - (1 / tan(angle));
 	}
-	dist = sqrt(pow(r->y_intersect_pos - player()->y_pos, 2) + pow(r->x_intersect_pos - player()->x_pos, 2));
-	dist += sqrt(pow(r->y_step, 2) + pow(r->x_step, 2)) * intersect_loop(r, angle, HORI);
+	dist = sqrt(pow(r.y_intersect_pos - player()->y_pos, 2) + pow(r.x_intersect_pos - player()->x_pos, 2));
+	int	loop = intersect_loop(r, angle, HORI);
+	dist += sqrt(pow(r.y_step, 2) + pow(r.x_step, 2)) * (double)loop;
 	return (dist);
 }
 
@@ -51,25 +39,25 @@ double	intersect_hori(double angle)
 double	intersect_verti(double angle)
 {
 	double	dist;
-	t_ray	*r = ray();
+	t_ray	r;
 
-	r->x_tile_play_pos = player()->x_pos - (int)player()->x_pos;
+	r.x_tile_play_pos = player()->x_pos - (int)player()->x_pos;
 	if (cos(angle) > 0)
 	{
-		r->x_intersect_pos = (int)player()->x_pos + 1;
-		r->y_intersect_pos = player()->y_pos + r->x_tile_play_pos * tan(angle);
-		r->x_step = 1;
-		r->y_step = tan(angle);
+		r.x_intersect_pos = (int)player()->x_pos + 1;
+		r.y_intersect_pos = player()->y_pos + (1 - r.x_tile_play_pos) * tan(angle);
+		r.x_step = 1;
+		r.y_step = tan(angle);
 	}
 	else
 	{
-		r->x_intersect_pos = (int)player()->x_pos;
-		r->y_intersect_pos = player()->y_pos - r->x_tile_play_pos * tan(angle);
-		r->x_step = -1;
-		r->y_step = - (tan(angle));
+		r.x_intersect_pos = (int)player()->x_pos;
+		r.y_intersect_pos = player()->y_pos - r.x_tile_play_pos * tan(angle);
+		r.x_step = -1;
+		r.y_step = - (tan(angle));
 	}
-	dist = sqrt(pow(r->y_intersect_pos - player()->y_pos, 2) + pow(r->x_intersect_pos - player()->x_pos, 2));
-	dist += sqrt(pow(r->y_step, 2) + pow(r->x_step, 2)) * intersect_loop(r, angle, VERTI);
+	dist = sqrt(pow(r.y_intersect_pos - player()->y_pos, 2) + pow(r.x_intersect_pos - player()->x_pos, 2));
+	dist += sqrt(pow(r.y_step, 2) + pow(r.x_step, 2)) * (double)intersect_loop(r, angle, VERTI);
 	return (dist);
 }
 
@@ -90,26 +78,24 @@ int	wall_hit(double x, double y, double angle, int mode)
 }
 
 // loops until hits a wall
-int	intersect_loop(t_ray *r, double angle, int mode)
+int	intersect_loop(t_ray r, double angle, int mode)
 {
 	int	index;
 
 	index = 0;
-	while ((int)(r->y_intersect_pos + r->y_step * index) < map()->len
-			&& (int)(r->y_intersect_pos + r->y_step * index) > 0
-			&& (int)(r->x_intersect_pos + r->x_step * index) < map()->width
-			&& (int)(r->x_intersect_pos + r->x_step * index) > 0)
+	while ((int)(r.y_intersect_pos + r.y_step * index) < map()->len
+			&& (int)(r.y_intersect_pos + r.y_step * index) > 0
+			&& (int)(r.x_intersect_pos + r.x_step * index) < map()->width
+			&& (int)(r.x_intersect_pos + r.x_step * index) > 0)
 	{
-		// highlight((r->x_intersect_pos + r->x_step * index) * map()->tile_size, (r->y_intersect_pos + r->y_step * index) * map()->tile_size, 3, 0xFF0000);
-		if (wall_hit(r->x_intersect_pos + r->x_step * index, r->y_intersect_pos + r->y_step * index, angle, mode))
+		// highlight((r.x_intersect_pos + r.x_step * index) * map()->tile_size, (r.y_intersect_pos + r.y_step * index) * map()->tile_size, 3, 0xFF0000);
+		if (wall_hit(r.x_intersect_pos + r.x_step * index, r.y_intersect_pos + r.y_step * index, angle, mode))
 		{
-			// highlight((r->x_intersect_pos + r->x_step * index) * map()->tile_size, (r->y_intersect_pos + r->y_step * index) * map()->tile_size, 3, 0xFFFFFF);
+			// highlight((r.x_intersect_pos + r.x_step * index) * map()->tile_size, (r.y_intersect_pos + r.y_step * index) * map()->tile_size, 3, 0xFFFFFF);
 			return (index);
 		}
 		index++;
 	}
-	//free_graphics();
-	//printf("we are not supposed to get this far\n");
 	return (index);
 }
 
@@ -194,7 +180,7 @@ void	draw_col(t_graphics *graphics_struct, double distance, int col_index)
 
 void	fan_out(void)
 {
-	double	radial;
+	double	radial = 0;
 	double 	distance;
 	int		col_index;
 
@@ -203,11 +189,11 @@ void	fan_out(void)
 	radial = - FOV / 2;
 	while (radial < FOV / 2)
 	{
-	distance = closest_wall(player()->direction + radial * RAD);
-	draw_col(graphics(), cos(radial * RAD) * distance, col_index);
-	draw_fov(player()->direction + radial * RAD, distance);
-	col_index++;
-	radial += (double)FOV / (double)WINDOW_WIDTH;
+		distance = closest_wall(player()->direction + radial * RAD);
+		draw_col(graphics(), cos(radial * RAD) * distance, col_index);
+		draw_fov(player()->direction + radial * RAD, distance);
+		col_index++;
+		radial += (double)FOV / (double)WINDOW_WIDTH;
 	}
 	mlx_put_image_to_window(graphics()->mlx, graphics()->win, graphics()->img, 0, 0);
 }

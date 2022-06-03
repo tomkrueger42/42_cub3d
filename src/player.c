@@ -25,8 +25,6 @@ void	free_player(void)
 	ft_free((void **)&ptr);
 }
 
-void	fan_out(void);
-
 void	render_player(void)
 {
 	int	x_px;
