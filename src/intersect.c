@@ -143,7 +143,7 @@ void	draw_fov(double angle, double distance)
 	}
 }
 
-void	draw_col(t_graphics *graphics_struct, double distance, int col_index)
+void	draw_col(t_graphics *graphics_struct, double distance, int col_index, int wall_color)
 {
 	int		y;
 	double	column_height;
@@ -152,7 +152,7 @@ void	draw_col(t_graphics *graphics_struct, double distance, int col_index)
 	column_height = 1 / distance * WINDOW_HEIGHT;
 	while (y < column_height)
 	{
-		my_mlx_pixel_put(graphics_struct, col_index, y + (WINDOW_HEIGHT - column_height) / 2, 0xAAAAFF);
+		my_mlx_pixel_put(graphics_struct, col_index, y + (WINDOW_HEIGHT - column_height) / 2, wall_color);
 		y++;
 	}
 }
@@ -163,6 +163,7 @@ void	fan_out(void)
 	double 	dist_hori;
 	double 	dist_verti;
 	int		col_index;
+	int		wall_color;
 
 	col_index = 0;
 	radial = - FOV / 2;
@@ -170,10 +171,20 @@ void	fan_out(void)
 	{
 		dist_hori = horizontal_intersections(player()->direction + radial * RAD);
 		dist_verti = vertical_intersections(player()->direction + radial * RAD);
-		if (dist_hori < dist_verti)
-			draw_col(graphics(), cos(radial * RAD) * dist_hori, col_index);
+		if (dist_hori < dist_verti && sin(player()->direction + radial * RAD) < 0)
+			wall_color = 0x5555FF;
+		else if (dist_verti < dist_hori && cos(player()->direction + radial * RAD) > 0)
+			wall_color = 0xF8F800;
+		else if (dist_hori < dist_verti && sin(player()->direction + radial * RAD) > 0)
+			wall_color = 0xF80000;
+		else if (dist_verti < dist_hori && cos(player()->direction + radial * RAD) < 0)
+			wall_color = 0xF88F00;
 		else
-			draw_col(graphics(), cos(radial * RAD) * dist_verti, col_index);
+			wall_color = 0xFF00; // just to catch errors
+		if (dist_hori < dist_verti)
+			draw_col(graphics(), cos(radial * RAD) * dist_hori, col_index, wall_color);
+		else
+			draw_col(graphics(), cos(radial * RAD) * dist_verti, col_index, wall_color);
 		// draw_fov(player()->direction + radial * RAD, distance);
 		col_index++;
 		radial += (double)FOV / (double)WINDOW_WIDTH;
