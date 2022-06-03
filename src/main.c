@@ -20,8 +20,9 @@ int	key_hook(int keycode)
 		mlx_destroy_image(graphics()->mlx, graphics()->img);
 		graphics()->img = mlx_new_image(graphics()->mlx, WINDOW_WIDTH, WINDOW_HEIGHT);
 		graphics()->addr = mlx_get_data_addr(graphics()->img, &graphics()->bits_per_pixel, &graphics()->line_length, &graphics()->endian);
-		render_minimap();
 		fan_out();
+		render_minimap();
+		mlx_put_image_to_window(graphics()->mlx, graphics()->win, graphics()->img, 0, 0);
 	}
 	return (0);
 }
@@ -39,7 +40,9 @@ int	main(void) // needs argc, **argv
 		free_player();
 		return (EXIT_FAILURE);
 	}
+	fan_out();
 	render_minimap();
+	mlx_put_image_to_window(graphics()->mlx, graphics()->win, graphics()->img, 0, 0);
 	mlx_hook(graphics()->win, 02, 1L<<0, key_hook, NULL);
 	mlx_loop(graphics()->mlx);
 	return (EXIT_SUCCESS);

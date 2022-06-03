@@ -41,11 +41,7 @@ void	render_player(void)
 		}
 		y_px++;
 	}
-
-	
 	draw_ray();
-
-	
 }
 
 void	draw_ray(void)
@@ -54,15 +50,15 @@ void	draw_ray(void)
 	double	y;
 	double	xy;
 
-	x = round(player()->x_delta * MINIMAP_SIZE);
-	y = round(player()->y_delta * MINIMAP_SIZE);
+	x = round(player()->x_delta * map()->tile_size * 2);
+	y = round(player()->y_delta * map()->tile_size * 2);
 	if (player()->y_delta == 0)
 		xy = __INT_FAST64_MAX__;
 	else
 		xy = player()->x_delta / player()->y_delta;
 	while (x != 0 || y != 0)
 	{
-		my_mlx_pixel_put(graphics(), player()->x_pos * map()->tile_size + x, player()->y_pos * map()->tile_size + y, 0xFF00);
+		my_mlx_pixel_put(graphics(), player()->x_pos * map()->tile_size + x, player()->y_pos * map()->tile_size + y, 0xFFAA33);
 		if (x > 0 && (y == 0 || (x / y >= xy && xy > 0) || (x / y < xy && xy < 0)))
 			x--;
 		else if (x < 0 && (y == 0 || (x / y <= xy && xy < 0) || (x / y > xy && xy > 0)))

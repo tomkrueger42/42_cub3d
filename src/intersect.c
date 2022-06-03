@@ -9,55 +9,54 @@ int		intersect_loop(t_ray r, double angle, int mode);
 void	highlight(int x, int y, int size, int color);
 
 // returns the distance of the first horizontal intersection with a wall
-double	intersect_hori(double angle)
+double	horizontal_intersections(double angle)
 {
 	double	dist;
 	t_ray	r;
 
-	r.y_tile_play_pos = player()->y_pos - (int)player()->y_pos;
+	r.tile_play_pos = player()->y_pos - (int)player()->y_pos;
 	if (sin(angle) > 0)
 	{
 		r.y_intersect_pos = (int)player()->y_pos + 1;
-		r.x_intersect_pos = player()->x_pos + (1 - r.y_tile_play_pos) / tan(angle);
+		r.x_intersect_pos = player()->x_pos + (1 - r.tile_play_pos) / tan(angle);
 		r.y_step = 1;
 		r.x_step = 1 / tan(angle);
 	}
 	else
 	{
 		r.y_intersect_pos = (int)player()->y_pos;
-		r.x_intersect_pos = player()->x_pos - r.y_tile_play_pos / tan(angle);
+		r.x_intersect_pos = player()->x_pos - r.tile_play_pos / tan(angle);
 		r.y_step = -1;
 		r.x_step = - (1 / tan(angle));
 	}
 	dist = sqrt(pow(r.y_intersect_pos - player()->y_pos, 2) + pow(r.x_intersect_pos - player()->x_pos, 2));
-	int	loop = intersect_loop(r, angle, HORI);
-	dist += sqrt(pow(r.y_step, 2) + pow(r.x_step, 2)) * (double)loop;
+	dist += sqrt(pow(r.y_step, 2) + pow(r.x_step, 2)) * intersect_loop(r, angle, HORI);
 	return (dist);
 }
 
 // returns the distance of the first vertical intersection with a wall
-double	intersect_verti(double angle)
+double	vertical_intersections(double angle)
 {
 	double	dist;
 	t_ray	r;
 
-	r.x_tile_play_pos = player()->x_pos - (int)player()->x_pos;
+	r.tile_play_pos = player()->x_pos - (int)player()->x_pos;
 	if (cos(angle) > 0)
 	{
 		r.x_intersect_pos = (int)player()->x_pos + 1;
-		r.y_intersect_pos = player()->y_pos + (1 - r.x_tile_play_pos) * tan(angle);
+		r.y_intersect_pos = player()->y_pos + (1 - r.tile_play_pos) * tan(angle);
 		r.x_step = 1;
 		r.y_step = tan(angle);
 	}
 	else
 	{
 		r.x_intersect_pos = (int)player()->x_pos;
-		r.y_intersect_pos = player()->y_pos - r.x_tile_play_pos * tan(angle);
+		r.y_intersect_pos = player()->y_pos - r.tile_play_pos * tan(angle);
 		r.x_step = -1;
 		r.y_step = - (tan(angle));
 	}
 	dist = sqrt(pow(r.y_intersect_pos - player()->y_pos, 2) + pow(r.x_intersect_pos - player()->x_pos, 2));
-	dist += sqrt(pow(r.y_step, 2) + pow(r.x_step, 2)) * (double)intersect_loop(r, angle, VERTI);
+	dist += sqrt(pow(r.y_step, 2) + pow(r.x_step, 2)) * intersect_loop(r, angle, VERTI);
 	return (dist);
 }
 
@@ -97,26 +96,6 @@ int	intersect_loop(t_ray r, double angle, int mode)
 		index++;
 	}
 	return (index);
-}
-
-// calls both functions for horizontal and vertical intersections and compares the output
-double	closest_wall(double angle)
-{
-	double	hori;
-	double verti;
-
-	hori = intersect_hori(angle);
-	verti = intersect_verti(angle);
-	if (hori < verti)
-	{
-		printf("hori is shorter with %f vs %f\n", hori, verti);
-		return (hori);
-	}
-	else
-	{
-		printf("verti is shorter with %f vs %f\n", verti, hori);
-		return (verti);
-	}
 }
 
 // draws a box
@@ -181,19 +160,22 @@ void	draw_col(t_graphics *graphics_struct, double distance, int col_index)
 void	fan_out(void)
 {
 	double	radial = 0;
-	double 	distance;
+	double 	dist_hori;
+	double 	dist_verti;
 	int		col_index;
 
 	col_index = 0;
-
 	radial = - FOV / 2;
 	while (radial < FOV / 2)
 	{
-		distance = closest_wall(player()->direction + radial * RAD);
-		draw_col(graphics(), cos(radial * RAD) * distance, col_index);
-		draw_fov(player()->direction + radial * RAD, distance);
+		dist_hori = horizontal_intersections(player()->direction + radial * RAD);
+		dist_verti = vertical_intersections(player()->direction + radial * RAD);
+		if (dist_hori < dist_verti)
+			draw_col(graphics(), cos(radial * RAD) * dist_hori, col_index);
+		else
+			draw_col(graphics(), cos(radial * RAD) * dist_verti, col_index);
+		// draw_fov(player()->direction + radial * RAD, distance);
 		col_index++;
 		radial += (double)FOV / (double)WINDOW_WIDTH;
 	}
-	mlx_put_image_to_window(graphics()->mlx, graphics()->win, graphics()->img, 0, 0);
 }

@@ -80,16 +80,11 @@ typedef struct s_player
 
 typedef struct s_ray
 {
-	double	x_tile_play_pos;
-	double	y_tile_play_pos;
+	double	tile_play_pos;
 	double	x_intersect_pos;
 	double	y_intersect_pos;
 	double	x_step;
 	double	y_step;
-	int	len_hit_hori;
-	int	len_hit_verti;
-	int	len_hit_wall;
-
 }	t_ray;
 
 

@@ -17,7 +17,7 @@ void	draw_box(int x_pos, int y_pos)
 			if (map()->data[y_pos][x_pos] == '1')
 				color = 0x444444;
 			else if (map()->data[y_pos][x_pos] == ' ')
-				color = 0xFF000000;
+				return ;
 			else
 				color = 0xbbbbbb;
 			if ((y_px == 0 || x_px == 0) && color != 0xFF000000) // borders between tiles
