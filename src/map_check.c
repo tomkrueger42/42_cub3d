@@ -66,7 +66,7 @@ int	player_check(char **data)
 			if (data[y][x] == 'N' || data[y][x] == 'E'
 				|| data[y][x] == 'S' || data[y][x] == 'W')
 			{
-				if (y == map()->len || x == map()->width || blanks_nearby(data, x, y))
+				if (y == get_map()->len || x == get_map()->width || blanks_nearby(data, x, y))
 					put_error_and_exit("incorrect player positioning", 3);
 				populate_player(x, y, data[y][x]);
 				sum++;
@@ -82,18 +82,18 @@ int	player_check(char **data)
 
 void	populate_player(int x, int y, char heading)
 {
-	player()->y_pos = y + 0.5;
-	player()->x_pos = x + 0.5;
+	get_player()->y_pos = y + 0.5;
+	get_player()->x_pos = x + 0.5;
 	if (heading == 'N')
-		player()->direction = 1.5 * PI;
+		get_player()->direction = 1.5 * PI;
 	else if (heading == 'E')
-		player()->direction = 0;
+		get_player()->direction = 0;
 	else if (heading == 'S')
-		player()->direction = 0.5 * PI;
+		get_player()->direction = 0.5 * PI;
 	else if (heading == 'W')
-		player()->direction = PI;
-	player()->size = map()->tile_size * 2 / 3;
-	player()->x_delta = cos(player()->direction);
-	player()->y_delta = sin(player()->direction);
-	player()->speed = (double)1 / (double)MOVEMENT_SPEED;
+		get_player()->direction = PI;
+	get_player()->size = get_map()->tile_size * 2 / 3;
+	get_player()->x_delta = cos(get_player()->direction);
+	get_player()->y_delta = sin(get_player()->direction);
+	get_player()->speed = (double)1 / (double)MOVEMENT_SPEED;
 }

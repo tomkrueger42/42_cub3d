@@ -1,7 +1,7 @@
 #include "cub3d.h"
 
 // This function returns the pointer to our style-struct
-t_style	*style(void)
+t_style	*get_style(void)
 {
 	static t_style	*style;
 
@@ -18,7 +18,7 @@ void	free_style(void)
 {
 	t_style	*ptr;
 
-	ptr = style();
+	ptr = get_style();
 	ft_free((void **)&ptr->north_walls);
 	ft_free((void **)&ptr->east_walls);
 	ft_free((void **)&ptr->south_walls);
