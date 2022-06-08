@@ -4,7 +4,7 @@
 
 void	draw_ray(void);
 
-t_player	*player(void)
+t_player	*get_player(void)
 {
 	static t_player	*player;
 
@@ -21,7 +21,7 @@ void	free_player(void)
 {
 	t_player	*ptr;
 
-	ptr = player();
+	ptr = get_player();
 	ft_free((void **)&ptr);
 }
 
@@ -30,13 +30,13 @@ void	render_player(void)
 	int	x_px;
 	int	y_px;
 
-	y_px = - (player()->size / 2);
-	while (y_px < player()->size / 2)
+	y_px = - (get_player()->size / 2);
+	while (y_px < get_player()->size / 2)
 	{
-		x_px = - (player()->size / 2);
-		while (x_px < player()->size / 2)
+		x_px = - (get_player()->size / 2);
+		while (x_px < get_player()->size / 2)
 		{
-			my_mlx_pixel_put(graphics(), player()->x_pos * map()->tile_size + x_px, player()->y_pos * map()->tile_size + y_px, 0xffff00);
+			my_mlx_pixel_put(get_graphics(), get_player()->x_pos * get_map()->tile_size + x_px, get_player()->y_pos * get_map()->tile_size + y_px, 0xffff00);
 			x_px++;
 		}
 		y_px++;
@@ -50,15 +50,15 @@ void	draw_ray(void)
 	double	y;
 	double	xy;
 
-	x = round(player()->x_delta * map()->tile_size * 2);
-	y = round(player()->y_delta * map()->tile_size * 2);
-	if (player()->y_delta == 0)
+	x = round(get_player()->x_delta * get_map()->tile_size * 2);
+	y = round(get_player()->y_delta * get_map()->tile_size * 2);
+	if (get_player()->y_delta == 0)
 		xy = __INT_FAST64_MAX__;
 	else
-		xy = player()->x_delta / player()->y_delta;
+		xy = get_player()->x_delta / get_player()->y_delta;
 	while (x != 0 || y != 0)
 	{
-		my_mlx_pixel_put(graphics(), player()->x_pos * map()->tile_size + x, player()->y_pos * map()->tile_size + y, 0xFFAA33);
+		my_mlx_pixel_put(get_graphics(), get_player()->x_pos * get_map()->tile_size + x, get_player()->y_pos * get_map()->tile_size + y, 0xFFAA33);
 		if (x > 0 && (y == 0 || (x / y >= xy && xy > 0) || (x / y < xy && xy < 0)))
 			x--;
 		else if (x < 0 && (y == 0 || (x / y <= xy && xy < 0) || (x / y > xy && xy > 0)))
@@ -69,32 +69,74 @@ void	draw_ray(void)
 			y++;
 	}
 }
-
+/* 
+	if (keycode == W_KEY)
+	{
+		x = player()->x_pos + player()->x_delta * player()->speed;
+		y = player()->y_pos + player()->y_delta * player()->speed;
+		if (map()->data[(int)y][(int)x] != '1')
+		{
+			player()->x_pos += player()->x_delta * player()->speed;
+			player()->y_pos += player()->y_delta * player()->speed;
+		}
+	}
+	else if (keycode == A_KEY)
+	{
+		x = player()->x_pos - player()->x_delta * player()->speed;
+		y = player()->y_pos + player()->y_delta * player()->speed;
+		if (map()->data[(int)y][(int)x] != '1')
+		{
+			player()->x_pos -= player()->x_delta * player()->speed;
+			player()->y_pos += player()->y_delta * player()->speed;
+		}
+	}
+	else if (keycode == S_KEY)
+	{
+		x = player()->x_pos - player()->x_delta * player()->speed;
+		y = player()->y_pos - player()->y_delta * player()->speed;
+		if (map()->data[(int)y][(int)x] != '1')
+		{
+			player()->x_pos -= player()->x_delta * player()->speed;
+			player()->y_pos -= player()->y_delta * player()->speed;
+		}
+	}
+	else if (keycode == D_KEY)
+	{
+		x = player()->x_pos + player()->x_delta * player()->speed;
+		y = player()->y_pos - player()->y_delta * player()->speed;
+		if (map()->data[(int)y][(int)x] != '1')
+		{
+			player()->x_pos += player()->x_delta * player()->speed;
+			player()->y_pos -= player()->y_delta * player()->speed;
+		}
+	}
+ */
 void	move_player(int keycode)
 {
 	if (keycode == W_KEY)
 	{
-		player()->x_pos += player()->x_delta * player()->speed;
-		player()->y_pos += player()->y_delta * player()->speed;
+		get_player()->x_pos += get_player()->x_delta * get_player()->speed;
+		get_player()->y_pos += get_player()->y_delta * get_player()->speed;
 	}
 	if (keycode == A_KEY)
 	{
-		player()->x_pos += player()->y_delta * player()->speed;
-		player()->y_pos -= player()->x_delta * player()->speed;
+		get_player()->x_pos += get_player()->y_delta * get_player()->speed;
+		get_player()->y_pos -= get_player()->x_delta * get_player()->speed;
 	}
 	else if (keycode == S_KEY)
 	{
-		player()->x_pos -= player()->x_delta * player()->speed;
-		player()->y_pos -= player()->y_delta * player()->speed;
+		get_player()->x_pos -= get_player()->x_delta * get_player()->speed;
+		get_player()->y_pos -= get_player()->y_delta * get_player()->speed;
 	}
 	else if (keycode == D_KEY)
 	{
-		player()->x_pos -= player()->y_delta * player()->speed;
-		player()->y_pos += player()->x_delta * player()->speed;
+		get_player()->x_pos -= get_player()->y_delta * get_player()->speed;
+		get_player()->y_pos += get_player()->x_delta * get_player()->speed;
 	}
 	else if (keycode == ARROW_LEFT_KEY)
-		player()->direction -= ROTATION_SPEED;
+		get_player()->direction -= ROTATION_SPEED;
 	else if (keycode == ARROW_RIGHT_KEY)
+<<<<<<< HEAD
 		player()->direction += ROTATION_SPEED;
 	if (player()->direction < 0 * PI)
 		player()->direction += 2 * PI;
@@ -103,4 +145,14 @@ void	move_player(int keycode)
 	player()->x_delta = cos(player()->direction);
 	player()->y_delta = sin(player()->direction);
 	// printf("x: %f, y: %f, x_d: %f, y_d: %f, dir: %f, speed: %f\n", player()->x_pos, player()->y_pos, player()->x_delta, player()->y_delta, player()->direction, player()->speed); 
+=======
+		get_player()->direction += ROTATION_SPEED;
+	if (get_player()->direction < 0 * PI)
+		get_player()->direction += 2 * PI;
+	else if (get_player()->direction >= 2 * PI)
+		get_player()->direction -= 2 * PI;
+	get_player()->x_delta = cos(get_player()->direction);
+	get_player()->y_delta = sin(get_player()->direction);
+	// printf("x: %f, y: %f, x_d: %f, y_d: %f, dir: %f, speed: %f\n", get_player()->x_pos, get_player()->y_pos, get_player()->x_delta, get_player()->y_delta, get_player()->direction, get_player()->speed);
+>>>>>>> c99fb1bcf9aa0e5d37fdf8814c46450a754cf62c
 }

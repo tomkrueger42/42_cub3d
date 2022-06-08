@@ -15,12 +15,12 @@
 # define MAP_CHARS		" 01NESW"
 # define MOVEMENT_SPEED	5				// number of clicks to walk across tiles
 # define ROTATION_SPEED	0.1
-# define FOV			60
+# define FOV			66
 # define RAD			0.0174533
 # define PI				3.1415926535
 # define MINIMAP_SIZE	600
-# define WINDOW_WIDTH	2000
-# define WINDOW_HEIGHT	1200
+# define WINDOW_WIDTH	1440
+# define WINDOW_HEIGHT	775
 
 # define ESC_KEY		53
 # define W_KEY			13
@@ -98,7 +98,7 @@ int		create_trgb(unsigned char t, unsigned char r, unsigned char g,
 			unsigned char b);
 
 // graphics.c
-t_graphics	*graphics(void);
+t_graphics	*get_graphics(void);
 void		free_graphics(void);
 
 // main.c
@@ -115,14 +115,14 @@ void	fill_rows_with_spaces(char **data);
 void	print_map(void);
 
 // map.c
-t_map	*map(void);
+t_map	*get_map(void);
 void	free_map(void);
 
 // minimap.c
 void	render_minimap(void);
 
 // player.c
-t_player	*player(void);
+t_player	*get_player(void);
 void		free_player(void);
 void		render_player(void);
 void		move_player(int keycode);
@@ -131,7 +131,7 @@ void		move_player(int keycode);
 void	read_file(char *filename);
 
 // style.c
-t_style	*style(void);
+t_style	*get_style(void);
 void	free_style(void);
 
 // utils.c

@@ -1,7 +1,7 @@
 #include "cub3d.h"
 
 // This function initializes the mlx instance and returns the graphics pointer
-t_graphics	*graphics(void)
+t_graphics	*get_graphics(void)
 {
 	static t_graphics	*graphics = NULL;
 
@@ -9,7 +9,7 @@ t_graphics	*graphics(void)
 	{
 		graphics = ft_calloc(1, sizeof(t_graphics));
 		if (graphics == NULL)
-			put_error_and_exit("malloc failure in graphics()", 1);
+			put_error_and_exit("malloc failure in get_graphics()", 1);
 		graphics->mlx = mlx_init();
 		graphics->win = mlx_new_window(graphics->mlx, WINDOW_WIDTH, WINDOW_HEIGHT, "cub3d");
 		graphics->img = mlx_new_image(graphics->mlx, WINDOW_WIDTH, WINDOW_HEIGHT);
@@ -24,7 +24,7 @@ void	free_graphics(void)
 {
 	t_graphics	*ptr;
 
-	ptr = graphics();
+	ptr = get_graphics();
 	printf("free_graphics()\n");
 	if (ptr != NULL)
 	{

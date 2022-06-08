@@ -20,13 +20,13 @@ void	read_file(char *filename)
 		temp = get_next_line(fd);
 	}
 	close (fd);
-	style()->north_walls = extract_value(lines, "NO ");
-	style()->east_walls = extract_value(lines, "EA ");
-	style()->south_walls = extract_value(lines, "SO ");
-	style()->west_walls = extract_value(lines, "WE ");
-	style()->floor_color = convert_color(extract_value(lines, "F "));
-	style()->ceiling_color = convert_color(extract_value(lines, "C "));
-	map()->data = ft_split(find_map(lines), '\n');
+	get_style()->north_walls = extract_value(lines, "NO ");
+	get_style()->east_walls = extract_value(lines, "EA ");
+	get_style()->south_walls = extract_value(lines, "SO ");
+	get_style()->west_walls = extract_value(lines, "WE ");
+	get_style()->floor_color = convert_color(extract_value(lines, "F "));
+	get_style()->ceiling_color = convert_color(extract_value(lines, "C "));
+	get_map()->data = ft_split(find_map(lines), '\n');
 	ft_free((void **)(&lines));
 }
 
@@ -54,6 +54,6 @@ unsigned int	convert_color(char *value)
 {
 	if (value == NULL)
 		return (0);
-	return (create_trgb(255, ft_atoi(value), ft_atoi(ft_strchr(value, ',') + 1),
+	return (create_trgb(0, ft_atoi(value), ft_atoi(ft_strchr(value, ',') + 1),
 			ft_atoi(ft_strrchr(value, ',') + 1)));
 }

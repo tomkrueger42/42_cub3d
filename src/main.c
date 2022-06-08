@@ -17,12 +17,12 @@ int	key_hook(int keycode)
 				|| keycode == ARROW_LEFT_KEY || keycode == ARROW_RIGHT_KEY)
 	{
 		move_player(keycode);
-		mlx_destroy_image(graphics()->mlx, graphics()->img);
-		graphics()->img = mlx_new_image(graphics()->mlx, WINDOW_WIDTH, WINDOW_HEIGHT);
-		graphics()->addr = mlx_get_data_addr(graphics()->img, &graphics()->bits_per_pixel, &graphics()->line_length, &graphics()->endian);
+		mlx_destroy_image(get_graphics()->mlx, get_graphics()->img);
+		get_graphics()->img = mlx_new_image(get_graphics()->mlx, WINDOW_WIDTH, WINDOW_HEIGHT);
+		get_graphics()->addr = mlx_get_data_addr(get_graphics()->img, &get_graphics()->bits_per_pixel, &get_graphics()->line_length, &get_graphics()->endian);
 		fan_out();
 		render_minimap();
-		mlx_put_image_to_window(graphics()->mlx, graphics()->win, graphics()->img, 0, 0);
+		mlx_put_image_to_window(get_graphics()->mlx, get_graphics()->win, get_graphics()->img, 0, 0);
 	}
 	return (0);
 }
@@ -31,9 +31,9 @@ int	key_hook(int keycode)
 int	main(void) // needs argc, **argv
 {
 	read_file("x.cub");
-	count_dimensions(map()->data);
-	fill_rows_with_spaces(map()->data);
-	if (map_check(map()->data) || player_check(map()->data))
+	count_dimensions(get_map()->data);
+	fill_rows_with_spaces(get_map()->data);
+	if (map_check(get_map()->data) || player_check(get_map()->data))
 	{
 		free_style();
 		free_map();
@@ -42,8 +42,8 @@ int	main(void) // needs argc, **argv
 	}
 	fan_out();
 	render_minimap();
-	mlx_put_image_to_window(graphics()->mlx, graphics()->win, graphics()->img, 0, 0);
-	mlx_hook(graphics()->win, 02, 1L<<0, key_hook, NULL);
-	mlx_loop(graphics()->mlx);
+	mlx_put_image_to_window(get_graphics()->mlx, get_graphics()->win, get_graphics()->img, 0, 0);
+	mlx_hook(get_graphics()->win, 02, 1L<<0, key_hook, NULL);
+	mlx_loop(get_graphics()->mlx);
 	return (EXIT_SUCCESS);
 }

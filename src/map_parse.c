@@ -52,14 +52,14 @@ void	count_dimensions(char **data)
 	y = 0;
 	while (data != NULL && data[y] != NULL)
 	{
-		if (map()->width < ft_strlen(data[y]))
-			map()->width = ft_strlen(data[y]);
+		if (get_map()->width < ft_strlen(data[y]))
+			get_map()->width = ft_strlen(data[y]);
 		y++;
 	}
-	map()->len = y;
-	map()->tile_size = MINIMAP_SIZE / map()->width;
-	if (map()->len > map()->width)
-		map()->tile_size = MINIMAP_SIZE / map()->len;
+	get_map()->len = y;
+	get_map()->tile_size = MINIMAP_SIZE / get_map()->width;
+	if (get_map()->len > get_map()->width)
+		get_map()->tile_size = MINIMAP_SIZE / get_map()->len;
 	fill_rows_with_spaces(data);
 }
 
@@ -72,10 +72,10 @@ void	fill_rows_with_spaces(char **data)
 	y = 0;
 	while (data != NULL && data[y] != NULL)
 	{
-		if (ft_strlen(data[y]) < map()->width)
+		if (ft_strlen(data[y]) < get_map()->width)
 		{
 			x = 0;
-			new = ft_calloc(map()->width + 1, sizeof(*new));
+			new = ft_calloc(get_map()->width + 1, sizeof(*new));
 			if (new == NULL)
 				put_error_and_exit("malloc error in fill_rows_with_spaces()", 1);
 			while (data[y][x] != '\0')
@@ -83,7 +83,7 @@ void	fill_rows_with_spaces(char **data)
 				new[x] = data[y][x];
 				x++;
 			}
-			while (x < map()->width)
+			while (x < get_map()->width)
 				new[x++] = ' ';
 			ft_free((void **)(&data[y]));
 			data[y] = new;
@@ -97,27 +97,27 @@ void	print_map(void)
 	int	index;
 
 	index = 0;
-	printf("NORTH = %s\n", style()->north_walls);
-	printf("EAST = %s\n", style()->east_walls);
-	printf("SOUTH = %s\n", style()->south_walls);
-	printf("WEST = %s\n", style()->west_walls);
-	printf("FLOOR COLOUR = %x\n", style()->floor_color);
-	printf("CEILING COLOUR = %x\n", style()->ceiling_color);
-	printf("x_max = %d\n", map()->width);
-	printf("y_max = %d\n", map()->len);
-	printf("tile_size = %d\n", map()->tile_size);
+	printf("NORTH = %s\n", get_style()->north_walls);
+	printf("EAST = %s\n", get_style()->east_walls);
+	printf("SOUTH = %s\n", get_style()->south_walls);
+	printf("WEST = %s\n", get_style()->west_walls);
+	printf("FLOOR COLOUR = %x\n", get_style()->floor_color);
+	printf("CEILING COLOUR = %x\n", get_style()->ceiling_color);
+	printf("x_max = %d\n", get_map()->width);
+	printf("y_max = %d\n", get_map()->len);
+	printf("tile_size = %d\n", get_map()->tile_size);
 	printf("\n____________________\nPLAYER INFOS\n");
-	printf("Player direction = %f\n", player()->direction);
-	printf("Player starts at = (%f|%f)\n", player()->x_pos, player()->y_pos);
+	printf("Player direction = %f\n", get_player()->direction);
+	printf("Player starts at = (%f|%f)\n", get_player()->x_pos, get_player()->y_pos);
 	printf("\n___________________\nMAP:\n");
-	if (map()->data == NULL)
+	if (get_map()->data == NULL)
 	{
-		printf("map()->data is null!!!\n");
+		printf("get_map()->data is null!!!\n");
 		return ;
 	}
-	while (map()->data[index] != NULL)
+	while (get_map()->data[index] != NULL)
 	{
-		printf("|%s|\n", map()->data[index]);
+		printf("|%s|\n", get_map()->data[index]);
 		index++;
 	}
 	return ;
