@@ -75,7 +75,48 @@ void	draw_ray(void)
 			y++;
 	}
 }
-
+/* 
+	if (keycode == W_KEY)
+	{
+		x = player()->x_pos + player()->x_delta * player()->speed;
+		y = player()->y_pos + player()->y_delta * player()->speed;
+		if (map()->data[(int)y][(int)x] != '1')
+		{
+			player()->x_pos += player()->x_delta * player()->speed;
+			player()->y_pos += player()->y_delta * player()->speed;
+		}
+	}
+	else if (keycode == A_KEY)
+	{
+		x = player()->x_pos - player()->x_delta * player()->speed;
+		y = player()->y_pos + player()->y_delta * player()->speed;
+		if (map()->data[(int)y][(int)x] != '1')
+		{
+			player()->x_pos -= player()->x_delta * player()->speed;
+			player()->y_pos += player()->y_delta * player()->speed;
+		}
+	}
+	else if (keycode == S_KEY)
+	{
+		x = player()->x_pos - player()->x_delta * player()->speed;
+		y = player()->y_pos - player()->y_delta * player()->speed;
+		if (map()->data[(int)y][(int)x] != '1')
+		{
+			player()->x_pos -= player()->x_delta * player()->speed;
+			player()->y_pos -= player()->y_delta * player()->speed;
+		}
+	}
+	else if (keycode == D_KEY)
+	{
+		x = player()->x_pos + player()->x_delta * player()->speed;
+		y = player()->y_pos - player()->y_delta * player()->speed;
+		if (map()->data[(int)y][(int)x] != '1')
+		{
+			player()->x_pos += player()->x_delta * player()->speed;
+			player()->y_pos -= player()->y_delta * player()->speed;
+		}
+	}
+ */
 void	move_player(int keycode)
 {
 	if (keycode == W_KEY)
