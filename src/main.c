@@ -28,9 +28,12 @@ int	key_hook(int keycode)
 }
 
 
-int	main(void) // needs argc, **argv
+int	main(int argc, char **argv)
 {
-	read_file("x.cub");
+	if (argc == 2)
+		read_file(argv[1]);
+	else
+		return (EXIT_FAILURE); // not sure if we should print err_msg
 	count_dimensions(get_map()->data);
 	fill_rows_with_spaces(get_map()->data);
 	if (map_check(get_map()->data) || player_check(get_map()->data))

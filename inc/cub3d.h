@@ -102,7 +102,7 @@ t_graphics	*get_graphics(void);
 void		free_graphics(void);
 
 // main.c
-int	main(void);
+int	main(int argc, char **argv);
 
 // map_check.c
 int	map_check(char **map);
