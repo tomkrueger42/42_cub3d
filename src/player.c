@@ -102,5 +102,5 @@ void	move_player(int keycode)
 		player()->direction -= 2 * PI;
 	player()->x_delta = cos(player()->direction);
 	player()->y_delta = sin(player()->direction);
-	// printf("x: %f, y: %f, x_d: %f, y_d: %f, dir: %f, speed: %f\n", player()->x_pos, player()->y_pos, player()->x_delta, player()->y_delta, player()->direction, player()->speed);
+	// printf("x: %f, y: %f, x_d: %f, y_d: %f, dir: %f, speed: %f\n", player()->x_pos, player()->y_pos, player()->x_delta, player()->y_delta, player()->direction, player()->speed); 
 }
