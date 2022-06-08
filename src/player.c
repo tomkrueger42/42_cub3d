@@ -72,24 +72,37 @@ void	draw_ray(void)
 
 void	move_player(int keycode)
 {
-	int x = get_player()->x_pos + get_player()->x_delta * get_player()->speed;
-	int y = get_player()->y_pos + get_player()->y_delta * get_player()->speed;
-	if (keycode == W_KEY && get_map()->data[y][x] != '1')
+	float	x;
+	float	y;
+	printf("px: %f, py %f\n", get_player()->x_pos, get_player()->y_pos);
+	x = get_player()->x_pos + get_player()->x_delta * get_player()->speed;
+	y = get_player()->y_pos + get_player()->y_delta * get_player()->speed;
+	printf("%f %f\n", x, y);
+	if (keycode == W_KEY && get_map()->data[(int)y][(int)x] != '1')
 	{
 		get_player()->x_pos += get_player()->x_delta * get_player()->speed;
 		get_player()->y_pos += get_player()->y_delta * get_player()->speed;
 	}
-	if (keycode == A_KEY && get_map()->data[y][x] != '1')
+	x = get_player()->x_pos - get_player()->x_delta * get_player()->speed;
+	y = get_player()->y_pos - get_player()->y_delta * get_player()->speed;
+	printf("%f %f\n", x, y);
+	if (keycode == A_KEY && get_map()->data[(int)y][(int)x] != '1')
 	{
 		get_player()->x_pos += get_player()->y_delta * get_player()->speed;
 		get_player()->y_pos -= get_player()->x_delta * get_player()->speed;
 	}
-	if (keycode == S_KEY && get_map()->data[y][x] != '1')
+	x = get_player()->x_pos - get_player()->x_delta * get_player()->speed;
+	y = get_player()->y_pos - get_player()->y_delta * get_player()->speed;
+	printf("%f %f\n", x, y);
+	if (keycode == S_KEY && get_map()->data[(int)y][(int)x] != '1')
 	{
 		get_player()->x_pos -= get_player()->x_delta * get_player()->speed;
 		get_player()->y_pos -= get_player()->y_delta * get_player()->speed;
 	}
-	else if (keycode == D_KEY && get_map()->data[y][x] != '1')
+	x = get_player()->x_pos - get_player()->x_delta * get_player()->speed;
+	y = get_player()->y_pos + get_player()->y_delta * get_player()->speed;
+	printf("%f %f\n", x, y);
+	if (keycode == D_KEY && get_map()->data[(int)y][(int)x] != '1')
 	{
 		get_player()->x_pos -= get_player()->y_delta * get_player()->speed;
 		get_player()->y_pos += get_player()->x_delta * get_player()->speed;

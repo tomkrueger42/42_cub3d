@@ -2,6 +2,7 @@ NO ./resources/5_0er.xpm
 WE ./resources/oettinger.xpm
 SO ./resources/perlenbacher.xpm
 EA ./resources/stuttgarter-hofbrau.xpm
+
 C 170,200,255
 F 130,42,42
 
@@ -31,5 +32,3 @@ F 130,42,42
 10100000100001001
 10000000000000001
 11111111111111111
-
-
