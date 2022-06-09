@@ -95,24 +95,35 @@ int	intersect_loop(t_ray r, double angle, int mode)
 	return (index);
 }
 
-void	draw_col(t_graphics *graphics, double distance, int col_index, int wall_color)
+void get_tex(double angle, double dist, int col_index, int wall_dir)
 {
-	int		y;
-	double	column_height;
+	double	wallx;
+	double	texx;
+	double	step;
+	double	y;
 	t_style	*style;
+	double	column_height;
 
-	y = 0;
-	column_height = 1 / distance * WINDOW_HEIGHT;
+	column_height = 1 / dist * WINDOW_HEIGHT;
 	style = get_style();
+	if (wall_dir == NORTH || wall_dir == SOUTH)
+		wallx = cos(angle) * dist + get_player()->x_pos;
+	else
+		wallx = sin(angle) * dist + get_player()->y_pos;
+	wallx -= floor(wallx);
+	texx = (int)(wallx * (double)TEX_WIDTH);
+	step = (double)TEX_HEIGHT / column_height;
+	// printf("wallx: %f, texx: %f, step: %f\n", wallx, texx, step);
+	y = 0;
 	while (y < (WINDOW_HEIGHT - column_height) / 2)
-		my_mlx_pixel_put(graphics, col_index, y++, style->ceiling_color);
-	while (y < (WINDOW_HEIGHT - column_height) / 2 + column_height)
+		my_mlx_pixel_put(&get_graphics()->image, col_index, y++, style->ceiling_color);
+	while (y < (WINDOW_HEIGHT - column_height) / 2 + column_height && y < WINDOW_HEIGHT)
 	{
-		my_mlx_pixel_put(graphics, col_index, y, wall_color);
+		my_mlx_pixel_put(&get_graphics()->image, col_index, y, style->textures[wall_dir][(int)((TEX_HEIGHT * texx) + (y - (WINDOW_HEIGHT - column_height) / 2) * step)]);
 		y++;
 	}
 	while (y < WINDOW_HEIGHT)
-		my_mlx_pixel_put(graphics, col_index, y++, style->floor_color);
+		my_mlx_pixel_put(&get_graphics()->image, col_index, y++, style->floor_color);
 }
 
 void	fan_out(void)
@@ -131,13 +142,21 @@ void	fan_out(void)
 		dist_hori = cos(radial * RAD) * horizontal_intersections(angle);
 		dist_verti = cos(radial * RAD) * vertical_intersections(angle);
 		if (dist_hori < dist_verti && sin(angle) < 0)
-			draw_col(get_graphics(), dist_hori, col_index, 0x5555FF);
+			get_tex(angle, dist_hori, col_index, NORTH);
 		else if (dist_verti < dist_hori && cos(angle) > 0)
-			draw_col(get_graphics(), dist_verti, col_index, 0xF8F800);
+			get_tex(angle, dist_verti, col_index, EAST);
 		else if (dist_hori < dist_verti && sin(angle) > 0)
-			draw_col(get_graphics(), dist_hori, col_index, 0xF80000);
+			get_tex(angle, dist_hori, col_index, SOUTH);
 		else if (dist_verti < dist_hori && cos(angle) < 0)
-			draw_col(get_graphics(), dist_verti, col_index, 0xF88F00);
+			get_tex(angle, dist_verti, col_index, WEST);
+		// if (dist_hori < dist_verti && sin(angle) < 0)
+		// 	draw_col(&get_graphics()->image, cos(radial * RAD) * dist_hori, col_index, get_tex(angle, dist_hori, NORTH));
+		// else if (dist_verti < dist_hori && cos(angle) > 0)
+		// 	draw_col(&get_graphics()->image, cos(radial * RAD) * dist_verti, col_index, get_tex(angle, dist_verti, EAST));
+		// else if (dist_hori < dist_verti && sin(angle) > 0)
+		// 	draw_col(&get_graphics()->image, cos(radial * RAD) * dist_hori, col_index, get_tex(angle, dist_hori, SOUTH));
+		// else if (dist_verti < dist_hori && cos(angle) < 0)
+		// 	draw_col(&get_graphics()->image, cos(radial * RAD) * dist_verti, col_index, get_tex(angle, dist_verti, WEST));
 		col_index++;
 		radial += (double)FOV / (double)WINDOW_WIDTH;
 	}

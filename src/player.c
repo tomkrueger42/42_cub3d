@@ -36,7 +36,7 @@ void	render_player(void)
 		x_px = - (get_player()->size / 2);
 		while (x_px < get_player()->size / 2)
 		{
-			my_mlx_pixel_put(get_graphics(), get_player()->x_pos * get_map()->tile_size + x_px, get_player()->y_pos * get_map()->tile_size + y_px, 0xffff00);
+			my_mlx_pixel_put(&get_graphics()->image, get_player()->x_pos * get_map()->tile_size + x_px, get_player()->y_pos * get_map()->tile_size + y_px, 0xffff00);
 			x_px++;
 		}
 		y_px++;
@@ -58,7 +58,7 @@ void	draw_ray(void)
 		xy = get_player()->x_delta / get_player()->y_delta;
 	while (x != 0 || y != 0)
 	{
-		my_mlx_pixel_put(get_graphics(), get_player()->x_pos * get_map()->tile_size + x, get_player()->y_pos * get_map()->tile_size + y, 0xFFAA33);
+		my_mlx_pixel_put(&get_graphics()->image, get_player()->x_pos * get_map()->tile_size + x, get_player()->y_pos * get_map()->tile_size + y, 0xFFAA33);
 		if (x > 0 && (y == 0 || (x / y >= xy && xy > 0) || (x / y < xy && xy < 0)))
 			x--;
 		else if (x < 0 && (y == 0 || (x / y <= xy && xy < 0) || (x / y > xy && xy > 0)))

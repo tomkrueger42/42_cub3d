@@ -1,12 +1,12 @@
 #include "cub3d.h"
 
-void	my_mlx_pixel_put(t_graphics *graphics, int x, int y, int color)
+void	my_mlx_pixel_put(t_img *img, int x, int y, int color)
 {
 	char	*dst;
 
 	if (x >= WINDOW_WIDTH || x < 0 || y >= WINDOW_HEIGHT || y < 0)
 		return ;
-	dst = graphics->addr + (y * graphics->line_length + x * (graphics->bits_per_pixel / 8));
+	dst = img->addr + (y * img->line_length + x * (img->bits_per_pixel / 8));
 	*(unsigned int*)dst = color;
 }
 

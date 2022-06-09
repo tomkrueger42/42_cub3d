@@ -17,16 +17,15 @@ int	key_hook(int keycode)
 				|| keycode == ARROW_LEFT_KEY || keycode == ARROW_RIGHT_KEY)
 	{
 		move_player(keycode);
-		mlx_destroy_image(get_graphics()->mlx, get_graphics()->img);
-		get_graphics()->img = mlx_new_image(get_graphics()->mlx, WINDOW_WIDTH, WINDOW_HEIGHT);
-		get_graphics()->addr = mlx_get_data_addr(get_graphics()->img, &get_graphics()->bits_per_pixel, &get_graphics()->line_length, &get_graphics()->endian);
+		mlx_destroy_image(get_graphics()->mlx, get_graphics()->image.img);
+		get_graphics()->image.img = mlx_new_image(get_graphics()->mlx, WINDOW_WIDTH, WINDOW_HEIGHT);
+		get_graphics()->image.addr = mlx_get_data_addr(get_graphics()->image.img, &get_graphics()->image.bits_per_pixel, &get_graphics()->image.line_length, &get_graphics()->image.endian);
 		fan_out();
 		render_minimap();
-		mlx_put_image_to_window(get_graphics()->mlx, get_graphics()->win, get_graphics()->img, 0, 0);
+		mlx_put_image_to_window(get_graphics()->mlx, get_graphics()->win, get_graphics()->image.img, 0, 0);
 	}
 	return (0);
 }
-
 
 int	main(void) // needs argc, **argv
 {
@@ -42,7 +41,7 @@ int	main(void) // needs argc, **argv
 	}
 	fan_out();
 	render_minimap();
-	mlx_put_image_to_window(get_graphics()->mlx, get_graphics()->win, get_graphics()->img, 0, 0);
+	mlx_put_image_to_window(get_graphics()->mlx, get_graphics()->win, get_graphics()->image.img, 0, 0);
 	mlx_hook(get_graphics()->win, 02, 1L<<0, key_hook, NULL);
 	mlx_loop(get_graphics()->mlx);
 	return (EXIT_SUCCESS);

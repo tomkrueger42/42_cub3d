@@ -3,7 +3,8 @@
 #include <unistd.h>
 
 unsigned int	convert_color(char *value);
-char	*extract_value(char *lines, char *identifier);
+char			*extract_value(char *lines, char *identifier);
+void			load_texture(int *texture, char *path);
 
 void	read_file(char *filename)
 {
@@ -26,6 +27,10 @@ void	read_file(char *filename)
 	get_style()->west_walls = extract_value(lines, "WE ");
 	get_style()->floor_color = convert_color(extract_value(lines, "F "));
 	get_style()->ceiling_color = convert_color(extract_value(lines, "C "));
+	load_texture(get_style()->textures[0], get_style()->north_walls);
+	load_texture(get_style()->textures[1], get_style()->east_walls);
+	load_texture(get_style()->textures[2], get_style()->south_walls);
+	load_texture(get_style()->textures[3], get_style()->west_walls);
 	get_map()->data = ft_split(find_map(lines), '\n');
 	ft_free((void **)(&lines));
 }
@@ -56,4 +61,25 @@ unsigned int	convert_color(char *value)
 		return (0);
 	return (create_trgb(0, ft_atoi(value), ft_atoi(ft_strchr(value, ',') + 1),
 			ft_atoi(ft_strrchr(value, ',') + 1)));
+}
+
+void	load_texture(int *texture, char *path)
+{
+	t_imgint tex_img;
+	int	x;
+	int	y;
+
+	tex_img.img = mlx_xpm_file_to_image(get_graphics()->mlx, path, \
+		&tex_img.img_width, &tex_img.img_height);
+	tex_img.addr = (int *)mlx_get_data_addr(tex_img.img, &tex_img.bits_per_pixel, \
+		&tex_img.line_length, &tex_img.endian);
+	y = -1;
+	while (++y < tex_img.img_height)
+	{
+		x = -1;
+		while (++x < tex_img.img_width)
+			texture[tex_img.img_height * y + x] = \
+				tex_img.addr[tex_img.img_height * y + x];
+	}
+	mlx_destroy_image(get_graphics()->mlx, tex_img.img);
 }
