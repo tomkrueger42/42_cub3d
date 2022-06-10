@@ -40,15 +40,6 @@
 # define GREEN			0x00ff00ff
 # define BLUE			0x0000ffff
 
-// keys
-# define ESC_KEY		53
-# define W_KEY			13
-# define A_KEY			0
-# define S_KEY			1
-# define D_KEY			2
-# define ARROW_LEFT_KEY	123
-# define ARROW_RIGHT_KEY 124
-
 /* ************************************************************************** */
 /* STRUCTS																	  */
 /* ************************************************************************** */

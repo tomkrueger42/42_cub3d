@@ -39,8 +39,8 @@ MINILIBX	=	-framework OpenGL -framework AppKit -L./libs/minilibx -lmlx
 MINILIBX_INC =	-Ilibs/minilibx
 
 MLX42_PATH =	./libs/libmlx42/libmlx42.a
-MLX42		=	-L/opt/homebrew/Cellar/glfw/3.3.7/lib -I include -lglfw -L./libs/libmlx42 -lmlx42
-# MLX42	=		-L./libs/libmlx42 -lmlx42 libs/libmlx42/libglfw3.a -framework Cocoa -framework OpenGL -framework IOKit
+# MLX42		=	-L/opt/homebrew/Cellar/glfw/3.3.7/lib -I include -lglfw -L./libs/libmlx42 -lmlx42
+MLX42	=		-L./libs/libmlx42 -lmlx42 libs/libmlx42/libglfw3.a -framework Cocoa -framework OpenGL -framework IOKit
 MLX42_INC =		-Ilibs/libmlx42/include/MLX42
 
 # **************************************************************************** #

@@ -1,7 +1,7 @@
-NO ./resources/8k_saturn.png
-WE ./resources/8k_sun.png
-SO ./resources/8k_stars.png
-EA ./resources/8k_venus_surface.png
+NO ./resources/bookshelf.png
+EA ./resources/gemov1.png
+SO ./resources/tilledsoil.png
+WE ./resources/treerings.png
 C 170,200,255
 F 130,42,42
 

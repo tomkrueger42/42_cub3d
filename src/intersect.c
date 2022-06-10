@@ -95,38 +95,42 @@ int	intersect_loop(t_ray r, double angle, int mode)
 	return (index);
 }
 
+unsigned int	get_pixel(mlx_texture_t *tex, unsigned int pos)
+{
+	return (tex->pixels[pos] << 24 | tex->pixels[pos + 1] << 16 | tex->pixels[pos + 2] << 8 | 0xff);
+}
+
 void get_tex(double angle, double dist, int col_index, int wall_dir)
 {
 	double	wallx;
 	double	texx;
-	double	step;
-	double	y;
-	t_style	*style;
-	double	column_height;
+	double texy;
+	double	y = 0;
+	t_style	*style = get_style();
+	double	column_height = 1.0 / dist * WINDOW_HEIGHT;
+	double	step = (double)style->texture[wall_dir]->height / column_height;
+	int		draw_start = (WINDOW_HEIGHT - column_height) / 2;
+	double	tex_pos = (draw_start - WINDOW_HEIGHT / 2 + column_height / 2) * step;
 
-	column_height = 1 / dist * WINDOW_HEIGHT;
-	style = get_style();
 	if (wall_dir == NORTH || wall_dir == SOUTH)
 		wallx = cos(angle) * dist + get_player()->x_pos;
 	else
 		wallx = sin(angle) * dist + get_player()->y_pos;
 	wallx -= floor(wallx);
-	texx = (int)(wallx * (double)TEX_WIDTH);
+	texx = (int)(wallx * (double)style->texture[wall_dir]->width);
+	texy = 0;
 	if ((wall_dir == NORTH || wall_dir == SOUTH) && cos(angle) > 0)
-		texx = TEX_WIDTH - texx - 1;
+		texx = style->texture[wall_dir]->width - texx - 1;
 	if ((wall_dir == EAST || wall_dir == WEST) && sin(angle) < 0)
-		texx = TEX_WIDTH - texx - 1;
-	step = (double)TEX_HEIGHT / column_height;
-	// printf("wallx: %f, texx: %f, step: %f\n", wallx, texx, step);
-	y = 0;
-	while (y < (WINDOW_HEIGHT - column_height) / 2)
+		texx = style->texture[wall_dir]->width - texx - 1;
+	while (y < draw_start)
 		mlx_put_pixel(get_graphics()->image, col_index, y++, style->ceiling_color);
-	step = 0;
-	while (y < (WINDOW_HEIGHT - column_height) / 2 + column_height && y < WINDOW_HEIGHT && step >= 0)
+	while (y < draw_start + column_height && y < WINDOW_HEIGHT && step >= 0)
 	{
-		mlx_put_pixel(get_graphics()->image, col_index, y, /* style->texture->pixels[(int)((TEX_HEIGHT * texx) + (y - (WINDOW_HEIGHT - column_height) / 2) * step)] */ GREEN);
+		texy = (int)tex_pos & (style->texture[wall_dir]->height - 1);
+		tex_pos += step;
+		mlx_put_pixel(get_graphics()->image, col_index, y, get_pixel(style->texture[wall_dir], (unsigned int)(style->texture[wall_dir]->width * texy + texx) * 4));
 		y++;
-		step++;
 	}
 	while (y < WINDOW_HEIGHT)
 		mlx_put_pixel(get_graphics()->image, col_index, y++, style->floor_color);
