@@ -2,7 +2,7 @@
 #	General																	   #
 # **************************************************************************** #
 
-NAME		=	cub3d
+NAME		=	cub3D
 CC			=	gcc
 CFLAGS		+=	-Wall -Wextra -Werror -g -fsanitize=address
 INC			=	-Iinc
