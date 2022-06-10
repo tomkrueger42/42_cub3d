@@ -95,24 +95,45 @@ int	intersect_loop(t_ray r, double angle, int mode)
 	return (index);
 }
 
-void	draw_col(t_graphics *graphics, double distance, int col_index, int wall_color)
+unsigned int	get_pixel(mlx_texture_t *tex, unsigned int pos)
 {
-	int		y;
-	double	column_height;
-	t_style	*style;
+	return (tex->pixels[pos] << 24 | tex->pixels[pos + 1] << 16 | tex->pixels[pos + 2] << 8 | 0xff);
+}
 
-	y = 0;
-	column_height = 1 / distance * WINDOW_HEIGHT;
-	style = get_style();
-	while (y < (WINDOW_HEIGHT - column_height) / 2)
-		my_mlx_pixel_put(graphics, col_index, y++, style->ceiling_color);
-	while (y < (WINDOW_HEIGHT - column_height) / 2 + column_height)
+void get_tex(double angle, double dist, int col_index, int wall_dir)
+{
+	double	wallx;
+	double	texx;
+	double texy;
+	double	y = 0;
+	t_style	*style = get_style();
+	double	column_height = 1.0 / dist * WINDOW_HEIGHT;
+	double	step = (double)style->texture[wall_dir]->height / column_height;
+	int		draw_start = (WINDOW_HEIGHT - column_height) / 2;
+	double	tex_pos = (draw_start - WINDOW_HEIGHT / 2 + column_height / 2) * step;
+
+	if (wall_dir == NORTH || wall_dir == SOUTH)
+		wallx = cos(angle) * dist + get_player()->x_pos;
+	else
+		wallx = sin(angle) * dist + get_player()->y_pos;
+	wallx -= floor(wallx);
+	texx = (int)(wallx * (double)style->texture[wall_dir]->width);
+	texy = 0;
+	if ((wall_dir == NORTH || wall_dir == SOUTH) && cos(angle) > 0)
+		texx = style->texture[wall_dir]->width - texx - 1;
+	if ((wall_dir == EAST || wall_dir == WEST) && sin(angle) < 0)
+		texx = style->texture[wall_dir]->width - texx - 1;
+	while (y < draw_start)
+		mlx_put_pixel(get_graphics()->image, col_index, y++, style->ceiling_color);
+	while (y < draw_start + column_height && y < WINDOW_HEIGHT && step >= 0)
 	{
-		my_mlx_pixel_put(graphics, col_index, y, wall_color);
+		texy = (int)tex_pos & (style->texture[wall_dir]->height - 1);
+		tex_pos += step;
+		mlx_put_pixel(get_graphics()->image, col_index, y, get_pixel(style->texture[wall_dir], (unsigned int)(style->texture[wall_dir]->width * texy + texx) * 4));
 		y++;
 	}
 	while (y < WINDOW_HEIGHT)
-		my_mlx_pixel_put(graphics, col_index, y++, style->floor_color);
+		mlx_put_pixel(get_graphics()->image, col_index, y++, style->floor_color);
 }
 
 void	fan_out(void)
@@ -131,13 +152,13 @@ void	fan_out(void)
 		dist_hori = cos(radial * RAD) * horizontal_intersections(angle);
 		dist_verti = cos(radial * RAD) * vertical_intersections(angle);
 		if (dist_hori < dist_verti && sin(angle) < 0)
-			draw_col(get_graphics(), dist_hori, col_index, 0x5555FF);
+			get_tex(angle, dist_hori, col_index, NORTH);
 		else if (dist_verti < dist_hori && cos(angle) > 0)
-			draw_col(get_graphics(), dist_verti, col_index, 0xF8F800);
+			get_tex(angle, dist_verti, col_index, EAST);
 		else if (dist_hori < dist_verti && sin(angle) > 0)
-			draw_col(get_graphics(), dist_hori, col_index, 0xF80000);
+			get_tex(angle, dist_hori, col_index, SOUTH);
 		else if (dist_verti < dist_hori && cos(angle) < 0)
-			draw_col(get_graphics(), dist_verti, col_index, 0xF88F00);
+			get_tex(angle, dist_verti, col_index, WEST);
 		col_index++;
 		radial += (double)FOV / (double)WINDOW_WIDTH;
 	}
