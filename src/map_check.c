@@ -51,7 +51,10 @@ int	check_top_space(char **maplines, int x, int y)
 		|| (length_top > x + 1 && x + 1 < length_top \
 		&& maplines[y - 1][x + 1] != '1' \
 		&& maplines[y - 1][x + 1] != ' '))
+		{
+			printf("testlsgs");
 		return (1);
+		}
 	else
 		return (0);
 }
@@ -212,7 +215,7 @@ int		check_spaces(char **maplines)
 	{
 		while (maplines[y][x])
 		{
-			if (check_square(maplines, x, y))
+			if (check_square(maplines, x, y) || blanks_nearby(maplines, x, y))
 				return (1);
 			x++;
 		}
