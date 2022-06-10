@@ -1,8 +1,6 @@
 #include "cub3d.h"
 #include <stdlib.h>
 
-void	fan_out(void);
-
 void	graphic_loop(void *data)
 {
 	t_graphics	*graphics;

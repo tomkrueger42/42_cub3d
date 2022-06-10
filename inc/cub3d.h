@@ -20,8 +20,6 @@
 # define MINIMAP_SIZE	600
 # define WINDOW_WIDTH	1440
 # define WINDOW_HEIGHT	775
-# define TEX_HEIGHT		64
-# define TEX_WIDTH		64
 
 // constant
 # define MAP_CHARS		" 01NESW"
@@ -43,15 +41,6 @@
 /* ************************************************************************** */
 /* STRUCTS																	  */
 /* ************************************************************************** */
-
-typedef struct	s_img
-{
-	void	*img;
-	char	*addr;
-	int		bits_per_pixel;
-	int		line_length;
-	int		endian;
-}	t_img;
 
 typedef struct	s_graphics
 {
@@ -105,13 +94,15 @@ typedef struct s_ray
 /* ************************************************************************** */
 
 // draw.c
-void	my_mlx_pixel_put(t_img *img, int x, int y, int color);
-int		create_trgb(unsigned char t, unsigned char r, unsigned char g,
-			unsigned char b);
+int		create_trgb(unsigned char r, unsigned char g, unsigned char b,
+			unsigned char t);
 
 // graphics.c
 t_graphics	*get_graphics(void);
 void		free_graphics(void);
+
+// intersect.c
+void	fan_out(void);
 
 // main.c
 int	main(void);
