@@ -100,7 +100,7 @@ void	move_player(int keycode)
 		get_player()->y_pos -= get_player()->y_delta * get_player()->speed;
 	}
 	x = get_player()->x_pos - get_player()->x_delta * get_player()->speed;
-	y = get_player()->y_pos + get_player()->y_delta * get_player()->speed;
+	y = get_player()->y_pos + get_player()->y_delta * get_player()->speed; 
 	printf("%f %f\n", x, y);
 	if (keycode == D_KEY && get_map()->data[(int)y][(int)x] != '1')
 	{

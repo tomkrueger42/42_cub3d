@@ -19,8 +19,8 @@ char	*find_map(char *lines)
 	map_start = line;
 	while (*line != '\0')
 	{
-		if (valid_line(line) == false)
-			put_error_and_exit("invalid map", 2);
+/* 		if (valid_line(line) == false)
+			put_error_and_exit("invalid map", 2); */
 		if (ft_strchr(line, '\n'))
 			line = ft_strchr(line, '\n') + 1;
 		else
