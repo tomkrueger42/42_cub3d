@@ -36,7 +36,7 @@ void	render_player(void)
 		x_px = - (get_player()->size / 2);
 		while (x_px < get_player()->size / 2)
 		{
-			my_mlx_pixel_put(&get_graphics()->image, get_player()->x_pos * get_map()->tile_size + x_px, get_player()->y_pos * get_map()->tile_size + y_px, 0xffff00);
+			mlx_put_pixel(get_graphics()->image, get_player()->x_pos * get_map()->tile_size + x_px, get_player()->y_pos * get_map()->tile_size + y_px, YELLOW);
 			x_px++;
 		}
 		y_px++;
@@ -58,7 +58,7 @@ void	draw_ray(void)
 		xy = get_player()->x_delta / get_player()->y_delta;
 	while (x != 0 || y != 0)
 	{
-		my_mlx_pixel_put(&get_graphics()->image, get_player()->x_pos * get_map()->tile_size + x, get_player()->y_pos * get_map()->tile_size + y, 0xFFAA33);
+		mlx_put_pixel(get_graphics()->image, get_player()->x_pos * get_map()->tile_size + x, get_player()->y_pos * get_map()->tile_size + y, YELLOW);
 		if (x > 0 && (y == 0 || (x / y >= xy && xy > 0) || (x / y < xy && xy < 0)))
 			x--;
 		else if (x < 0 && (y == 0 || (x / y <= xy && xy < 0) || (x / y > xy && xy > 0)))
@@ -70,37 +70,19 @@ void	draw_ray(void)
 	}
 }
 
-void	move_player(int keycode)
+void	move_player(double add_to_x_pos, double add_to_y_pos)
 {
-	if (keycode == W_KEY)
-	{
-		get_player()->x_pos += get_player()->x_delta * get_player()->speed;
-		get_player()->y_pos += get_player()->y_delta * get_player()->speed;
-	}
-	if (keycode == A_KEY)
-	{
-		get_player()->x_pos += get_player()->y_delta * get_player()->speed;
-		get_player()->y_pos -= get_player()->x_delta * get_player()->speed;
-	}
-	else if (keycode == S_KEY)
-	{
-		get_player()->x_pos -= get_player()->x_delta * get_player()->speed;
-		get_player()->y_pos -= get_player()->y_delta * get_player()->speed;
-	}
-	else if (keycode == D_KEY)
-	{
-		get_player()->x_pos -= get_player()->y_delta * get_player()->speed;
-		get_player()->y_pos += get_player()->x_delta * get_player()->speed;
-	}
-	else if (keycode == ARROW_LEFT_KEY)
-		get_player()->direction -= ROTATION_SPEED;
-	else if (keycode == ARROW_RIGHT_KEY)
-		get_player()->direction += ROTATION_SPEED;
+	get_player()->x_pos += add_to_x_pos * get_player()->speed;
+	get_player()->y_pos += add_to_y_pos * get_player()->speed;
+}
+
+void	rotate_player(double add_to_direction)
+{
+	get_player()->direction += add_to_direction;
 	if (get_player()->direction < 0 * PI)
 		get_player()->direction += 2 * PI;
 	else if (get_player()->direction >= 2 * PI)
 		get_player()->direction -= 2 * PI;
 	get_player()->x_delta = cos(get_player()->direction);
 	get_player()->y_delta = sin(get_player()->direction);
-	// printf("x: %f, y: %f, x_d: %f, y_d: %f, dir: %f, speed: %f\n", get_player()->x_pos, get_player()->y_pos, get_player()->x_delta, get_player()->y_delta, get_player()->direction, get_player()->speed);
 }

@@ -112,18 +112,24 @@ void get_tex(double angle, double dist, int col_index, int wall_dir)
 		wallx = sin(angle) * dist + get_player()->y_pos;
 	wallx -= floor(wallx);
 	texx = (int)(wallx * (double)TEX_WIDTH);
+	if ((wall_dir == NORTH || wall_dir == SOUTH) && cos(angle) > 0)
+		texx = TEX_WIDTH - texx - 1;
+	if ((wall_dir == EAST || wall_dir == WEST) && sin(angle) < 0)
+		texx = TEX_WIDTH - texx - 1;
 	step = (double)TEX_HEIGHT / column_height;
 	// printf("wallx: %f, texx: %f, step: %f\n", wallx, texx, step);
 	y = 0;
 	while (y < (WINDOW_HEIGHT - column_height) / 2)
-		my_mlx_pixel_put(&get_graphics()->image, col_index, y++, style->ceiling_color);
-	while (y < (WINDOW_HEIGHT - column_height) / 2 + column_height && y < WINDOW_HEIGHT)
+		mlx_put_pixel(get_graphics()->image, col_index, y++, style->ceiling_color);
+	step = 0;
+	while (y < (WINDOW_HEIGHT - column_height) / 2 + column_height && y < WINDOW_HEIGHT && step >= 0)
 	{
-		my_mlx_pixel_put(&get_graphics()->image, col_index, y, style->textures[wall_dir][(int)((TEX_HEIGHT * texx) + (y - (WINDOW_HEIGHT - column_height) / 2) * step)]);
+		mlx_put_pixel(get_graphics()->image, col_index, y, /* style->texture->pixels[(int)((TEX_HEIGHT * texx) + (y - (WINDOW_HEIGHT - column_height) / 2) * step)] */ GREEN);
 		y++;
+		step++;
 	}
 	while (y < WINDOW_HEIGHT)
-		my_mlx_pixel_put(&get_graphics()->image, col_index, y++, style->floor_color);
+		mlx_put_pixel(get_graphics()->image, col_index, y++, style->floor_color);
 }
 
 void	fan_out(void)
@@ -149,14 +155,6 @@ void	fan_out(void)
 			get_tex(angle, dist_hori, col_index, SOUTH);
 		else if (dist_verti < dist_hori && cos(angle) < 0)
 			get_tex(angle, dist_verti, col_index, WEST);
-		// if (dist_hori < dist_verti && sin(angle) < 0)
-		// 	draw_col(&get_graphics()->image, cos(radial * RAD) * dist_hori, col_index, get_tex(angle, dist_hori, NORTH));
-		// else if (dist_verti < dist_hori && cos(angle) > 0)
-		// 	draw_col(&get_graphics()->image, cos(radial * RAD) * dist_verti, col_index, get_tex(angle, dist_verti, EAST));
-		// else if (dist_hori < dist_verti && sin(angle) > 0)
-		// 	draw_col(&get_graphics()->image, cos(radial * RAD) * dist_hori, col_index, get_tex(angle, dist_hori, SOUTH));
-		// else if (dist_verti < dist_hori && cos(angle) < 0)
-		// 	draw_col(&get_graphics()->image, cos(radial * RAD) * dist_verti, col_index, get_tex(angle, dist_verti, WEST));
 		col_index++;
 		radial += (double)FOV / (double)WINDOW_WIDTH;
 	}

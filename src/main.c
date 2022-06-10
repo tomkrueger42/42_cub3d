@@ -3,31 +3,32 @@
 
 void	fan_out(void);
 
-int	key_hook(int keycode)
+void	graphic_loop(void *data)
 {
-	if (keycode == ESC_KEY)
+	t_graphics	*graphics;
+
+	graphics = data;
+	if (mlx_is_key_down(graphics->mlx, MLX_KEY_ESCAPE))
 	{
-		free_graphics();
-		free_player();
-		free_map();
-		free_style();
-		exit(0);
+		mlx_close_window(graphics->mlx);
 	}
-	else if (keycode == W_KEY || keycode == A_KEY || keycode == S_KEY || keycode == D_KEY
-				|| keycode == ARROW_LEFT_KEY || keycode == ARROW_RIGHT_KEY)
-	{
-		move_player(keycode);
-		mlx_destroy_image(get_graphics()->mlx, get_graphics()->image.img);
-		get_graphics()->image.img = mlx_new_image(get_graphics()->mlx, WINDOW_WIDTH, WINDOW_HEIGHT);
-		get_graphics()->image.addr = mlx_get_data_addr(get_graphics()->image.img, &get_graphics()->image.bits_per_pixel, &get_graphics()->image.line_length, &get_graphics()->image.endian);
-		fan_out();
-		render_minimap();
-		mlx_put_image_to_window(get_graphics()->mlx, get_graphics()->win, get_graphics()->image.img, 0, 0);
-	}
-	return (0);
+	else if (mlx_is_key_down(graphics->mlx, MLX_KEY_W))
+		move_player(get_player()->x_delta, get_player()->y_delta);
+	else if (mlx_is_key_down(graphics->mlx, MLX_KEY_A))
+		move_player(get_player()->y_delta, -get_player()->x_delta);
+	else if (mlx_is_key_down(graphics->mlx, MLX_KEY_S))
+		move_player(-get_player()->x_delta, -get_player()->y_delta);
+	else if (mlx_is_key_down(graphics->mlx, MLX_KEY_D))
+		move_player(-get_player()->y_delta, get_player()->x_delta);
+	else if (mlx_is_key_down(graphics->mlx, MLX_KEY_LEFT))
+		rotate_player(-ROTATION_SPEED);
+	else if (mlx_is_key_down(graphics->mlx, MLX_KEY_RIGHT))
+		rotate_player(ROTATION_SPEED);
+	fan_out();
+	render_minimap();
 }
 
-int	main(void) // needs argc, **argv
+int	main(void)
 {
 	read_file("x.cub");
 	count_dimensions(get_map()->data);
@@ -41,8 +42,9 @@ int	main(void) // needs argc, **argv
 	}
 	fan_out();
 	render_minimap();
-	mlx_put_image_to_window(get_graphics()->mlx, get_graphics()->win, get_graphics()->image.img, 0, 0);
-	mlx_hook(get_graphics()->win, 02, 1L<<0, key_hook, NULL);
+	mlx_image_to_window(get_graphics()->mlx, get_graphics()->image, 0, 0);
+	mlx_loop_hook(get_graphics()->mlx, &graphic_loop, get_graphics());
 	mlx_loop(get_graphics()->mlx);
+	free_graphics();
 	return (EXIT_SUCCESS);
 }

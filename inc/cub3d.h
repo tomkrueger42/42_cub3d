@@ -6,15 +6,16 @@
 /* ************************************************************************** */
 
 # include "libft.h"
-# include <mlx.h>
+// # include <mlx.h>
+# include <MLX42.h>
 
 /* ************************************************************************** */
 /* DEFINES																	  */
 /* ************************************************************************** */
 
 // modifyable
-# define MOVEMENT_SPEED	5				// number of clicks to walk across tiles
-# define ROTATION_SPEED	0.1
+# define MOVEMENT_SPEED	10				// number of clicks to walk across tiles
+# define ROTATION_SPEED	0.05
 # define FOV			66
 # define MINIMAP_SIZE	600
 # define WINDOW_WIDTH	1440
@@ -30,6 +31,14 @@
 # define EAST			1
 # define SOUTH			2
 # define WEST			3
+# define WHITE			0xffffffff
+# define BLACK			0x000000ff
+# define LIGHT_GREY		0xbbbbbbff
+# define DARK_GREY		0x444444ff
+# define YELLOW			0xffff00ff
+# define RED			0xff0000ff
+# define GREEN			0x00ff00ff
+# define BLUE			0x0000ffff
 
 // keys
 # define ESC_KEY		53
@@ -44,17 +53,6 @@
 /* STRUCTS																	  */
 /* ************************************************************************** */
 
-typedef struct	s_imgint
-{
-	void	*img;
-	int		*addr;
-	int		bits_per_pixel;
-	int		line_length;
-	int		endian;
-	int		img_width;
-	int		img_height;
-}	t_imgint;
-
 typedef struct	s_img
 {
 	void	*img;
@@ -66,9 +64,8 @@ typedef struct	s_img
 
 typedef struct	s_graphics
 {
-	void	*mlx;
-	void	*win;
-	t_img	image;
+	mlx_t		*mlx;
+	mlx_image_t	*image;
 }	t_graphics;
 
 typedef struct s_map
@@ -85,9 +82,7 @@ typedef struct s_style
 	char			*east_walls;
 	char			*south_walls;
 	char			*west_walls;
-	int				textures[4][TEX_HEIGHT * TEX_WIDTH];
-	int				tex_width[4];
-	int				tex_height[4];
+	mlx_texture_t	*texture[4];
 	unsigned int	floor_color;
 	unsigned int	ceiling_color;
 }	t_style;
@@ -151,7 +146,8 @@ void	render_minimap(void);
 t_player	*get_player(void);
 void		free_player(void);
 void		render_player(void);
-void		move_player(int keycode);
+void		move_player(double add_to_x_pos, double add_to_y_pos);
+void		rotate_player(double add_to_direction);
 
 // read_file.c
 void	read_file(char *filename);
