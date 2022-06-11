@@ -109,23 +109,26 @@ void get_tex(double angle, double dist, int col_index, int wall_dir)
 	t_style	*style = get_style();
 	double	column_height = 1.0 / dist * WINDOW_HEIGHT;
 	double	step = (double)style->texture[wall_dir]->height / column_height;
-	int		draw_start = (WINDOW_HEIGHT - column_height) / 2;
-	double	tex_pos = (draw_start - WINDOW_HEIGHT / 2 + column_height / 2) * step;
+	double	col_start = (WINDOW_HEIGHT - column_height) / 2;
+	double	tex_pos = step;
 
+	if (column_height > WINDOW_HEIGHT)
+		tex_pos = (column_height - WINDOW_HEIGHT) / 2 * step;
 	if (wall_dir == NORTH || wall_dir == SOUTH)
 		wallx = cos(angle) * dist + get_player()->x_pos;
 	else
 		wallx = sin(angle) * dist + get_player()->y_pos;
 	wallx -= floor(wallx);
 	texx = (int)(wallx * (double)style->texture[wall_dir]->width);
-	texy = 0;
 	if ((wall_dir == NORTH || wall_dir == SOUTH) && cos(angle) > 0)
 		texx = style->texture[wall_dir]->width - texx - 1;
 	if ((wall_dir == EAST || wall_dir == WEST) && sin(angle) < 0)
 		texx = style->texture[wall_dir]->width - texx - 1;
-	while (y < draw_start)
+	while (y < col_start)
+	{
 		mlx_put_pixel(get_graphics()->image, col_index, y++, style->ceiling_color);
-	while (y < draw_start + column_height && y < WINDOW_HEIGHT && step >= 0)
+	}
+	while (y < col_start + column_height && y < WINDOW_HEIGHT && step >= 0)
 	{
 		texy = (int)tex_pos & (style->texture[wall_dir]->height - 1);
 		tex_pos += step;
