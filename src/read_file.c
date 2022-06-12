@@ -60,24 +60,3 @@ unsigned int	convert_color(char *value)
 	return (create_trgb(0, ft_atoi(value), ft_atoi(ft_strchr(value, ',') + 1),
 			ft_atoi(ft_strrchr(value, ',') + 1)));
 }
-
-// void	load_texture(int *texture, char *path)
-// {
-// 	t_imgint tex_img;
-// 	int	x;
-// 	int	y;
-
-// 	tex_img.img = mlx_xpm_file_to_image(get_graphics()->mlx, path, \
-// 		&tex_img.img_width, &tex_img.img_height);
-// 	tex_img.addr = (int *)mlx_get_data_addr(tex_img.img, &tex_img.bits_per_pixel, \
-// 		&tex_img.line_length, &tex_img.endian);
-// 	y = -1;
-// 	while (++y < tex_img.img_height)
-// 	{
-// 		x = -1;
-// 		while (++x < tex_img.img_width)
-// 			texture[tex_img.img_height * y + x] = \
-// 				tex_img.addr[tex_img.img_height * y + x];
-// 	}
-// 	mlx_destroy_image(get_graphics()->mlx, tex_img.img);
-// }

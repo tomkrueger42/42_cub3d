@@ -16,8 +16,7 @@ OBJS		=	$(addprefix $(OBJ_PATH), $(SRCS:.c=.o))
 #	Sources																	   #
 # **************************************************************************** #
 
-SRCS		=	draw.c\
-				graphics.c\
+SRCS		=	graphics.c\
 				intersect.c\
 				main.c\
 				map_check.c map_parse.c map.c minimap.c\
@@ -34,13 +33,9 @@ LIBFT_PATH	=	./libs/libft/libft.a
 LIBFT		=	-L./libs/libft -lft
 LIBFT_INC	=	-Ilibs/libft/includes
 
-MINILIBX_PATH =	./libs/minilibx/libmlx.a
-MINILIBX	=	-framework OpenGL -framework AppKit -L./libs/minilibx -lmlx
-MINILIBX_INC =	-Ilibs/minilibx
-
 MLX42_PATH =	./libs/libmlx42/libmlx42.a
-# MLX42		=	-L/opt/homebrew/Cellar/glfw/3.3.7/lib -I include -lglfw -L./libs/libmlx42 -lmlx42
-MLX42	=		-L./libs/libmlx42 -lmlx42 libs/libmlx42/libglfw3.a -framework Cocoa -framework OpenGL -framework IOKit
+# MLX42		=	-L/opt/homebrew/Cellar/glfw/3.3.7/lib -I include -lglfw -L./libs/libmlx42 -lmlx42							# for compilation with glfw as a homebrew package
+MLX42	=		-L./libs/libmlx42 -lmlx42 libs/libmlx42/libglfw3.a -framework Cocoa -framework OpenGL -framework IOKit		# for compilation with glfw as built library in libmlx42/
 MLX42_INC =		-Ilibs/libmlx42/include/MLX42
 
 # **************************************************************************** #
