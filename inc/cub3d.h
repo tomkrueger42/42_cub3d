@@ -6,7 +6,6 @@
 /* ************************************************************************** */
 
 # include "libft.h"
-// # include <mlx.h>
 # include <MLX42.h>
 
 /* ************************************************************************** */
@@ -14,9 +13,9 @@
 /* ************************************************************************** */
 
 // modifyable
-# define MOVEMENT_SPEED	10				// number of clicks to walk across tiles
-# define ROTATION_SPEED	0.05
-# define FOV			66
+# define MVT_SPEED		6			// tiles per second
+# define ROT_SPEED		2			// value 1 => 6 seconds for full 360
+# define FOV			60
 # define MINIMAP_SIZE	600
 # define WINDOW_WIDTH	1440
 # define WINDOW_HEIGHT	775
@@ -74,7 +73,6 @@ typedef struct s_player
 	double	x_delta;
 	double	y_delta;
 	double	direction;
-	double	speed;
 	int		size;
 }	t_player;
 
@@ -102,6 +100,7 @@ t_graphics	*get_graphics(void);
 void		free_graphics(void);
 
 // intersect.c
+int		wall_hit(double x, double y, double angle, int mode);
 void	fan_out(void);
 
 // main.c
@@ -140,5 +139,6 @@ void	free_style(void);
 
 // utils.c
 void	put_error_and_exit(char *msg, int exitcode);
+long	now_ms(void);
 
 #endif

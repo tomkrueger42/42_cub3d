@@ -10,52 +10,60 @@ int		intersect_loop(t_ray r, double angle, int mode);
 // returns the distance of the first horizontal intersection with a wall
 double	horizontal_intersections(double angle)
 {
-	double	dist;
-	t_ray	r;
+	double		dist;
+	t_ray		r;
+	t_player	*player;
 
-	r.tile_play_pos = get_player()->y_pos - (int)get_player()->y_pos;
+	player = get_player();
+	r.tile_play_pos = player->y_pos - (int)player->y_pos;
 	if (sin(angle) > 0)
 	{
-		r.y_intersect_pos = (int)get_player()->y_pos + 1;
-		r.x_intersect_pos = get_player()->x_pos + (1 - r.tile_play_pos) / tan(angle);
+		r.y_intersect_pos = (int)player->y_pos + 1;
+		r.x_intersect_pos = player->x_pos + (1 - r.tile_play_pos) / tan(angle);
 		r.y_step = 1;
 		r.x_step = 1 / tan(angle);
 	}
 	else
 	{
-		r.y_intersect_pos = (int)get_player()->y_pos;
-		r.x_intersect_pos = get_player()->x_pos - r.tile_play_pos / tan(angle);
+		r.y_intersect_pos = (int)player->y_pos;
+		r.x_intersect_pos = player->x_pos - r.tile_play_pos / tan(angle);
 		r.y_step = -1;
-		r.x_step = - (1 / tan(angle));
+		r.x_step = - 1 / tan(angle);
 	}
-	dist = sqrt(pow(r.y_intersect_pos - get_player()->y_pos, 2) + pow(r.x_intersect_pos - get_player()->x_pos, 2));
-	dist += sqrt(pow(r.y_step, 2) + pow(r.x_step, 2)) * intersect_loop(r, angle, HORI);
+	dist = sqrt(pow(r.y_intersect_pos - player->y_pos, 2) \
+			+ pow(r.x_intersect_pos - player->x_pos, 2));
+	dist += sqrt(pow(r.y_step, 2) + pow(r.x_step, 2)) \
+			* intersect_loop(r, angle, HORI);
 	return (dist);
 }
 
 // returns the distance of the first vertical intersection with a wall
 double	vertical_intersections(double angle)
 {
-	double	dist;
-	t_ray	r;
+	double		dist;
+	t_ray		r;
+	t_player	*player;
 
-	r.tile_play_pos = get_player()->x_pos - (int)get_player()->x_pos;
+	player = get_player();
+	r.tile_play_pos = player->x_pos - (int)player->x_pos;
 	if (cos(angle) > 0)
 	{
-		r.x_intersect_pos = (int)get_player()->x_pos + 1;
-		r.y_intersect_pos = get_player()->y_pos + (1 - r.tile_play_pos) * tan(angle);
+		r.x_intersect_pos = (int)player->x_pos + 1;
+		r.y_intersect_pos = player->y_pos + (1 - r.tile_play_pos) * tan(angle);
 		r.x_step = 1;
 		r.y_step = tan(angle);
 	}
 	else
 	{
-		r.x_intersect_pos = (int)get_player()->x_pos;
-		r.y_intersect_pos = get_player()->y_pos - r.tile_play_pos * tan(angle);
+		r.x_intersect_pos = (int)player->x_pos;
+		r.y_intersect_pos = player->y_pos - r.tile_play_pos * tan(angle);
 		r.x_step = -1;
-		r.y_step = - (tan(angle));
+		r.y_step = - tan(angle);
 	}
-	dist = sqrt(pow(r.y_intersect_pos - get_player()->y_pos, 2) + pow(r.x_intersect_pos - get_player()->x_pos, 2));
-	dist += sqrt(pow(r.y_step, 2) + pow(r.x_step, 2)) * intersect_loop(r, angle, VERTI);
+	dist = sqrt(pow(r.y_intersect_pos - player->y_pos, 2) \
+			+ pow(r.x_intersect_pos - player->x_pos, 2));
+	dist += sqrt(pow(r.y_step, 2) + pow(r.x_step, 2)) \
+			* intersect_loop(r, angle, VERTI);
 	return (dist);
 }
 
@@ -86,7 +94,8 @@ int	intersect_loop(t_ray r, double angle, int mode)
 			&& (int)(r.x_intersect_pos + r.x_step * index) < get_map()->width
 			&& (int)(r.x_intersect_pos + r.x_step * index) > 0)
 	{
-		if (wall_hit(r.x_intersect_pos + r.x_step * index, r.y_intersect_pos + r.y_step * index, angle, mode))
+		if (wall_hit(r.x_intersect_pos + r.x_step * index, \
+				r.y_intersect_pos + r.y_step * index, angle, mode))
 		{
 			return (index);
 		}
@@ -107,40 +116,38 @@ void get_tex(double angle, double dist, int col_index, int wall_dir)
 	double texy;
 	double	y = 0;
 	t_style	*style = get_style();
+	t_graphics *graphics = get_graphics();
 	double	column_height = 1.0 / dist * WINDOW_HEIGHT;
 	double	step = (double)style->texture[wall_dir]->height / column_height;
-	int		draw_start = (WINDOW_HEIGHT - column_height) / 2;
-	double	tex_pos = (draw_start - WINDOW_HEIGHT / 2 + column_height / 2) * step;
+	double	col_start = (WINDOW_HEIGHT - column_height) / 2;
+	double	tex_pos = step;
 
+	if (column_height > WINDOW_HEIGHT)
+		tex_pos = (column_height - WINDOW_HEIGHT) / 2 * step;
 	if (wall_dir == NORTH || wall_dir == SOUTH)
 		wallx = cos(angle) * dist + get_player()->x_pos;
 	else
 		wallx = sin(angle) * dist + get_player()->y_pos;
 	wallx -= floor(wallx);
 	texx = (int)(wallx * (double)style->texture[wall_dir]->width);
-	texy = 0;
-	if ((wall_dir == NORTH || wall_dir == SOUTH) && cos(angle) > 0)
-		texx = style->texture[wall_dir]->width - texx - 1;
-	if ((wall_dir == EAST || wall_dir == WEST) && sin(angle) < 0)
-		texx = style->texture[wall_dir]->width - texx - 1;
-	while (y < draw_start)
-		mlx_put_pixel(get_graphics()->image, col_index, y++, style->ceiling_color);
-	while (y < draw_start + column_height && y < WINDOW_HEIGHT && step >= 0)
+	while (y < col_start)
+		mlx_put_pixel(graphics->image, col_index, y++, style->ceiling_color);
+	while (y < col_start + column_height && y < WINDOW_HEIGHT)
 	{
 		texy = (int)tex_pos & (style->texture[wall_dir]->height - 1);
 		tex_pos += step;
-		mlx_put_pixel(get_graphics()->image, col_index, y, get_pixel(style->texture[wall_dir], (unsigned int)(style->texture[wall_dir]->width * texy + texx) * 4));
+		mlx_put_pixel(graphics->image, col_index, y, get_pixel(style->texture[wall_dir], (unsigned int)(style->texture[wall_dir]->width * texy + texx) * 4));
 		y++;
 	}
 	while (y < WINDOW_HEIGHT)
-		mlx_put_pixel(get_graphics()->image, col_index, y++, style->floor_color);
+		mlx_put_pixel(graphics->image, col_index, y++, style->floor_color);
 }
 
 void	fan_out(void)
 {
 	double	radial;
-	double 	dist_hori;
-	double 	dist_verti;
+	double	dist_hori;
+	double	dist_verti;
 	int		col_index;
 	double	angle;
 
