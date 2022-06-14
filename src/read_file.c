@@ -4,7 +4,7 @@
 
 unsigned int	convert_color(char *value);
 char			*extract_value(char *lines, char *identifier);
-void			load_texture(int *texture, char *path);
+mlx_texture_t	*load_texture(char *value);
 
 void	read_file(char *filename)
 {
@@ -23,10 +23,10 @@ void	read_file(char *filename)
 	}
 	close (fd);
 	style = get_style();
-	style->texture[0] = mlx_load_png(extract_value(lines, "NO "));
-	style->texture[1] = mlx_load_png(extract_value(lines, "EA "));
-	style->texture[2] = mlx_load_png(extract_value(lines, "SO "));
-	style->texture[3] = mlx_load_png(extract_value(lines, "WE "));
+	style->texture[NORTH] = load_texture(extract_value(lines, "NO"));
+	style->texture[EAST] = load_texture(extract_value(lines, "EA"));
+	style->texture[SOUTH] = load_texture(extract_value(lines, "SO"));
+	style->texture[WEST] = load_texture(extract_value(lines, "WE"));
 	style->floor_color = convert_color(extract_value(lines, "F "));
 	style->ceiling_color = convert_color(extract_value(lines, "C "));
 	get_map()->data = ft_split(find_map(lines), '\n');
@@ -52,11 +52,28 @@ char	*extract_value(char *lines, char *identifier)
 	return (ft_substr(origin, 0, end));
 }
 
+mlx_texture_t	*load_texture(char *value)
+{
+	mlx_texture_t	*texture;
+
+	if (value == NULL)
+		put_error_and_exit("missing texture path", 1);
+	texture = mlx_load_png(value);
+	ft_free((void **)&value);
+	if (texture == NULL)
+		put_error_and_exit("incorrect texture path", 1);
+	return (texture);
+}
+
 // This function converts the comma seperated rgb values to hex
 unsigned int	convert_color(char *value)
 {
+	unsigned int	color;
+
 	if (value == NULL)
-		return (0);
-	return (create_trgb(0, ft_atoi(value), ft_atoi(ft_strchr(value, ',') + 1),
-			ft_atoi(ft_strrchr(value, ',') + 1)));
+		put_error_and_exit("missing floor/ceiling color", 1);
+	color = create_trgb(0, ft_atoi(value), ft_atoi(ft_strchr(value, ',') + 1),
+			ft_atoi(ft_strrchr(value, ',') + 1));
+	ft_free((void **)&value);
+	return (color);
 }

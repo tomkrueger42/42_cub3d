@@ -43,6 +43,7 @@ int	main(int argc, char **argv)
 		return (EXIT_FAILURE); // not sure if we should print err_msg
 	count_dimensions(get_map()->data);
 	fill_rows_with_spaces(get_map()->data);
+	print_map();
 	if (map_check(get_map()->data) || player_check(get_map()->data))
 	{
 		free_style();

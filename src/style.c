@@ -19,9 +19,5 @@ void	free_style(void)
 	t_style	*ptr;
 
 	ptr = get_style();
-	ft_free((void **)&ptr->north_walls);
-	ft_free((void **)&ptr->east_walls);
-	ft_free((void **)&ptr->south_walls);
-	ft_free((void **)&ptr->west_walls);
 	ft_free((void **)&ptr);
 }

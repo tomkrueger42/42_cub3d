@@ -229,15 +229,15 @@ int		check_spaces(char **maplines)
 	map-check gets the map-data from get_map()->data, the map is saved and filled with spaces
 	it will check the boarders with check-boraders
 */
-int		map_check(char **data)
-{
-	prints_map(data);
-	if (check_borders(data) || check_spaces(data))
-		return (1);
-	return (0);
-}
+// int		map_check(char **data)
+// {
+// 	prints_map(data);
+// 	if (check_borders(data) || check_spaces(data))
+// 		return (1);
+// 	return (0);
+// }
 
-/* int	map_check(char **data)
+int	map_check(char **data)
 {
 	int	y;
 	int	x;
@@ -260,7 +260,7 @@ int		map_check(char **data)
 		y++;
 	}
 	return (EXIT_SUCCESS);
-} */
+}
 
 int	blanks_nearby(char **data, int x, int y) // segfault when longest map->data line ends with 0 and no blanks nearby
 {
@@ -269,7 +269,6 @@ int	blanks_nearby(char **data, int x, int y) // segfault when longest map->data 
 		|| data[y - 1][x] == ' '
 		|| data[y - 1][x + 1] == ' '
 		|| data[y][x - 1] == ' '
-		|| data[y][x] == ' '
 		|| data[y][x + 1] == ' '
 		|| data[y + 1][x - 1] == ' '
 		|| data[y + 1][x] == ' '
@@ -296,7 +295,7 @@ int	player_check(char **data)
 			if (data[y][x] == 'N' || data[y][x] == 'E'
 				|| data[y][x] == 'S' || data[y][x] == 'W')
 			{
-				if (y == get_map()->len || x == get_map()->width || blanks_nearby(data, x, y))
+				if (blanks_nearby(data, x, y))
 					put_error_and_exit("incorrect player positioning", 3);
 				populate_player(x, y, data[y][x]);
 				sum++;

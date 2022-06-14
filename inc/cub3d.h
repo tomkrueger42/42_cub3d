@@ -57,10 +57,6 @@ typedef struct s_map
 
 typedef struct s_style
 {
-	char			*north_walls;
-	char			*east_walls;
-	char			*south_walls;
-	char			*west_walls;
 	mlx_texture_t	*texture[4];
 	unsigned int	floor_color;
 	unsigned int	ceiling_color;

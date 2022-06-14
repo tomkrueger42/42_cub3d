@@ -54,8 +54,8 @@ void	draw_ray(t_player *player, t_map *map)
 	double		y;
 	double		xy;
 
-	x = round(player->x_delta * map->tile_size * 2);
-	y = round(player->y_delta * map->tile_size * 2);
+	x = round(player->x_delta * map->tile_size);
+	y = round(player->y_delta * map->tile_size);
 	if (player->y_delta == 0)
 		xy = __INT_FAST64_MAX__;
 	else
