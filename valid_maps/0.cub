@@ -1,9 +1,10 @@
-NO ./textures_xpm/naturalbricks_hd_verydark.xpm
-SO ./textures_xpm/naturalbricks_hd_middle.xpm
-EA ./textures_xpm/naturalbricks_hd_middle.xpm
-WE ./textures_xpm/naturalbricks_hd_middle.xpm
-C 155,100,160
-F 111,111,111
+NO                    ./resources/bookshelf.png
+EA               ./resources/gemov1.png
+SO ./resources/tilledsoil.png
+WE ./resources/treerings.png
+
+C 170,200,255
+F 130,42,4.2
 
      11111111111111111
      10000000000111111

@@ -3,12 +3,8 @@ EA ./resources/gemov1.png
 SO ./resources/tilledsoil.png
 WE ./resources/treerings.png
 
-
-
 C 155,100,160
 F 111,111,111
-
-
 
 11111111111111111
 10000000000000001

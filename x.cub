@@ -1,7 +1,15 @@
+<<<<<<< Updated upstream
 NO ./resources/5_0er.xpm
 WE ./resources/oettinger.xpm
 SO ./resources/perlenbacher.xpm
 EA ./resources/stuttgarter-hofbrau.xpm
+=======
+NO  ./resources/bookshelf.png
+EA ./resources/gemov1.png
+SO ./resources/tilledsoil.png
+WE ./resources/treerings.png
+
+>>>>>>> Stashed changes
 C 170,200,255
 F 130,42,42
 

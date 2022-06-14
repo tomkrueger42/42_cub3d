@@ -1,6 +1,7 @@
 #include "cub3d.h"
 #include <fcntl.h>
 #include <unistd.h>
+#include <stdio.h>
 
 unsigned int	convert_color(char *value);
 char	*extract_value(char *lines, char *identifier);
@@ -30,13 +31,35 @@ void	read_file(char *filename)
 	ft_free((void **)(&lines));
 }
 
+
+int		texture_given(char *lines, char *identifier)
+{
+	bool	sw;
+	sw = false;
+	while (true)
+	{
+
+		lines = ft_strnstr(lines, identifier, ft_strlen(lines));
+		if (lines == NULL)
+			break;
+		else if (sw == true)
+			return (1);
+		sw = true;
+		lines += ft_strlen(identifier);
+	}
+	return (0);
+}
+
 // This function extracts the value of the identifier from lines
 char	*extract_value(char *lines, char *identifier)
 {
 	int		end;
 	char	*origin;
 
+	if (texture_given(lines, identifier))
+		put_error_and_exit("You cant have multiple paths for one texture!", 2);
 	origin = ft_strnstr(lines, identifier, ft_strlen(lines));
+	//printf("origin is%s\n", origin);
 	if (origin == NULL)
 		put_error_and_exit("invalid file!", 2);
 	while (!ft_iswhitespace(*origin))
@@ -46,6 +69,7 @@ char	*extract_value(char *lines, char *identifier)
 	end = 0;
 	while (origin[end] != '\0' && !ft_iswhitespace(origin[end]))
 		end++;
+	printf("output is %s\n", ft_substr(origin, 0, end));
 	return (ft_substr(origin, 0, end));
 }
 
