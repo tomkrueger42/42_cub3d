@@ -125,9 +125,9 @@ void get_tex(double angle, double dist, int col_index, int wall_dir)
 	if (column_height > WINDOW_HEIGHT)
 		tex_pos = (column_height - WINDOW_HEIGHT) / 2 * step;
 	if (wall_dir == NORTH || wall_dir == SOUTH)
-		wallx = cos(angle) * (acos(radial * RAD) * dist) + get_player()->x_pos;
+		wallx = cos(angle) * (dist / cos(radial * RAD)) + get_player()->x_pos;
 	else
-		wallx = sin(angle) * (acos(radial * RAD) * dist) + get_player()->y_pos;
+		wallx = sin(angle) * (dist / cos(radial * RAD)) + get_player()->y_pos;
 	wallx -= floor(wallx);
 	texx = (int)(wallx * (double)style->texture[wall_dir]->width);
 	while (y < col_start)
