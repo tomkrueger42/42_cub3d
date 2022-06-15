@@ -1,9 +1,11 @@
-NO ./resources/bookshelf.png
-EA ./resources/gemov1.png
-SO ./resources/tilledsoil.png
+
+NO      ./resources/bookshelf.png
+EA 			./resources/gemov1.png	
+SO ./resources/tilledsoil.png   
 WE ./resources/treerings.png
-C 170,200,255
-F 130,42,4.2
+
+C 		 	 	 170,200,100     
+F 130,42,42		 
 
                     11111111
         1111111111111000001111111

@@ -12,8 +12,11 @@ char	*find_map(char *lines)
 
 	while (*lines != '\0' && valid_line(lines) == 0)
 	{
+		if (ft_strchr(lines, '\n') == 0)
+			return(NULL);
 		lines = ft_strchr(lines, '\n') + 1;
 	}
+	
 	map_start = lines;
 	while (*lines != '\0')								// this loop basically only checks for some invalid lines in the map
 	{
@@ -24,6 +27,8 @@ char	*find_map(char *lines)
 		else
 			break ;
 	}
+	if (map_start == lines)
+		return (NULL);
 	return (map_start);
 }
 

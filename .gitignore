@@ -23,7 +23,7 @@ cub3d
 # Libraries
 *.lib
 libft.a
-mlx42.a
+libs/libmlx42/libmlx42.a
 *.la
 *.lo
 
