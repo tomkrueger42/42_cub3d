@@ -82,6 +82,26 @@ typedef struct s_ray
 	double	y_step;
 }	t_ray;
 
+typedef struct s_fan
+{
+	double	dist;
+	double	dist_hori;
+	double	dist_verti;
+	int		col_index;
+	double	angle;
+	double	radial;
+	int		wall_dir;
+}	t_fan;
+
+typedef struct s_draw
+{
+	int		tex_x;
+	int		tex_y;
+	double	column_height;
+	double	step;
+	int		col_start;
+	double	tex_pos;
+}	t_draw;
 
 /* ************************************************************************** */
 /* FUNCTION PROTOTYPES														  */
@@ -125,6 +145,10 @@ void		free_player(void);
 void		render_player(void);
 void		move_player(double add_to_x_pos, double add_to_y_pos);
 void		rotate_player(double add_to_direction);
+
+// raycast.c
+double	horizontal_intersections(double angle);
+double	vertical_intersections(double angle);
 
 // read_file.c
 void	read_file(char *filename);
