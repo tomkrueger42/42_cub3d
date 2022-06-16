@@ -82,17 +82,6 @@ typedef struct s_ray
 	double	y_step;
 }	t_ray;
 
-typedef struct s_fan
-{
-	double	dist;
-	double	dist_hori;
-	double	dist_verti;
-	int		col_index;
-	double	angle;
-	double	radial;
-	int		wall_dir;
-}	t_fan;
-
 typedef struct s_draw
 {
 	int		tex_x;
@@ -117,7 +106,7 @@ void		free_graphics(void);
 
 // intersect.c
 int		wall_hit(double x, double y, double angle, int mode);
-void	fan_out(void);
+void	fan_out(int col_index, double radial);
 
 // main.c
 int	main(int argc, char **argv);
@@ -142,7 +131,6 @@ void	render_minimap(void);
 // player.c
 t_player	*get_player(void);
 void		free_player(void);
-void		render_player(void);
 void		move_player(double add_to_x_pos, double add_to_y_pos);
 void		rotate_player(double add_to_direction);
 

@@ -12,12 +12,9 @@ void	graphic_loop(void *data)
 	graphics = data;
 	player = get_player();
 	fps = (double)(now_ms() - old_time) / 1000;
-	// printf("fps: %f\n", 1 / fps);
 	old_time = now_ms();
 	if (mlx_is_key_down(graphics->mlx, MLX_KEY_ESCAPE))
-	{
 		mlx_close_window(graphics->mlx);
-	}
 	else if (mlx_is_key_down(graphics->mlx, MLX_KEY_W))
 		move_player(player->x_delta * fps, player->y_delta * fps);
 	else if (mlx_is_key_down(graphics->mlx, MLX_KEY_A))
@@ -30,17 +27,15 @@ void	graphic_loop(void *data)
 		rotate_player(-fps);
 	else if (mlx_is_key_down(graphics->mlx, MLX_KEY_RIGHT))
 		rotate_player(fps);
-	fan_out();
+	fan_out(0, -FOV / 2);
 	render_minimap();
 }
 
-
 int	main(int argc, char **argv)
 {
-	if (argc == 2)
-		read_file(argv[1]);
-	else
-		return (EXIT_FAILURE); // not sure if we should print err_msg
+	if (argc != 2)
+		put_error_and_exit("incorrect amount of arguments", 1);
+	read_file(argv[1]);
 	count_dimensions(get_map()->data);
 	fill_rows_with_spaces(get_map()->data);
 	print_map();
@@ -51,7 +46,7 @@ int	main(int argc, char **argv)
 		free_player();
 		return (EXIT_FAILURE);
 	}
-	fan_out();
+	fan_out(0, -FOV / 2);
 	render_minimap();
 	mlx_image_to_window(get_graphics()->mlx, get_graphics()->image, 0, 0);
 	mlx_loop_hook(get_graphics()->mlx, &graphic_loop, get_graphics());

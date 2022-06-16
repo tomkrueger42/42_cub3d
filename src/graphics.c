@@ -13,7 +13,8 @@ t_graphics	*get_graphics(void)
 		graphics->mlx = mlx_init(WINDOW_WIDTH, WINDOW_HEIGHT, "cub3d", false);
 		if (graphics->mlx == NULL)
 			put_error_and_exit("mlx init failure", 1);
-		graphics->image = mlx_new_image(graphics->mlx, WINDOW_WIDTH, WINDOW_HEIGHT);
+		graphics->image = mlx_new_image(graphics->mlx,
+				WINDOW_WIDTH, WINDOW_HEIGHT);
 		if (graphics->image == NULL)
 		{
 			mlx_terminate(graphics->mlx);

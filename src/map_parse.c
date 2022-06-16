@@ -4,8 +4,6 @@
 
 int	valid_line(char *line);
 
-// This function searches for the first valid line of the map and if there is 
-// ANY NON VALID line afterwards it says 'invalid map'
 char	*find_map(char *lines)
 {
 	char	*map_start;
@@ -13,12 +11,11 @@ char	*find_map(char *lines)
 	while (*lines != '\0' && valid_line(lines) == 0)
 	{
 		if (ft_strchr(lines, '\n') == 0)
-			return(NULL);
+			return (NULL);
 		lines = ft_strchr(lines, '\n') + 1;
 	}
-	
 	map_start = lines;
-	while (*lines != '\0')								// this loop basically only checks for some invalid lines in the map
+	while (*lines != '\0')
 	{
 		if (valid_line(lines) == 0 && *lines != '\n')
 			put_error_and_exit("invalid map", 2);
@@ -32,7 +29,6 @@ char	*find_map(char *lines)
 	return (map_start);
 }
 
-// This function checks if a line of the map is valid
 int	valid_line(char *line)
 {
 	size_t	index;
@@ -105,7 +101,8 @@ void	print_map(void)
 	printf("tile_size = %d\n", get_map()->tile_size);
 	printf("\n____________________\nPLAYER INFOS\n");
 	printf("Player direction = %f\n", get_player()->direction);
-	printf("Player starts at = (%f|%f)\n", get_player()->x_pos, get_player()->y_pos);
+	printf("Player starts at = (%f|%f)\n", get_player()->x_pos,
+		get_player()->y_pos);
 	printf("\n___________________\nMAP:\n");
 	if (get_map()->data == NULL)
 	{
