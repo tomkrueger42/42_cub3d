@@ -17,13 +17,13 @@ OBJS		=	$(addprefix $(OBJ_PATH), $(SRCS:.c=.o))
 # **************************************************************************** #
 
 SRCS		=	graphics.c\
-				intersect.c\
 				main.c\
 				map_check.c map_parse.c map.c minimap.c\
 				player.c\
 				raycast.c\
 				read_file.c\
 				style.c\
+				texture.c\
 				utils.c
 
 # **************************************************************************** #

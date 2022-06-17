@@ -9,7 +9,7 @@ t_style	*get_style(void)
 	{
 		style = ft_calloc(1, sizeof(t_style));
 		if (style == NULL)
-			put_error_and_exit("malloc failure in style()", 1);
+			put_error_and_exit("malloc failure in style()");
 		style->texture[NORTH] = NULL;
 		style->texture[EAST] = NULL;
 		style->texture[SOUTH] = NULL;

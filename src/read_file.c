@@ -1,21 +1,19 @@
 #include "cub3d.h"
-#include <fcntl.h>
 #include <unistd.h>
-#include <stdio.h>
 
 unsigned int	convert_color(char *value);
 char			*extract_value(char *lines, char *identifier);
 mlx_texture_t	*load_texture(char *value);
 
-void	read_file(char *filename)
+void	read_file(int fd)
 {
-	int		fd;
 	char	*lines;
 	char	*temp;
 	t_style	*style;
 
+	if (fd == -1)
+		put_error_and_exit("file not found");
 	lines = NULL;
-	fd = open(filename, O_RDONLY);
 	temp = get_next_line(fd);
 	while (temp != NULL)
 	{
@@ -28,11 +26,11 @@ void	read_file(char *filename)
 	style->texture[EAST] = load_texture(extract_value(lines, "EA"));
 	style->texture[SOUTH] = load_texture(extract_value(lines, "SO"));
 	style->texture[WEST] = load_texture(extract_value(lines, "WE"));
-	style->floor_color = convert_color(extract_value(lines, "F "));
-	style->ceiling_color = convert_color(extract_value(lines, "C "));
+	style->floor_color = convert_color(extract_value(lines, "F"));
+	style->ceiling_color = convert_color(extract_value(lines, "C"));
 	get_map()->data = ft_split(find_map(lines), '\n');
 	if (get_map()->data == NULL)
-		put_error_and_exit("no map!", 1);
+		put_error_and_exit("no map!");
 	ft_free((void **)(&lines));
 }
 
@@ -61,10 +59,10 @@ char	*extract_value(char *lines, char *identifier)
 	char	*origin;
 
 	if (texture_given(lines, identifier))
-		put_error_and_exit("You cant have multiple paths for one texture!", 2);
+		put_error_and_exit("invalid identifiers");
 	origin = ft_strnstr(lines, identifier, ft_strlen(lines));
 	if (origin == NULL)
-		put_error_and_exit("invalid file!", 2);
+		put_error_and_exit("invalid file");
 	while (!ft_iswhitespace(*origin))
 		origin++;
 	while (ft_iswhitespace(*origin))
@@ -72,7 +70,6 @@ char	*extract_value(char *lines, char *identifier)
 	end = 0;
 	while (origin[end] != '\0' && !ft_iswhitespace(origin[end]))
 		end++;
-	printf("output is %s\n", ft_substr(origin, 0, end));
 	return (ft_substr(origin, 0, end));
 }
 
@@ -81,11 +78,11 @@ mlx_texture_t	*load_texture(char *value)
 	mlx_texture_t	*texture;
 
 	if (value == NULL)
-		put_error_and_exit("missing texture path", 1);
+		put_error_and_exit("missing texture path");
 	texture = mlx_load_png(value);
 	ft_free((void **)&value);
 	if (texture == NULL)
-		put_error_and_exit("incorrect texture path", 1);
+		put_error_and_exit("incorrect texture path");
 	return (texture);
 }
 
@@ -97,20 +94,21 @@ unsigned int	convert_color(char *value)
 
 	i = -1;
 	if (value == NULL)
-		put_error_and_exit("missing floor/ceiling color", 1);
+		put_error_and_exit("missing floor/ceiling color");
 	while (value[++i] != '\0')
-		if (!ft_isdigit(value[i]) && value[i] != ',')
-			put_error_and_exit("wrong color code formatting", 1);
-	if (ft_count_char(value, ',') > 2)
-		put_error_and_exit("incorrect number formatting", 1);
-	if (ft_atoi(value) > 255 || ft_atoi(value) < 0)
-		put_error_and_exit("color range needs to be between 0 and 255", 1);
-	if (ft_atoi(ft_strchr(value, ',') + 1) > 255
-		|| ft_atoi(ft_strchr(value, ',') + 1) < 0)
-		put_error_and_exit("color range needs to be between 0 and 255", 1);
-	if (ft_atoi(ft_strrchr(value, ',') + 1) > 255
-		|| ft_atoi(ft_strrchr(value, ',') + 1) < 0)
-		put_error_and_exit("color range needs to be between 0 and 255", 1);
+	{
+		if ((!ft_isdigit(value[i]) && value[i] != ',')
+			|| (i == 0 && (ft_count_char(value, ',') > 2
+		|| ft_atoi(value) > 255 || ft_atoi(value) < 0
+		|| ft_atoi(ft_strchr(value, ',') + 1) > 255
+		|| ft_atoi(ft_strchr(value, ',') + 1) < 0
+		|| ft_atoi(ft_strrchr(value, ',') + 1) > 255
+		|| ft_atoi(ft_strrchr(value, ',') + 1) < 0)))
+		{
+			ft_free((void **)&value);
+			put_error_and_exit("incorrect color code formatting");
+		}
+	}
 	color = create_trgb(0, ft_atoi(value), ft_atoi(ft_strchr(value, ',') + 1),
 			ft_atoi(ft_strrchr(value, ',') + 1));
 	ft_free((void **)&value);

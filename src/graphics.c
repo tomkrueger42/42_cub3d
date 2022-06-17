@@ -9,16 +9,16 @@ t_graphics	*get_graphics(void)
 	{
 		graphics = ft_calloc(1, sizeof(t_graphics));
 		if (graphics == NULL)
-			put_error_and_exit("malloc failure in get_graphics()", 1);
-		graphics->mlx = mlx_init(WINDOW_WIDTH, WINDOW_HEIGHT, "cub3d", false);
+			put_error_and_exit("malloc failure in get_graphics()");
+		graphics->mlx = mlx_init(WINDOW_WIDTH, WINDOW_HEIGHT, "cub3D", false);
 		if (graphics->mlx == NULL)
-			put_error_and_exit("mlx init failure", 1);
+			put_error_and_exit("mlx init failure");
 		graphics->image = mlx_new_image(graphics->mlx,
 				WINDOW_WIDTH, WINDOW_HEIGHT);
 		if (graphics->image == NULL)
 		{
 			mlx_terminate(graphics->mlx);
-			put_error_and_exit("mlx new image failure", 1);
+			put_error_and_exit("mlx new image failure");
 		}
 	}
 	return (graphics);

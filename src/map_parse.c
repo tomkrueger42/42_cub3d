@@ -18,7 +18,7 @@ char	*find_map(char *lines)
 	while (*lines != '\0')
 	{
 		if (valid_line(lines) == 0 && *lines != '\n')
-			put_error_and_exit("invalid map", 2);
+			put_error_and_exit("invalid map");
 		if (ft_strchr(lines, '\n'))
 			lines = ft_strchr(lines, '\n') + 1;
 		else
@@ -59,7 +59,6 @@ void	count_dimensions(char **data)
 	get_map()->tile_size = MINIMAP_SIZE / get_map()->width;
 	if (get_map()->len > get_map()->width)
 		get_map()->tile_size = MINIMAP_SIZE / get_map()->len;
-	fill_rows_with_spaces(data);
 }
 
 void	fill_rows_with_spaces(char **data)
@@ -74,7 +73,7 @@ void	fill_rows_with_spaces(char **data)
 		x = 0;
 		new = ft_calloc(get_map()->width + 2, sizeof(*new));
 		if (new == NULL)
-			put_error_and_exit("malloc error in fill_rows_with_spaces()", 1);
+			put_error_and_exit("malloc error in fill_rows_with_spaces()");
 		while (data[y][x] != '\0')
 		{
 			new[x] = data[y][x];
@@ -114,5 +113,4 @@ void	print_map(void)
 		printf("|%s|\n", get_map()->data[index]);
 		index++;
 	}
-	return ;
 }

@@ -1,6 +1,6 @@
 #include "cub3d.h"
+#include <fcntl.h>
 #include <stdlib.h>
-#include <stdio.h>
 
 void	graphic_loop(void *data)
 {
@@ -34,23 +34,23 @@ void	graphic_loop(void *data)
 int	main(int argc, char **argv)
 {
 	if (argc != 2)
-		put_error_and_exit("incorrect amount of arguments", 1);
-	read_file(argv[1]);
+		put_error_and_exit("incorrect amount of arguments");
+	if (ft_strnstr(argv[1], ".cub", ft_strlen(argv[1]))
+		!= argv[1] + ft_strlen(argv[1]) - 4)
+		put_error_and_exit("filename must end with '.cub' extension");
+	read_file(open(argv[1], O_RDONLY));
 	count_dimensions(get_map()->data);
 	fill_rows_with_spaces(get_map()->data);
-	print_map();
-	if (map_check(get_map()->data) || player_check(get_map()->data))
-	{
-		free_style();
-		free_map();
-		free_player();
-		return (EXIT_FAILURE);
-	}
+	map_check(get_map()->data);
+	player_check(get_map()->data);
 	fan_out(0, -FOV / 2);
 	render_minimap();
 	mlx_image_to_window(get_graphics()->mlx, get_graphics()->image, 0, 0);
 	mlx_loop_hook(get_graphics()->mlx, &graphic_loop, get_graphics());
 	mlx_loop(get_graphics()->mlx);
 	free_graphics();
+	free_map();
+	free_player();
+	free_style();
 	return (EXIT_SUCCESS);
 }

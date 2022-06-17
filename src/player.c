@@ -11,7 +11,7 @@ t_player	*get_player(void)
 	{
 		player = ft_calloc(1, sizeof(t_player));
 		if (player == NULL)
-			put_error_and_exit("malloc failure in player()", 1);
+			put_error_and_exit("malloc failure in player()");
 	}
 	return (player);
 }

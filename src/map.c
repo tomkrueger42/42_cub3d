@@ -8,7 +8,7 @@ t_map	*get_map(void)
 	{
 		map = ft_calloc(1, sizeof(t_map));
 		if (map == NULL)
-			put_error_and_exit("malloc failure in get_map()", 1);
+			put_error_and_exit("malloc failure in get_map()");
 	}
 	return (map);
 }

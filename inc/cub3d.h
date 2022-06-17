@@ -139,14 +139,14 @@ double	horizontal_intersections(double angle);
 double	vertical_intersections(double angle);
 
 // read_file.c
-void	read_file(char *filename);
+void	read_file(int fd);
 
 // style.c
 t_style	*get_style(void);
 void	free_style(void);
 
 // utils.c
-void	put_error_and_exit(char *msg, int exitcode);
+void	put_error_and_exit(char *msg);
 long	now_ms(void);
 
 #endif

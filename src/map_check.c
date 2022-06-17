@@ -21,7 +21,7 @@ int	map_check(char **data)
 			if (data[y][x] == '0' && blanks_nearby(data, x, y))
 			{
 				printf("unclosed walls near map[%d][%d]\n", y, x);
-				put_error_and_exit("unclosed walls", 3);
+				put_error_and_exit("unclosed walls");
 				return (EXIT_FAILURE);
 			}
 			x++;
@@ -66,14 +66,14 @@ int	player_check(char **data)
 				|| data[y][x] == 'S' || data[y][x] == 'W')
 			{
 				if (blanks_nearby(data, x, y))
-					put_error_and_exit("incorrect player positioning", 3);
+					put_error_and_exit("incorrect player positioning");
 				populate_player(x, y, data[y][x]);
 				sum++;
 			}
 		}
 	}
 	if (sum != 1)
-		put_error_and_exit("wrong amount of players", 3);
+		put_error_and_exit("wrong amount of players");
 	return (EXIT_SUCCESS);
 }
 
