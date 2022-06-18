@@ -14,7 +14,7 @@
 
 // modifyable
 # define MVT_SPEED		6			// tiles per second
-# define ROT_SPEED		2			// value 1 => 6 seconds for full 360
+# define ROT_SPEED		3			// (6 / ROT_SPEED) seconds for full 360
 # define FOV			60
 # define MINIMAP_SIZE	600
 # define WINDOW_WIDTH	1440
@@ -41,7 +41,7 @@
 /* STRUCTS																	  */
 /* ************************************************************************** */
 
-typedef struct	s_graphics
+typedef struct s_graphics
 {
 	mlx_t		*mlx;
 	mlx_image_t	*image;
@@ -72,7 +72,6 @@ typedef struct s_player
 	int		size;
 }	t_player;
 
-
 typedef struct s_ray
 {
 	double	tile_play_pos;
@@ -96,37 +95,29 @@ typedef struct s_draw
 /* FUNCTION PROTOTYPES														  */
 /* ************************************************************************** */
 
-// draw.c
-int		create_trgb(unsigned char r, unsigned char g, unsigned char b,
-			unsigned char t);
-
 // graphics.c
 t_graphics	*get_graphics(void);
 void		free_graphics(void);
 
-// intersect.c
-int		wall_hit(double x, double y, double angle, int mode);
-void	fan_out(int col_index, double radial);
-
 // main.c
-int	main(int argc, char **argv);
+int			main(int argc, char **argv);
 
 // map_check.c
-int	map_check(char **map);
-int	player_check(char **map);
+int			map_check(char **map);
+int			player_check(char **map);
 
 // map_parse.c
-char	*find_map(char *lines);
-void	count_dimensions(char **data);
-void	fill_rows_with_spaces(char **data);
-void	print_map(void);
+char		*find_map(char *lines);
+void		count_dimensions(char **data);
+void		fill_rows_with_spaces(char **data);
+void		print_map(void);
 
 // map.c
-t_map	*get_map(void);
-void	free_map(void);
+t_map		*get_map(void);
+void		free_map(void);
 
 // minimap.c
-void	render_minimap(void);
+void		render_minimap(void);
 
 // player.c
 t_player	*get_player(void);
@@ -135,18 +126,25 @@ void		move_player(double add_to_x_pos, double add_to_y_pos);
 void		rotate_player(double add_to_direction);
 
 // raycast.c
-double	horizontal_intersections(double angle);
-double	vertical_intersections(double angle);
+void		raycast(int col_index, double radial);
+int			wall_hit(double x, double y, double angle, int mode);
 
 // read_file.c
-void	read_file(int fd);
+void		read_file(int fd);
 
 // style.c
-t_style	*get_style(void);
-void	free_style(void);
+t_style		*get_style(void);
+void		free_style(void);
+
+// texture.c
+void		draw_tex(int col_index, t_draw draw, int wall_dir);
+t_draw		set_vars(double angle, double radial, double dist,
+				int wall_dir);
 
 // utils.c
-void	put_error_and_exit(char *msg);
-long	now_ms(void);
+void		put_error_and_exit(char *msg);
+long		now_ms(void);
+int			create_trgb(unsigned char r, unsigned char g, unsigned char b,
+				unsigned char t);
 
 #endif

@@ -1,34 +1,7 @@
 #include "cub3d.h"
 #include <math.h>
 
-void			draw_tex(int col_index, t_draw draw, int wall_dir);
-t_draw			set_vars(double angle, double radial, double dist,
-					int wall_dir);
 unsigned int	get_pixel(mlx_texture_t *tex, unsigned int pos);
-
-void	fan_out(int col_index, double radial)
-{
-	double	dist_h;
-	double	dist_v;
-	double	angle;
-
-	while (radial < FOV / 2)
-	{
-		angle = get_player()->direction + radial * RAD;
-		dist_h = cos(radial * RAD) * horizontal_intersections(angle);
-		dist_v = cos(radial * RAD) * vertical_intersections(angle);
-		if (dist_h < dist_v && sin(angle) < 0)
-			draw_tex(col_index, set_vars(angle, radial, dist_h, NORTH), NORTH);
-		else if (dist_v < dist_h && cos(angle) > 0)
-			draw_tex(col_index, set_vars(angle, radial, dist_v, EAST), EAST);
-		else if (dist_h < dist_v && sin(angle) > 0)
-			draw_tex(col_index, set_vars(angle, radial, dist_h, SOUTH), SOUTH);
-		else if (dist_v < dist_h && cos(angle) < 0)
-			draw_tex(col_index, set_vars(angle, radial, dist_v, WEST), WEST);
-		col_index++;
-		radial += (double)FOV / (double)WINDOW_WIDTH;
-	}
-}
 
 void	draw_tex(int col_index, t_draw draw, int wall_dir)
 {

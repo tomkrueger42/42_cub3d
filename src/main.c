@@ -27,7 +27,7 @@ void	graphic_loop(void *data)
 		rotate_player(-fps);
 	else if (mlx_is_key_down(graphics->mlx, MLX_KEY_RIGHT))
 		rotate_player(fps);
-	fan_out(0, -FOV / 2);
+	raycast(0, -FOV / 2);
 	render_minimap();
 }
 
@@ -43,7 +43,7 @@ int	main(int argc, char **argv)
 	fill_rows_with_spaces(get_map()->data);
 	map_check(get_map()->data);
 	player_check(get_map()->data);
-	fan_out(0, -FOV / 2);
+	raycast(0, -FOV / 2);
 	render_minimap();
 	mlx_image_to_window(get_graphics()->mlx, get_graphics()->image, 0, 0);
 	mlx_loop_hook(get_graphics()->mlx, &graphic_loop, get_graphics());
