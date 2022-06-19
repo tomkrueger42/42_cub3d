@@ -23,5 +23,14 @@ void	free_style(void)
 	t_style	*ptr;
 
 	ptr = get_style();
+	ft_free((void **)&ptr->texture[NORTH]->pixels);
+	ft_free((void **)&ptr->texture[NORTH]);
+	ft_free((void **)&ptr->texture[EAST]->pixels);
+	ft_free((void **)&ptr->texture[EAST]);
+	ft_free((void **)&ptr->texture[SOUTH]->pixels);
+	ft_free((void **)&ptr->texture[SOUTH]);
+	ft_free((void **)&ptr->texture[WEST]->pixels);
+	ft_free((void **)&ptr->texture[WEST]);
+	ft_free((void **)&ptr->texture);
 	ft_free((void **)&ptr);
 }

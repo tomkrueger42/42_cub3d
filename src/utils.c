@@ -11,6 +11,7 @@ void	put_error_and_exit(char *msg)
 	free_map();
 	free_player();
 	free_style();
+	system("leaks cub3D");
 	exit(EXIT_FAILURE);
 }
 

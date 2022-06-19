@@ -52,5 +52,6 @@ int	main(int argc, char **argv)
 	free_map();
 	free_player();
 	free_style();
+	system("leaks cub3D");
 	return (EXIT_SUCCESS);
 }
