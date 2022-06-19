@@ -1,10 +1,10 @@
 NO	./resources/bookshelf.png
-EA	./resources/gemov1.png	
+EA	./resources/grey_tile.png	
 SO	./resources/tilledsoil.png
 WE	./resources/treerings.png
 
-C	170,200,100
-F	120,42,42
+C	50,50,200
+F	42,42,42
 
                                          11111
                                         11010111111111

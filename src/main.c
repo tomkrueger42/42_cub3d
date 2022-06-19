@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   main.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: tkruger <tkruger@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/06/19 17:11:23 by tkruger           #+#    #+#             */
+/*   Updated: 2022/06/19 17:17:54 by tkruger          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "cub3d.h"
 #include <fcntl.h>
 #include <stdlib.h>
@@ -38,7 +50,7 @@ int	main(int argc, char **argv)
 	if (ft_strnstr(argv[1], ".cub", ft_strlen(argv[1]))
 		!= argv[1] + ft_strlen(argv[1]) - 4)
 		put_error_and_exit("filename must end with '.cub' extension");
-	read_file(open(argv[1], O_RDONLY));
+	read_file(open(argv[1], O_RDONLY), get_style(), get_map());
 	count_dimensions(get_map()->data);
 	fill_rows_with_spaces(get_map()->data);
 	map_check(get_map()->data);
@@ -52,6 +64,5 @@ int	main(int argc, char **argv)
 	free_map();
 	free_player();
 	free_style();
-	system("leaks cub3D");
 	return (EXIT_SUCCESS);
 }

@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   cub3d.h                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: tkruger <tkruger@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/06/19 17:10:01 by tkruger           #+#    #+#             */
+/*   Updated: 2022/06/19 17:18:47 by tkruger          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef CUB3D_H
 # define CUB3D_H
 
@@ -130,7 +142,7 @@ void		raycast(int col_index, double radial);
 int			wall_hit(double x, double y, double angle, int mode);
 
 // read_file.c
-void		read_file(int fd);
+void		read_file(int fd, t_style *style, t_map *map);
 
 // style.c
 t_style		*get_style(void);
@@ -144,7 +156,7 @@ t_draw		set_vars(double angle, double radial, double dist,
 // utils.c
 void		put_error_and_exit(char *msg);
 long		now_ms(void);
-int			create_trgb(unsigned char r, unsigned char g, unsigned char b,
+int			create_rgbt(unsigned char r, unsigned char g, unsigned char b,
 				unsigned char t);
 
 #endif

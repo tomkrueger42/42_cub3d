@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   read_file.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: tkruger <tkruger@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/06/19 17:10:31 by tkruger           #+#    #+#             */
+/*   Updated: 2022/06/19 17:19:02 by tkruger          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "cub3d.h"
 #include <unistd.h>
 
@@ -5,11 +17,10 @@ unsigned int	convert_color(char *value);
 char			*extract_value(char *lines, char *identifier);
 mlx_texture_t	*load_texture(char *value);
 
-void	read_file(int fd)
+void	read_file(int fd, t_style *style, t_map *map)
 {
 	char	*lines;
 	char	*temp;
-	t_style	*style;
 
 	if (fd == -1)
 		put_error_and_exit("file not found");
@@ -21,15 +32,14 @@ void	read_file(int fd)
 		temp = get_next_line(fd);
 	}
 	close (fd);
-	style = get_style();
 	style->texture[NORTH] = load_texture(extract_value(lines, "NO"));
 	style->texture[EAST] = load_texture(extract_value(lines, "EA"));
 	style->texture[SOUTH] = load_texture(extract_value(lines, "SO"));
 	style->texture[WEST] = load_texture(extract_value(lines, "WE"));
 	style->floor_color = convert_color(extract_value(lines, "F"));
 	style->ceiling_color = convert_color(extract_value(lines, "C"));
-	get_map()->data = ft_split(find_map(lines), '\n');
-	if (get_map()->data == NULL)
+	map->data = ft_split(find_map(lines), '\n');
+	if (map->data == NULL)
 		put_error_and_exit("no map!");
 	ft_free((void **)(&lines));
 }
@@ -99,18 +109,18 @@ unsigned int	convert_color(char *value)
 	{
 		if ((!ft_isdigit(value[i]) && value[i] != ',')
 			|| (i == 0 && (ft_count_char(value, ',') > 2
-		|| ft_atoi(value) > 255 || ft_atoi(value) < 0
-		|| ft_atoi(ft_strchr(value, ',') + 1) > 255
-		|| ft_atoi(ft_strchr(value, ',') + 1) < 0
-		|| ft_atoi(ft_strrchr(value, ',') + 1) > 255
-		|| ft_atoi(ft_strrchr(value, ',') + 1) < 0)))
+					|| ft_atoi(value) > 255 || ft_atoi(value) < 0
+					|| ft_atoi(ft_strchr(value, ',') + 1) > 255
+					|| ft_atoi(ft_strchr(value, ',') + 1) < 0
+					|| ft_atoi(ft_strrchr(value, ',') + 1) > 255
+					|| ft_atoi(ft_strrchr(value, ',') + 1) < 0)))
 		{
 			ft_free((void **)&value);
 			put_error_and_exit("incorrect color code formatting");
 		}
 	}
-	color = create_trgb(0, ft_atoi(value), ft_atoi(ft_strchr(value, ',') + 1),
-			ft_atoi(ft_strrchr(value, ',') + 1));
+	color = create_rgbt(ft_atoi(value), ft_atoi(ft_strchr(value, ',') + 1),
+			ft_atoi(ft_strrchr(value, ',') + 1), 255);
 	ft_free((void **)&value);
 	return (color);
 }
