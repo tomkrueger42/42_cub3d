@@ -1,18 +1,20 @@
-# c_template
+# cub3D
 
-This is a template for C projects
+## My first RayCaster with miniLibX
 
-To clone this repository, use
-
-git clone --recurse-submodules https://github.com/tomkr-01/c_template.git
-
-to get both the template as well as the already included libft library.
+Summary: This project is inspired by the world-famous Wolfenstein 3D game, which
+was the first FPS ever. It will enable you to explore ray-casting. Your goal will be to make a dynamic view inside a maze, in which you’ll have to find your way.
 
 ________________________________________________________________________________
 
+To clone the repository, run the following command:
 
-Libft is automatically added as a submodule. To remove libft, change to libs/ and use
+```git clone --recurse-submodules https://github.com/tomkrueger42/42_cub3d.git```
 
-rm -rf libft/
+Then, change into the 42_cub3d directory and build to program with
 
-to delete the libft library. Also, make sure to delete the section about libft in .gitmodules as well as in Makefile!
+```make```
+
+You can run the game using
+
+```./cub3d <x.cub>```

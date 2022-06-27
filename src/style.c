@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   style.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tkruger <tkruger@student.42.fr>            +#+  +:+       +#+        */
+/*   By: tomkrueger <tomkrueger@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/19 17:10:34 by tkruger           #+#    #+#             */
-/*   Updated: 2022/06/19 17:10:35 by tkruger          ###   ########.fr       */
+/*   Updated: 2022/06/27 16:18:09 by tomkrueger       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,17 +32,18 @@ t_style	*get_style(void)
 
 void	free_style(void)
 {
+	int		i;
 	t_style	*ptr;
 
+	i = NORTH;
 	ptr = get_style();
-	ft_free((void **)&ptr->texture[NORTH]->pixels);
-	ft_free((void **)&ptr->texture[NORTH]);
-	ft_free((void **)&ptr->texture[EAST]->pixels);
-	ft_free((void **)&ptr->texture[EAST]);
-	ft_free((void **)&ptr->texture[SOUTH]->pixels);
-	ft_free((void **)&ptr->texture[SOUTH]);
-	ft_free((void **)&ptr->texture[WEST]->pixels);
-	ft_free((void **)&ptr->texture[WEST]);
+	while (i <= WEST)
+	{
+		if (ptr->texture[i] != NULL)
+			ft_free((void **)&ptr->texture[i]->pixels);
+		ft_free((void **)&ptr->texture[i]);
+		i++;
+	}
 	ft_free((void **)&ptr->texture);
 	ft_free((void **)&ptr);
 }
